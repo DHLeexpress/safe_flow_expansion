@@ -1,0 +1,85 @@
+{
+  "confirmation": "/home/dohyun/projects/afe2_runs/low7_b1_balanced_sweep_63ebefa/confirmation",
+  "failure_marker": "red X at terminal position for CR or timeout; no text label",
+  "fixed_indices": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9
+  ],
+  "gammas": [
+    0.1,
+    0.5,
+    1.0
+  ],
+  "kazuki_definition": {
+    "conditioning_schema": "low7_closest_boundary_tie_mean",
+    "gamma_ctx": 0.5,
+    "goal_coef": 0.0,
+    "important_control_note": "goal_coef=safe_coef=0 is not raw pretrained: FlowMPPI elite selection, perturbation, collision/goal costs, and warm start remain active",
+    "safe_coef_candidates": [
+      0.0,
+      0.1,
+      0.9
+    ],
+    "selected_high": 0.9,
+    "selected_low": 0.1,
+    "selection_rule": "predeclared original Kazuki safety-grid endpoints: minimum and maximum positive candidate; summaries are diagnostic and never select the rows",
+    "summaries": {
+      "0.0": {
+        "ambiguous_count": 0,
+        "balance": 0.6,
+        "cr": 0.0,
+        "r_count": 7,
+        "route_value_std": 0.7844734932452582,
+        "sr": 0.0,
+        "timeout": 1.0,
+        "u_count": 3
+      },
+      "0.1": {
+        "ambiguous_count": 1,
+        "balance": 0.4444444444444444,
+        "cr": 0.0,
+        "r_count": 7,
+        "route_value_std": 0.6995136771714362,
+        "sr": 0.0,
+        "timeout": 1.0,
+        "u_count": 2
+      },
+      "0.9": {
+        "ambiguous_count": 5,
+        "balance": 0.8,
+        "cr": 0.0,
+        "r_count": 2,
+        "route_value_std": 0.05719577829392264,
+        "sr": 0.0,
+        "timeout": 1.0,
+        "u_count": 3
+      }
+    }
+  },
+  "metric_version": "b1_current_best_gallery_v1",
+  "outputs": {
+    "b1_current_best_5x3_gallery.pdf": "b933d56c9ac049accea7fe37c774b4485fd1b6938f0e76fb1ed54a58bf49d9e5",
+    "b1_current_best_5x3_gallery.png": "70294ffcccf186d2f751fdc21716328ca22b589e0edc8687fb8a7173a809b4b8"
+  },
+  "pretrained_checkpoint": "/home/dohyun/projects/afe2_runs/low7_groupavg_tiemean_r0_pair_0f0c128/seed_20260718_eq_0_ga_1/pretrain/data/checkpoint_candidate.pt",
+  "pretrained_checkpoint_sha256": "524c9c0a4fd071221ac509b9d8e6fbbfb85fdf1811aa04160317f2a9e2d3ef90",
+  "raw_rule": "first ten fixed indices from each authenticated disjoint M50 cell; no outcome curation",
+  "reused_rollout_sha256": {
+    "expert.npz": "4547bac9c2e60777d82cf8876d5e9805428892d1c8572d77be27b20c83121230",
+    "kazuki_ws_0.1.npz": "ca3267fd4979ef48e19fa22a721ae9aa8b56b43d06f25863e0f927059906d28f",
+    "kazuki_ws_0.9.npz": "84ea3af7762da37df867fa387c2e46c239f356fa831f0ffe19021085353f723d",
+    "kazuki_ws_0.npz": "24ab6ecb501454924985b99e055e8d30060f4d163c49766f9a1219cfd4b3dab7"
+  },
+  "rollout_source": "reused without regeneration from /home/dohyun/projects/afe2_runs/b1_current_best_gallery_406936e",
+  "scene_profile": "low7_radius1_canonical_v1",
+  "scene_sha256": "356d6d48b3af2b017b529562b530f35285c86f9107da512a73de6ef664b03e72",
+  "status": "B1_CURRENT_BEST_GALLERY_COMPLETE"
+}

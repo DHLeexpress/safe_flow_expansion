@@ -1,0 +1,555 @@
+{
+  "ranking": [
+    {
+      "arm": {
+        "adaptive_ess_target": 0.25,
+        "arm_id": "cap512_ess025_alpha0010_cost",
+        "execution_rule": "nominal_hp_safemppi_cost",
+        "gp_cap": 512,
+        "negative_alpha": 0.01
+      },
+      "best": {
+        "CR": 0.0,
+        "J": 0.857142857142857,
+        "SR": 1.0,
+        "minimum_clearance": 0.056365811627463035,
+        "round": 19,
+        "timeout": 0.0
+      },
+      "elapsed_seconds": 2041.8141222000122,
+      "gpu": 1,
+      "run": "/home/dohyun/projects/afe2_runs/low7_b1_balanced_sweep_63ebefa/arms/cap512_ess025_alpha0010_cost",
+      "screening": "/home/dohyun/projects/afe2_runs/low7_b1_balanced_sweep_63ebefa/screening/cap512_ess025_alpha0010_cost",
+      "status": "ARM_COMPLETE"
+    },
+    {
+      "arm": {
+        "adaptive_ess_target": 0.25,
+        "arm_id": "cap768_ess025_alpha0000_cost",
+        "execution_rule": "nominal_hp_safemppi_cost",
+        "gp_cap": 768,
+        "negative_alpha": 0.0
+      },
+      "best": {
+        "CR": 0.0,
+        "J": 0.857142857142857,
+        "SR": 1.0,
+        "minimum_clearance": 0.05448934663109269,
+        "round": 19,
+        "timeout": 0.0
+      },
+      "elapsed_seconds": 2235.581137418747,
+      "gpu": 1,
+      "run": "/home/dohyun/projects/afe2_runs/low7_b1_balanced_sweep_63ebefa/arms/cap768_ess025_alpha0000_cost",
+      "screening": "/home/dohyun/projects/afe2_runs/low7_b1_balanced_sweep_63ebefa/screening/cap768_ess025_alpha0000_cost",
+      "status": "ARM_COMPLETE"
+    },
+    {
+      "arm": {
+        "adaptive_ess_target": 0.25,
+        "arm_id": "cap768_ess025_alpha0001_cost",
+        "execution_rule": "nominal_hp_safemppi_cost",
+        "gp_cap": 768,
+        "negative_alpha": 0.001
+      },
+      "best": {
+        "CR": 0.0,
+        "J": 0.857142857142857,
+        "SR": 1.0,
+        "minimum_clearance": 0.050618013799269675,
+        "round": 20,
+        "timeout": 0.0
+      },
+      "elapsed_seconds": 2226.31077337265,
+      "gpu": 3,
+      "run": "/home/dohyun/projects/afe2_runs/low7_b1_balanced_sweep_63ebefa/arms/cap768_ess025_alpha0001_cost",
+      "screening": "/home/dohyun/projects/afe2_runs/low7_b1_balanced_sweep_63ebefa/screening/cap768_ess025_alpha0001_cost",
+      "status": "ARM_COMPLETE"
+    },
+    {
+      "arm": {
+        "adaptive_ess_target": 0.5,
+        "arm_id": "cap512_ess050_alpha0001_margin",
+        "execution_rule": "nominal_hp_max_step_margin",
+        "gp_cap": 512,
+        "negative_alpha": 0.001
+      },
+      "best": {
+        "CR": 0.0,
+        "J": 0.8285714285714285,
+        "SR": 1.0,
+        "minimum_clearance": 0.056061586883878876,
+        "round": 19,
+        "timeout": 0.0
+      },
+      "elapsed_seconds": 2412.686093568802,
+      "gpu": 1,
+      "run": "/home/dohyun/projects/afe2_runs/low7_b1_balanced_sweep_63ebefa/arms/cap512_ess050_alpha0001_margin",
+      "screening": "/home/dohyun/projects/afe2_runs/low7_b1_balanced_sweep_63ebefa/screening/cap512_ess050_alpha0001_margin",
+      "status": "ARM_COMPLETE"
+    },
+    {
+      "arm": {
+        "adaptive_ess_target": 0.5,
+        "arm_id": "cap768_ess050_alpha0000_margin",
+        "execution_rule": "nominal_hp_max_step_margin",
+        "gp_cap": 768,
+        "negative_alpha": 0.0
+      },
+      "best": {
+        "CR": 0.0,
+        "J": 0.8285714285714285,
+        "SR": 1.0,
+        "minimum_clearance": 0.05282843183605811,
+        "round": 20,
+        "timeout": 0.0
+      },
+      "elapsed_seconds": 2789.884248495102,
+      "gpu": 3,
+      "run": "/home/dohyun/projects/afe2_runs/low7_b1_balanced_sweep_63ebefa/arms/cap768_ess050_alpha0000_margin",
+      "screening": "/home/dohyun/projects/afe2_runs/low7_b1_balanced_sweep_63ebefa/screening/cap768_ess050_alpha0000_margin",
+      "status": "ARM_COMPLETE"
+    },
+    {
+      "arm": {
+        "adaptive_ess_target": 0.5,
+        "arm_id": "cap512_ess050_alpha0000_margin",
+        "execution_rule": "nominal_hp_max_step_margin",
+        "gp_cap": 512,
+        "negative_alpha": 0.0
+      },
+      "best": {
+        "CR": 0.0,
+        "J": 0.8285714285714285,
+        "SR": 1.0,
+        "minimum_clearance": 0.05136626568113335,
+        "round": 19,
+        "timeout": 0.0
+      },
+      "elapsed_seconds": 2290.07532787323,
+      "gpu": 3,
+      "run": "/home/dohyun/projects/afe2_runs/low7_b1_balanced_sweep_63ebefa/arms/cap512_ess050_alpha0000_margin",
+      "screening": "/home/dohyun/projects/afe2_runs/low7_b1_balanced_sweep_63ebefa/screening/cap512_ess050_alpha0000_margin",
+      "status": "ARM_COMPLETE"
+    },
+    {
+      "arm": {
+        "adaptive_ess_target": 0.5,
+        "arm_id": "cap768_ess050_alpha0000_cost",
+        "execution_rule": "nominal_hp_safemppi_cost",
+        "gp_cap": 768,
+        "negative_alpha": 0.0
+      },
+      "best": {
+        "CR": 0.014285714285714285,
+        "J": 0.8285714285714285,
+        "SR": 0.9857142857142858,
+        "minimum_clearance": 0.051910335108882336,
+        "round": 16,
+        "timeout": 0.0
+      },
+      "elapsed_seconds": 1945.1325008869171,
+      "gpu": 3,
+      "run": "/home/dohyun/projects/afe2_runs/low7_b1_balanced_sweep_63ebefa/arms/cap768_ess050_alpha0000_cost",
+      "screening": "/home/dohyun/projects/afe2_runs/low7_b1_balanced_sweep_63ebefa/screening/cap768_ess050_alpha0000_cost",
+      "status": "ARM_COMPLETE"
+    },
+    {
+      "arm": {
+        "adaptive_ess_target": 0.25,
+        "arm_id": "cap512_ess025_alpha0000_margin",
+        "execution_rule": "nominal_hp_max_step_margin",
+        "gp_cap": 512,
+        "negative_alpha": 0.0
+      },
+      "best": {
+        "CR": 0.014285714285714285,
+        "J": 0.8285714285714285,
+        "SR": 0.9857142857142858,
+        "minimum_clearance": 0.04263822918137539,
+        "round": 16,
+        "timeout": 0.0
+      },
+      "elapsed_seconds": 3077.1200771331787,
+      "gpu": 1,
+      "run": "/home/dohyun/projects/afe2_runs/low7_b1_balanced_sweep_63ebefa/arms/cap512_ess025_alpha0000_margin",
+      "screening": "/home/dohyun/projects/afe2_runs/low7_b1_balanced_sweep_63ebefa/screening/cap512_ess025_alpha0000_margin",
+      "status": "ARM_COMPLETE"
+    },
+    {
+      "arm": {
+        "adaptive_ess_target": 0.5,
+        "arm_id": "cap768_ess050_alpha0010_margin",
+        "execution_rule": "nominal_hp_max_step_margin",
+        "gp_cap": 768,
+        "negative_alpha": 0.01
+      },
+      "best": {
+        "CR": 0.0,
+        "J": 0.7999999999999999,
+        "SR": 1.0,
+        "minimum_clearance": 0.055423809731279326,
+        "round": 19,
+        "timeout": 0.0
+      },
+      "elapsed_seconds": 2842.9044556617737,
+      "gpu": 3,
+      "run": "/home/dohyun/projects/afe2_runs/low7_b1_balanced_sweep_63ebefa/arms/cap768_ess050_alpha0010_margin",
+      "screening": "/home/dohyun/projects/afe2_runs/low7_b1_balanced_sweep_63ebefa/screening/cap768_ess050_alpha0010_margin",
+      "status": "ARM_COMPLETE"
+    },
+    {
+      "arm": {
+        "adaptive_ess_target": 0.5,
+        "arm_id": "cap512_ess050_alpha0010_margin",
+        "execution_rule": "nominal_hp_max_step_margin",
+        "gp_cap": 512,
+        "negative_alpha": 0.01
+      },
+      "best": {
+        "CR": 0.0,
+        "J": 0.7999999999999999,
+        "SR": 1.0,
+        "minimum_clearance": 0.052205593217280924,
+        "round": 20,
+        "timeout": 0.0
+      },
+      "elapsed_seconds": 3094.674495458603,
+      "gpu": 3,
+      "run": "/home/dohyun/projects/afe2_runs/low7_b1_balanced_sweep_63ebefa/arms/cap512_ess050_alpha0010_margin",
+      "screening": "/home/dohyun/projects/afe2_runs/low7_b1_balanced_sweep_63ebefa/screening/cap512_ess050_alpha0010_margin",
+      "status": "ARM_COMPLETE"
+    },
+    {
+      "arm": {
+        "adaptive_ess_target": 0.5,
+        "arm_id": "cap768_ess050_alpha0001_margin",
+        "execution_rule": "nominal_hp_max_step_margin",
+        "gp_cap": 768,
+        "negative_alpha": 0.001
+      },
+      "best": {
+        "CR": 0.0,
+        "J": 0.7999999999999999,
+        "SR": 1.0,
+        "minimum_clearance": 0.05109038750334448,
+        "round": 14,
+        "timeout": 0.0
+      },
+      "elapsed_seconds": 2872.1219561100006,
+      "gpu": 1,
+      "run": "/home/dohyun/projects/afe2_runs/low7_b1_balanced_sweep_63ebefa/arms/cap768_ess050_alpha0001_margin",
+      "screening": "/home/dohyun/projects/afe2_runs/low7_b1_balanced_sweep_63ebefa/screening/cap768_ess050_alpha0001_margin",
+      "status": "ARM_COMPLETE"
+    },
+    {
+      "arm": {
+        "adaptive_ess_target": 0.5,
+        "arm_id": "cap768_ess050_alpha0001_cost",
+        "execution_rule": "nominal_hp_safemppi_cost",
+        "gp_cap": 768,
+        "negative_alpha": 0.001
+      },
+      "best": {
+        "CR": 0.014285714285714285,
+        "J": 0.7999999999999999,
+        "SR": 0.9857142857142858,
+        "minimum_clearance": 0.05610802943579616,
+        "round": 20,
+        "timeout": 0.0
+      },
+      "elapsed_seconds": 2167.729047060013,
+      "gpu": 1,
+      "run": "/home/dohyun/projects/afe2_runs/low7_b1_balanced_sweep_63ebefa/arms/cap768_ess050_alpha0001_cost",
+      "screening": "/home/dohyun/projects/afe2_runs/low7_b1_balanced_sweep_63ebefa/screening/cap768_ess050_alpha0001_cost",
+      "status": "ARM_COMPLETE"
+    },
+    {
+      "arm": {
+        "adaptive_ess_target": 0.5,
+        "arm_id": "cap512_ess050_alpha0010_cost",
+        "execution_rule": "nominal_hp_safemppi_cost",
+        "gp_cap": 512,
+        "negative_alpha": 0.01
+      },
+      "best": {
+        "CR": 0.014285714285714285,
+        "J": 0.7999999999999999,
+        "SR": 0.9857142857142858,
+        "minimum_clearance": 0.05133859198229963,
+        "round": 16,
+        "timeout": 0.0
+      },
+      "elapsed_seconds": 2036.540626525879,
+      "gpu": 3,
+      "run": "/home/dohyun/projects/afe2_runs/low7_b1_balanced_sweep_63ebefa/arms/cap512_ess050_alpha0010_cost",
+      "screening": "/home/dohyun/projects/afe2_runs/low7_b1_balanced_sweep_63ebefa/screening/cap512_ess050_alpha0010_cost",
+      "status": "ARM_COMPLETE"
+    },
+    {
+      "arm": {
+        "adaptive_ess_target": 0.5,
+        "arm_id": "cap512_ess050_alpha0000_cost",
+        "execution_rule": "nominal_hp_safemppi_cost",
+        "gp_cap": 512,
+        "negative_alpha": 0.0
+      },
+      "best": {
+        "CR": 0.014285714285714285,
+        "J": 0.7999999999999999,
+        "SR": 0.9857142857142858,
+        "minimum_clearance": 0.049182051185743765,
+        "round": 17,
+        "timeout": 0.0
+      },
+      "elapsed_seconds": 1885.5936906337738,
+      "gpu": 3,
+      "run": "/home/dohyun/projects/afe2_runs/low7_b1_balanced_sweep_63ebefa/arms/cap512_ess050_alpha0000_cost",
+      "screening": "/home/dohyun/projects/afe2_runs/low7_b1_balanced_sweep_63ebefa/screening/cap512_ess050_alpha0000_cost",
+      "status": "ARM_COMPLETE"
+    },
+    {
+      "arm": {
+        "adaptive_ess_target": 0.5,
+        "arm_id": "cap512_ess050_alpha0001_cost",
+        "execution_rule": "nominal_hp_safemppi_cost",
+        "gp_cap": 512,
+        "negative_alpha": 0.001
+      },
+      "best": {
+        "CR": 0.014285714285714285,
+        "J": 0.7999999999999999,
+        "SR": 0.9857142857142858,
+        "minimum_clearance": 0.04846506080400441,
+        "round": 18,
+        "timeout": 0.0
+      },
+      "elapsed_seconds": 2032.9404003620148,
+      "gpu": 1,
+      "run": "/home/dohyun/projects/afe2_runs/low7_b1_balanced_sweep_63ebefa/arms/cap512_ess050_alpha0001_cost",
+      "screening": "/home/dohyun/projects/afe2_runs/low7_b1_balanced_sweep_63ebefa/screening/cap512_ess050_alpha0001_cost",
+      "status": "ARM_COMPLETE"
+    },
+    {
+      "arm": {
+        "adaptive_ess_target": 0.25,
+        "arm_id": "cap768_ess025_alpha0001_margin",
+        "execution_rule": "nominal_hp_max_step_margin",
+        "gp_cap": 768,
+        "negative_alpha": 0.001
+      },
+      "best": {
+        "CR": 0.014285714285714285,
+        "J": 0.7999999999999999,
+        "SR": 0.9857142857142858,
+        "minimum_clearance": 0.04641415183957594,
+        "round": 14,
+        "timeout": 0.0
+      },
+      "elapsed_seconds": 3185.8011498451233,
+      "gpu": 3,
+      "run": "/home/dohyun/projects/afe2_runs/low7_b1_balanced_sweep_63ebefa/arms/cap768_ess025_alpha0001_margin",
+      "screening": "/home/dohyun/projects/afe2_runs/low7_b1_balanced_sweep_63ebefa/screening/cap768_ess025_alpha0001_margin",
+      "status": "ARM_COMPLETE"
+    },
+    {
+      "arm": {
+        "adaptive_ess_target": 0.25,
+        "arm_id": "cap768_ess025_alpha0010_cost",
+        "execution_rule": "nominal_hp_safemppi_cost",
+        "gp_cap": 768,
+        "negative_alpha": 0.01
+      },
+      "best": {
+        "CR": 0.014285714285714285,
+        "J": 0.7999999999999999,
+        "SR": 0.9857142857142858,
+        "minimum_clearance": 0.04522220916903133,
+        "round": 20,
+        "timeout": 0.0
+      },
+      "elapsed_seconds": 2030.6414070129395,
+      "gpu": 1,
+      "run": "/home/dohyun/projects/afe2_runs/low7_b1_balanced_sweep_63ebefa/arms/cap768_ess025_alpha0010_cost",
+      "screening": "/home/dohyun/projects/afe2_runs/low7_b1_balanced_sweep_63ebefa/screening/cap768_ess025_alpha0010_cost",
+      "status": "ARM_COMPLETE"
+    },
+    {
+      "arm": {
+        "adaptive_ess_target": 0.25,
+        "arm_id": "cap512_ess025_alpha0001_margin",
+        "execution_rule": "nominal_hp_max_step_margin",
+        "gp_cap": 512,
+        "negative_alpha": 0.001
+      },
+      "best": {
+        "CR": 0.014285714285714285,
+        "J": 0.7999999999999999,
+        "SR": 0.9857142857142858,
+        "minimum_clearance": 0.04013662746466678,
+        "round": 16,
+        "timeout": 0.0
+      },
+      "elapsed_seconds": 3136.909507036209,
+      "gpu": 3,
+      "run": "/home/dohyun/projects/afe2_runs/low7_b1_balanced_sweep_63ebefa/arms/cap512_ess025_alpha0001_margin",
+      "screening": "/home/dohyun/projects/afe2_runs/low7_b1_balanced_sweep_63ebefa/screening/cap512_ess025_alpha0001_margin",
+      "status": "ARM_COMPLETE"
+    },
+    {
+      "arm": {
+        "adaptive_ess_target": 0.25,
+        "arm_id": "cap768_ess025_alpha0000_margin",
+        "execution_rule": "nominal_hp_max_step_margin",
+        "gp_cap": 768,
+        "negative_alpha": 0.0
+      },
+      "best": {
+        "CR": 0.05714285714285714,
+        "J": 0.7714285714285715,
+        "SR": 0.9428571428571428,
+        "minimum_clearance": 0.040250568895468485,
+        "round": 16,
+        "timeout": 0.0
+      },
+      "elapsed_seconds": 3027.112368106842,
+      "gpu": 1,
+      "run": "/home/dohyun/projects/afe2_runs/low7_b1_balanced_sweep_63ebefa/arms/cap768_ess025_alpha0000_margin",
+      "screening": "/home/dohyun/projects/afe2_runs/low7_b1_balanced_sweep_63ebefa/screening/cap768_ess025_alpha0000_margin",
+      "status": "ARM_COMPLETE"
+    },
+    {
+      "arm": {
+        "adaptive_ess_target": 0.5,
+        "arm_id": "cap768_ess050_alpha0010_cost",
+        "execution_rule": "nominal_hp_safemppi_cost",
+        "gp_cap": 768,
+        "negative_alpha": 0.01
+      },
+      "best": {
+        "CR": 0.014285714285714285,
+        "J": 0.7714285714285714,
+        "SR": 0.9857142857142858,
+        "minimum_clearance": 0.055058996315320054,
+        "round": 20,
+        "timeout": 0.0
+      },
+      "elapsed_seconds": 2104.977524280548,
+      "gpu": 3,
+      "run": "/home/dohyun/projects/afe2_runs/low7_b1_balanced_sweep_63ebefa/arms/cap768_ess050_alpha0010_cost",
+      "screening": "/home/dohyun/projects/afe2_runs/low7_b1_balanced_sweep_63ebefa/screening/cap768_ess050_alpha0010_cost",
+      "status": "ARM_COMPLETE"
+    },
+    {
+      "arm": {
+        "adaptive_ess_target": 0.25,
+        "arm_id": "cap768_ess025_alpha0010_margin",
+        "execution_rule": "nominal_hp_max_step_margin",
+        "gp_cap": 768,
+        "negative_alpha": 0.01
+      },
+      "best": {
+        "CR": 0.014285714285714285,
+        "J": 0.7714285714285714,
+        "SR": 0.9857142857142858,
+        "minimum_clearance": 0.0431182302735692,
+        "round": 15,
+        "timeout": 0.0
+      },
+      "elapsed_seconds": 3177.475550174713,
+      "gpu": 1,
+      "run": "/home/dohyun/projects/afe2_runs/low7_b1_balanced_sweep_63ebefa/arms/cap768_ess025_alpha0010_margin",
+      "screening": "/home/dohyun/projects/afe2_runs/low7_b1_balanced_sweep_63ebefa/screening/cap768_ess025_alpha0010_margin",
+      "status": "ARM_COMPLETE"
+    },
+    {
+      "arm": {
+        "adaptive_ess_target": 0.25,
+        "arm_id": "cap512_ess025_alpha0000_cost",
+        "execution_rule": "nominal_hp_safemppi_cost",
+        "gp_cap": 512,
+        "negative_alpha": 0.0
+      },
+      "best": {
+        "CR": 0.04285714285714286,
+        "J": 0.7714285714285714,
+        "SR": 0.9571428571428572,
+        "minimum_clearance": 0.05036435460767423,
+        "round": 19,
+        "timeout": 0.0
+      },
+      "elapsed_seconds": 1946.363974571228,
+      "gpu": 1,
+      "run": "/home/dohyun/projects/afe2_runs/low7_b1_balanced_sweep_63ebefa/arms/cap512_ess025_alpha0000_cost",
+      "screening": "/home/dohyun/projects/afe2_runs/low7_b1_balanced_sweep_63ebefa/screening/cap512_ess025_alpha0000_cost",
+      "status": "ARM_COMPLETE"
+    },
+    {
+      "arm": {
+        "adaptive_ess_target": 0.25,
+        "arm_id": "cap512_ess025_alpha0010_margin",
+        "execution_rule": "nominal_hp_max_step_margin",
+        "gp_cap": 512,
+        "negative_alpha": 0.01
+      },
+      "best": {
+        "CR": 0.05714285714285714,
+        "J": 0.7714285714285714,
+        "SR": 0.9428571428571428,
+        "minimum_clearance": 0.041338176054296696,
+        "round": 15,
+        "timeout": 0.0
+      },
+      "elapsed_seconds": 2631.234627723694,
+      "gpu": 1,
+      "run": "/home/dohyun/projects/afe2_runs/low7_b1_balanced_sweep_63ebefa/arms/cap512_ess025_alpha0010_margin",
+      "screening": "/home/dohyun/projects/afe2_runs/low7_b1_balanced_sweep_63ebefa/screening/cap512_ess025_alpha0010_margin",
+      "status": "ARM_COMPLETE"
+    },
+    {
+      "arm": {
+        "adaptive_ess_target": 0.25,
+        "arm_id": "cap512_ess025_alpha0001_cost",
+        "execution_rule": "nominal_hp_safemppi_cost",
+        "gp_cap": 512,
+        "negative_alpha": 0.001
+      },
+      "best": {
+        "CR": 0.02857142857142857,
+        "J": 0.7428571428571429,
+        "SR": 0.9714285714285714,
+        "minimum_clearance": 0.04122967309305347,
+        "round": 19,
+        "timeout": 0.0
+      },
+      "elapsed_seconds": 2102.435109615326,
+      "gpu": 3,
+      "run": "/home/dohyun/projects/afe2_runs/low7_b1_balanced_sweep_63ebefa/arms/cap512_ess025_alpha0001_cost",
+      "screening": "/home/dohyun/projects/afe2_runs/low7_b1_balanced_sweep_63ebefa/screening/cap512_ess025_alpha0001_cost",
+      "status": "ARM_COMPLETE"
+    }
+  ],
+  "rule": "maximize J=mean_gamma 2*min(success_U,success_R)/M; then SR, CR, timeout, clearance, earlier round",
+  "selected": {
+    "arm": {
+      "adaptive_ess_target": 0.25,
+      "arm_id": "cap512_ess025_alpha0010_cost",
+      "execution_rule": "nominal_hp_safemppi_cost",
+      "gp_cap": 512,
+      "negative_alpha": 0.01
+    },
+    "best": {
+      "CR": 0.0,
+      "J": 0.857142857142857,
+      "SR": 1.0,
+      "minimum_clearance": 0.056365811627463035,
+      "round": 19,
+      "timeout": 0.0
+    },
+    "elapsed_seconds": 2041.8141222000122,
+    "gpu": 1,
+    "run": "/home/dohyun/projects/afe2_runs/low7_b1_balanced_sweep_63ebefa/arms/cap512_ess025_alpha0010_cost",
+    "screening": "/home/dohyun/projects/afe2_runs/low7_b1_balanced_sweep_63ebefa/screening/cap512_ess025_alpha0010_cost",
+    "status": "ARM_COMPLETE"
+  }
+}

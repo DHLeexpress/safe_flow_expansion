@@ -1,0 +1,1120 @@
+{
+  "gpu": {
+    "cuda_visible_devices": "1",
+    "name": "NVIDIA H100 NVL",
+    "physical_index": 1,
+    "process_device": "cuda:0",
+    "uuid": "GPU-50fb5dae-52a8-5843-bc81-b869586dccde"
+  },
+  "mode": "holdout",
+  "noise_bank": {
+    "disjoint_from_screen_prefix": true,
+    "dtype": "float32",
+    "independence": "fixed across the three selected-arm endpoint comparison checkpoints",
+    "indexing": "[gamma, rollout_index, control_time, latent_dimension]",
+    "master_seed_disjoint_from_screen": true,
+    "screen_seed": 910748408648085943,
+    "screen_sha256": "01a7d8f796e26794641f4001911f9d42483e5b1993d7cb0eba16c8b2635c1816",
+    "seed": 3920417869907838514,
+    "sha256": "8164b116bf8aa09c6b1d44376c7bbd566cc127984ea77287d85f9aa8a95588bc",
+    "shape": [
+      7,
+      50,
+      300,
+      20
+    ]
+  },
+  "profile": {
+    "caption": "disjoint B1 balanced-r0 raw temperature-1 M=50/gamma confirmation",
+    "checkpoint_stride": 1,
+    "delivery_status": "AFE_RBF_B1_BALANCED_HOLDOUT_DELIVERY_COMPLETE",
+    "filename_tag": "b1_balanced_holdout_m50",
+    "m": 50,
+    "metric_version": "afe_rbf_b1_balanced_holdout_m50_v1",
+    "name": "b1_balanced_holdout_m50",
+    "summary_status": "AFE_RBF_B1_BALANCED_HOLDOUT_COMPLETE"
+  },
+  "raw_policy": "temperature=1, no tilt/filter/controller/fallback",
+  "run": {
+    "algorithm": "afe_rbf_low7_b1_balanced_r0_sweep_v1",
+    "authenticated_artifact_count": 37,
+    "complete_sha256": "83b25a8312bbbe66e5fae216942197cd08a624d7190b0fa43733f17c1f1c245f",
+    "completed_round": 20,
+    "evaluation_profile": "v2_smoke_m10_every_round",
+    "evaluation_rounds": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20
+    ],
+    "final_checkpoint_alias": {
+      "path": "/home/dohyun/projects/afe2_runs/low7_b1_balanced_sweep_63ebefa/arms/cap512_ess025_alpha0010_cost/final.pt",
+      "sha256": "b55d223f6aeb16b1a2b68e61e6dbf0b7942a56fdecb4b6b66af21511abd0c96e"
+    },
+    "kind": "single_afe_rbf_raw_sweep",
+    "method": "afe_rbf",
+    "probe_sha256": "bec29cae0f287509a57ed491143e7e5936df40abba4dee95de6ed8afd1bda49e",
+    "recipe": {
+      "B": 4,
+      "K": 16,
+      "M_eval": 0,
+      "T": 300,
+      "acquisition_memory": "round 1: verified-positive pretrained calibration seed; later rounds: at most 512 full-H positives from the current and previous 1 rounds, selected without replacement by round_gamma_replica_context; re-embedded with current phi; frozen within round",
+      "acquisition_mode": "sequential",
+      "adaptive_beta_contexts_per_gamma": 64,
+      "adaptive_beta_equalize_gammas": true,
+      "adaptive_ess_target": 0.25,
+      "afe_lr": 1e-05,
+      "afe_steps": 0,
+      "algorithm": "afe_rbf_low7_b1_balanced_r0_sweep_v1",
+      "arm": "afe",
+      "artifact_profile": "sweep_compact",
+      "artifact_profile_description": "omit final DStore; retain checkpoints at the declared compact interval and training-viz rounds 1..10/every10; probe, calibration, and completion hashes remain complete",
+      "base_lengthscale": 0.20032394292220754,
+      "batch": 128,
+      "beta": 0.00869098801767839,
+      "beta_protocol": "round-1 operational calibration followed after every round by a beta-neutral current-policy calibration targeting median ESS=0.25; beta_n is frozen during round n",
+      "calibration_budget": {
+        "disjoint_context_archive": {
+          "positives": 816,
+          "queries": 884,
+          "socp_errors": 0,
+          "socp_solves": 884,
+          "verifier_cpu_seconds": 5.0177055997774005
+        },
+        "enters_round1_GP": "exactly the declared operational_gp_size seed positives",
+        "enters_training_Dplus": false,
+        "score_vector_seconds": 1.344128703698516,
+        "seed_archive": {
+          "positives": 813,
+          "queries": 884,
+          "socp_errors": 0,
+          "socp_solves": 884,
+          "verifier_cpu_seconds": 2.6985465865582228
+        },
+        "total_positives": 1629,
+        "total_queries": 1768,
+        "total_socp_errors": 0,
+        "total_socp_solves": 1768,
+        "total_wall_seconds": 7.959980661049485
+      },
+      "calibration_control_steps": 4,
+      "calibration_limitation": "beta is solved on beta-neutral random pending orders; realized first-step ESS/K and stage-normalized ESS/M_remaining are logged during expansion",
+      "calibration_replicas": 8,
+      "calibration_scope": "round-0 acquisition-only verifier budget; the seed archive supplies the declared round-1 GP but neither archive enters cumulative training D+ or audit",
+      "compact_checkpoint_every": 1,
+      "conditioning_schema": "low7_closest_boundary_tie_mean",
+      "demo_buffer_isolation": null,
+      "demo_frac": 0.0,
+      "demo_objective_semantics": null,
+      "demo_reference": null,
+      "execution": "nominal_hp_safemppi_cost; execution-verified (full-H or certified goal prefix) and, for nominal_hp rules, the first executed state satisfies the nominal SafeMPPI DTCBF level-set condition; NVP terminates; no expert/fallback",
+      "execution_rule": "nominal_hp_safemppi_cost",
+      "freeze_visual_encoder": true,
+      "gammas": [
+        0.1,
+        0.2,
+        0.3,
+        0.4,
+        0.5,
+        0.7,
+        1.0
+      ],
+      "gp_cap": 512,
+      "gp_lam": 0.01,
+      "gp_replay_sampling": "round_gamma_replica_context",
+      "gp_replay_window": 2,
+      "grad_clip": 1.0,
+      "gradient_clip_semantics": "the declared replay measure defines the pre-clip objective; existing global gradient clipping is then applied and its active-step fraction is logged",
+      "kernel": "RBF",
+      "learning_memory": "hierarchically round/gamma/replica/context/query-interleaved replay over full-H positives from the current and previous 1 rounds; cumulative D+ archive is retained",
+      "lengthscale": 0.20032394292220754,
+      "lengthscale_multiplier": 1.0,
+      "lengthscale_protocol": "declared multiplier times the mean pairwise embedding distance of exactly 50 samples from the pretrained model",
+      "methodological_scope": "task-specific peptide-style RBF AFE adaptation; previous-round cap and parallel frozen acquisition are explicit computational assumptions",
+      "negative_alpha": 0.01,
+      "negative_alpha_semantics": "paper gradient-norm target: g = g_pos - rho*g_neg, rho=alpha*||g_pos||/||g_neg||; alpha=0 is exact positive-only update",
+      "negative_population": "all successfully observed B queries at a terminal NVP context from the same replay window; this task-specific closed-loop viability signal may overlap full-H D+ and excludes SOCP errors",
+      "nfe": 8,
+      "no_anchor": true,
+      "no_curriculum": true,
+      "no_fallback": true,
+      "no_prox": true,
+      "nvp_all_k_audit": "at the unchanged NVP context only, verify unselected K-B candidates and classify acquisition miss versus nominal-Hp gate versus finite-K failure; audit candidates never enter D/D+, GP, beta, execution, or training",
+      "optimizer_draw_interpretation": "exactly |eligible D+| unique positive draws; every eligible positive appears once; samples are partitioned into ceil(|eligible D+|/batch) minibatches whose sizes differ by at most one; the declared replay-loss measure, not draw count, sets each positive's gradient coefficient",
+      "optimizer_draws_formula": "|eligible D+|",
+      "optimizer_draws_per_round": null,
+      "optimizer_steps_formula": "ceil(|eligible D+|/batch)",
+      "optimizer_steps_per_round": 0,
+      "outcome_evaluation": "not produced by the trainer; stored checkpoints require a separate raw, untilted temperature-1 evaluation",
+      "parallel_sampling": "8 closed-loop replicas per gamma advanced synchronously; one GPU proposal batch per control tick; 48 persistent spawned CPU verifier workers; no within-round GP update",
+      "protocol_profile": "b1_balanced_r0_sweep",
+      "raw_condition_dim": 7,
+      "rbf_offline_sweep": false,
+      "reach": 0.15,
+      "reference_code_semantics": "sequential Schur complements are the B<K budget-consistent adaptation of the public peptide implementation's batch-conditional covariance",
+      "replay_epochs": 1,
+      "replay_loss_measure": "equal nested mass over active positive-support gamma, (round, episode), context, and positive query; all eligible positives remain in the exact epoch; a size-b minibatch in an S-step epoch applies weight b*S*mu_q before clipping",
+      "replay_loss_measure_limitation": "gamma/episode/context groups with zero eligible full-H positives cannot carry positive CFM mass and are logged as missing support",
+      "replay_loss_weighting": "gamma_episode_context_query_equal_mass",
+      "replay_sampling": "round_gamma_replica_context",
+      "replay_update_mode": "one_epoch_without_replacement",
+      "replay_window": 2,
+      "rollout_replicas": 8,
+      "rounds": 20,
+      "route_diagnostics": {
+        "ambiguity_band_m": 0.05,
+        "early_control_steps": 10,
+        "intervention": false,
+        "mode_definition": "U/R is the sign of plan-endpoint cross-track displacement from the oriented canonical start-goal line; ambiguous values are retained",
+        "training_populations": [
+          "all_K",
+          "selected_B",
+          "full_H_positive",
+          "executed"
+        ]
+      },
+      "runtime": {
+        "CUDA_VISIBLE_DEVICES": "1",
+        "cuda_available": true,
+        "cuda_device_name": "NVIDIA H100 NVL",
+        "cuda_device_uuid": "50fb5dae-52a8-5843-bc81-b869586dccde",
+        "cuda_runtime": "12.4",
+        "logical_cuda_index": 0,
+        "numpy": "2.4.6",
+        "python": "3.11.15 | packaged by conda-forge | (main, Mar  5 2026, 16:45:40) [GCC 14.3.0]",
+        "requested_device": "cuda",
+        "torch": "2.6.0+cu124"
+      },
+      "s": 0.9,
+      "scene": {
+        "dt": 0.1,
+        "goal": [
+          4.699999809265137,
+          4.699999809265137
+        ],
+        "obstacles": [
+          [
+            1.0,
+            1.0,
+            0.20000000298023224
+          ],
+          [
+            1.0,
+            2.0,
+            0.20000000298023224
+          ],
+          [
+            1.0,
+            3.0,
+            0.20000000298023224
+          ],
+          [
+            1.0,
+            4.0,
+            0.20000000298023224
+          ],
+          [
+            2.0,
+            1.0,
+            0.20000000298023224
+          ],
+          [
+            2.0,
+            4.0,
+            0.20000000298023224
+          ],
+          [
+            3.0,
+            1.0,
+            0.20000000298023224
+          ],
+          [
+            3.0,
+            4.0,
+            0.20000000298023224
+          ],
+          [
+            4.0,
+            1.0,
+            0.20000000298023224
+          ],
+          [
+            4.0,
+            2.0,
+            0.20000000298023224
+          ],
+          [
+            4.0,
+            3.0,
+            0.20000000298023224
+          ],
+          [
+            4.0,
+            4.0,
+            0.20000000298023224
+          ],
+          [
+            0.0,
+            5.199999809265137,
+            0.20000000298023224
+          ],
+          [
+            5.199999809265137,
+            0.0,
+            0.20000000298023224
+          ],
+          [
+            0.38461539149284363,
+            5.199999809265137,
+            0.20000000298023224
+          ],
+          [
+            5.199999809265137,
+            0.38461539149284363,
+            0.20000000298023224
+          ],
+          [
+            0.7692307829856873,
+            -0.20000000298023224,
+            0.20000000298023224
+          ],
+          [
+            0.7692307829856873,
+            5.199999809265137,
+            0.20000000298023224
+          ],
+          [
+            -0.20000000298023224,
+            0.7692307829856873,
+            0.20000000298023224
+          ],
+          [
+            5.199999809265137,
+            0.7692307829856873,
+            0.20000000298023224
+          ],
+          [
+            1.1538461446762085,
+            -0.20000000298023224,
+            0.20000000298023224
+          ],
+          [
+            1.1538461446762085,
+            5.199999809265137,
+            0.20000000298023224
+          ],
+          [
+            -0.20000000298023224,
+            1.1538461446762085,
+            0.20000000298023224
+          ],
+          [
+            5.199999809265137,
+            1.1538461446762085,
+            0.20000000298023224
+          ],
+          [
+            1.5384615659713745,
+            -0.20000000298023224,
+            0.20000000298023224
+          ],
+          [
+            1.5384615659713745,
+            5.199999809265137,
+            0.20000000298023224
+          ],
+          [
+            -0.20000000298023224,
+            1.5384615659713745,
+            0.20000000298023224
+          ],
+          [
+            5.199999809265137,
+            1.5384615659713745,
+            0.20000000298023224
+          ],
+          [
+            1.923076868057251,
+            -0.20000000298023224,
+            0.20000000298023224
+          ],
+          [
+            1.923076868057251,
+            5.199999809265137,
+            0.20000000298023224
+          ],
+          [
+            -0.20000000298023224,
+            1.923076868057251,
+            0.20000000298023224
+          ],
+          [
+            5.199999809265137,
+            1.923076868057251,
+            0.20000000298023224
+          ],
+          [
+            2.307692289352417,
+            -0.20000000298023224,
+            0.20000000298023224
+          ],
+          [
+            2.307692289352417,
+            5.199999809265137,
+            0.20000000298023224
+          ],
+          [
+            -0.20000000298023224,
+            2.307692289352417,
+            0.20000000298023224
+          ],
+          [
+            5.199999809265137,
+            2.307692289352417,
+            0.20000000298023224
+          ],
+          [
+            2.692307710647583,
+            -0.20000000298023224,
+            0.20000000298023224
+          ],
+          [
+            2.692307710647583,
+            5.199999809265137,
+            0.20000000298023224
+          ],
+          [
+            -0.20000000298023224,
+            2.692307710647583,
+            0.20000000298023224
+          ],
+          [
+            5.199999809265137,
+            2.692307710647583,
+            0.20000000298023224
+          ],
+          [
+            3.076923131942749,
+            -0.20000000298023224,
+            0.20000000298023224
+          ],
+          [
+            3.076923131942749,
+            5.199999809265137,
+            0.20000000298023224
+          ],
+          [
+            -0.20000000298023224,
+            3.076923131942749,
+            0.20000000298023224
+          ],
+          [
+            5.199999809265137,
+            3.076923131942749,
+            0.20000000298023224
+          ],
+          [
+            3.461538553237915,
+            -0.20000000298023224,
+            0.20000000298023224
+          ],
+          [
+            3.461538553237915,
+            5.199999809265137,
+            0.20000000298023224
+          ],
+          [
+            -0.20000000298023224,
+            3.461538553237915,
+            0.20000000298023224
+          ],
+          [
+            5.199999809265137,
+            3.461538553237915,
+            0.20000000298023224
+          ],
+          [
+            3.846153736114502,
+            -0.20000000298023224,
+            0.20000000298023224
+          ],
+          [
+            3.846153736114502,
+            5.199999809265137,
+            0.20000000298023224
+          ],
+          [
+            -0.20000000298023224,
+            3.846153736114502,
+            0.20000000298023224
+          ],
+          [
+            5.199999809265137,
+            3.846153736114502,
+            0.20000000298023224
+          ],
+          [
+            4.230769157409668,
+            -0.20000000298023224,
+            0.20000000298023224
+          ],
+          [
+            4.230769157409668,
+            5.199999809265137,
+            0.20000000298023224
+          ],
+          [
+            -0.20000000298023224,
+            4.230769157409668,
+            0.20000000298023224
+          ],
+          [
+            5.199999809265137,
+            4.230769157409668,
+            0.20000000298023224
+          ],
+          [
+            4.615384578704834,
+            -0.20000000298023224,
+            0.20000000298023224
+          ],
+          [
+            -0.20000000298023224,
+            4.615384578704834,
+            0.20000000298023224
+          ],
+          [
+            5.0,
+            -0.20000000298023224,
+            0.20000000298023224
+          ],
+          [
+            -0.20000000298023224,
+            5.0,
+            0.20000000298023224
+          ],
+          [
+            0.38461539149284363,
+            -0.20000000298023224,
+            0.20000000298023224
+          ],
+          [
+            4.615384578704834,
+            5.199999809265137,
+            0.20000000298023224
+          ],
+          [
+            -0.20000000298023224,
+            0.38461539149284363,
+            0.20000000298023224
+          ],
+          [
+            5.199999809265137,
+            4.615384578704834,
+            0.20000000298023224
+          ],
+          [
+            0.0,
+            -0.20000000298023224,
+            0.20000000298023224
+          ],
+          [
+            -0.20000000298023224,
+            0.0,
+            0.20000000298023224
+          ],
+          [
+            5.199999809265137,
+            5.0,
+            0.20000000298023224
+          ],
+          [
+            5.0,
+            5.199999809265137,
+            0.20000000298023224
+          ],
+          [
+            2.5,
+            2.5,
+            1.0
+          ]
+        ],
+        "profile": {
+          "center_replacement_radius": 1.0,
+          "description": "Endpoint-matched giant-obstacle OOD task: replace the four central radius-0.2 disks by one radius-1.0 disk at (2.5,2.5).",
+          "goal": [
+            4.7,
+            4.7
+          ],
+          "name": "low7_radius1_canonical_v1",
+          "start": [
+            0.3,
+            0.3
+          ],
+          "wall_plugs": 8
+        },
+        "robot_radius": 0.0,
+        "sha256": "356d6d48b3af2b017b529562b530f35285c86f9107da512a73de6ef664b03e72",
+        "start_state": [
+          0.30000001192092896,
+          0.30000001192092896,
+          0.0,
+          0.0
+        ],
+        "u_max": 1.0,
+        "workspace_bounds": [
+          0.0,
+          5.0,
+          0.0,
+          5.0
+        ]
+      },
+      "seed": 910,
+      "single_arm": true,
+      "source_checkpoint": "/home/dohyun/projects/afe2_runs/low7_groupavg_tiemean_r0_pair_0f0c128/seed_20260718_eq_0_ga_1/pretrain/data/checkpoint_candidate.pt",
+      "source_checkpoint_contract": {
+        "assumption_level": "file_model_architecture_and_paired_pretraining_provenance; external disjoint raw qualification required by B1 launcher",
+        "balanced_r0_qualification": {
+          "M_per_gamma": 100,
+          "checkpoint_sha256": "524c9c0a4fd071221ac509b9d8e6fbbfb85fdf1811aa04160317f2a9e2d3ef90",
+          "confirmation": "/home/dohyun/projects/afe2_runs/low7_groupavg_tiemean_antithetic_r0_716aff0/confirmation/qualification.json",
+          "confirmation_sha256": "4c33a82c4ec02d98a7d8644a6f7e3b6a48a98e6fb41514f4e035b7bb2e65992f",
+          "delivery_manifest": "/home/dohyun/projects/afe2_runs/low7_groupavg_tiemean_antithetic_r0_716aff0/DELIVERY_COMPLETE.json",
+          "delivery_manifest_sha256": "e1b81b508eb8e5ae2927ea9bc2750b802fd401b229f15ca42d7987bd54a43528",
+          "minimum_balance": 0.8,
+          "minimum_resolved_fraction": 0.95,
+          "minimum_success_balance": 0.8,
+          "minimum_successes": 10
+        },
+        "checkpoint_file_sha256": "524c9c0a4fd071221ac509b9d8e6fbbfb85fdf1811aa04160317f2a9e2d3ef90",
+        "checkpoint_model_state_sha256": "02aa058368aa3576204a5bd01cf6832f1ae416b4f1c52b69c700224b22e4600d",
+        "conditioning_schema": "low7_closest_boundary_tie_mean",
+        "ctx_dim": 39,
+        "endpoint_free": true,
+        "equivariance_weight": 0.0,
+        "expansion_promotion": false,
+        "fresh_from_scratch": true,
+        "name": "qualified_reflection_paired_low7_candidate_v1",
+        "parameter_count": 70308,
+        "raw_condition_dim": 7,
+        "reflection_group_average": true,
+        "reflection_paired_pretraining": true,
+        "source_manifest": "/home/dohyun/projects/afe2_runs/low7_fixed_grid_8c80cf0/combined/manifest.json",
+        "source_query_hash_digest": "88f19ea801de154835477506809d6d2bc9b0573720431fe8009fdedf5b2320b8",
+        "stage_schema": "afe_fresh_pretrain_v5_low7_reflection_group_average",
+        "trunk_input_dim": 91
+      },
+      "source_checkpoint_contract_sha256": "d73bc2a6adbff6865711dc2ff6fd2b43f2bea37769de2f83b01d5848f0a9be9d",
+      "source_checkpoint_model_sha256": "02aa058368aa3576204a5bd01cf6832f1ae416b4f1c52b69c700224b22e4600d",
+      "source_checkpoint_sha256": "524c9c0a4fd071221ac509b9d8e6fbbfb85fdf1811aa04160317f2a9e2d3ef90",
+      "source_git_commit": "63ebefa7877c0b923c1c7cdea19228302dd6a0ca",
+      "training_probes": false,
+      "uncertainty_meaning": "RBF posterior variance conditioned on the acquisition buffer and only the locations already selected within the same B-budget query; not validity probability and not a safety certificate",
+      "update": "gamma/episode/context/query equal-mass weighted CFM lr 1e-05, batch 128, one exact without-replacement epoch over eligible D+; dynamic optimizer steps ceil(|eligible D+|/batch), NVP signed-gradient alpha 0.01, no prox",
+      "verifier_workers": 48
+    },
+    "recipe_sha256": "39e4bae5aeaab301c2c8dd6a1860611625a0be75c2b2319506bc82376ee30079",
+    "run_root": "/home/dohyun/projects/afe2_runs/low7_b1_balanced_sweep_63ebefa/arms/cap512_ess025_alpha0010_cost",
+    "scene_sha256": "356d6d48b3af2b017b529562b530f35285c86f9107da512a73de6ef664b03e72",
+    "selected_checkpoints": {
+      "0": {
+        "path": "/home/dohyun/projects/afe2_runs/low7_b1_balanced_sweep_63ebefa/arms/cap512_ess025_alpha0010_cost/ckpt_0.pt",
+        "sha256": "bb463e1291eb1396fe9bd876d979e664f007cec984e322c404deeb2b58ea88d6"
+      },
+      "1": {
+        "path": "/home/dohyun/projects/afe2_runs/low7_b1_balanced_sweep_63ebefa/arms/cap512_ess025_alpha0010_cost/ckpt_1.pt",
+        "sha256": "306c6ade0f1c98cc99c2a80406d7a693603ad088b084cd318555612cd6c308c0"
+      },
+      "10": {
+        "path": "/home/dohyun/projects/afe2_runs/low7_b1_balanced_sweep_63ebefa/arms/cap512_ess025_alpha0010_cost/ckpt_10.pt",
+        "sha256": "b79ed4d37c772dedf24f9c5ea846ff789a6f9dc3830b76a1b24eb2c7f5b8d795"
+      },
+      "11": {
+        "path": "/home/dohyun/projects/afe2_runs/low7_b1_balanced_sweep_63ebefa/arms/cap512_ess025_alpha0010_cost/ckpt_11.pt",
+        "sha256": "fb5a06ba28def0172076e8516834e4a81c32cb7e86abd8ccd39f026ab114c5e9"
+      },
+      "12": {
+        "path": "/home/dohyun/projects/afe2_runs/low7_b1_balanced_sweep_63ebefa/arms/cap512_ess025_alpha0010_cost/ckpt_12.pt",
+        "sha256": "233da10a87bf882348edbfd7ef3d24b1d72cd68284ea383f5849c321d43080e3"
+      },
+      "13": {
+        "path": "/home/dohyun/projects/afe2_runs/low7_b1_balanced_sweep_63ebefa/arms/cap512_ess025_alpha0010_cost/ckpt_13.pt",
+        "sha256": "d92b970c85d5ed31d60d73b264476168d39e9888329988831af0aa9a466692fb"
+      },
+      "14": {
+        "path": "/home/dohyun/projects/afe2_runs/low7_b1_balanced_sweep_63ebefa/arms/cap512_ess025_alpha0010_cost/ckpt_14.pt",
+        "sha256": "d926b4f6bfe3da7a7dbafc8e69b4701ecc9c941930120f9b16269c93d45e3279"
+      },
+      "15": {
+        "path": "/home/dohyun/projects/afe2_runs/low7_b1_balanced_sweep_63ebefa/arms/cap512_ess025_alpha0010_cost/ckpt_15.pt",
+        "sha256": "bd94c62a3744a3174c96cbd838d50c5a6151624dee1a042f05cc83dd70c2b77b"
+      },
+      "16": {
+        "path": "/home/dohyun/projects/afe2_runs/low7_b1_balanced_sweep_63ebefa/arms/cap512_ess025_alpha0010_cost/ckpt_16.pt",
+        "sha256": "91747c8dd89a91d39b69e17091ab66c85ecc65d4099a4e1c08d3722b0447ee8a"
+      },
+      "17": {
+        "path": "/home/dohyun/projects/afe2_runs/low7_b1_balanced_sweep_63ebefa/arms/cap512_ess025_alpha0010_cost/ckpt_17.pt",
+        "sha256": "6d3a76be86508543909382dce13ffdd48514f7d261c1ff64069b51a5b37aa919"
+      },
+      "18": {
+        "path": "/home/dohyun/projects/afe2_runs/low7_b1_balanced_sweep_63ebefa/arms/cap512_ess025_alpha0010_cost/ckpt_18.pt",
+        "sha256": "19f1944d0a885182c5f10f839b5a416a31bbdad91065e8665c92554f90d3de79"
+      },
+      "19": {
+        "path": "/home/dohyun/projects/afe2_runs/low7_b1_balanced_sweep_63ebefa/arms/cap512_ess025_alpha0010_cost/ckpt_19.pt",
+        "sha256": "60c155472f5ed0e4a1d53581857f09aead7924f8ce11e8e3adf890d5a57fc079"
+      },
+      "2": {
+        "path": "/home/dohyun/projects/afe2_runs/low7_b1_balanced_sweep_63ebefa/arms/cap512_ess025_alpha0010_cost/ckpt_2.pt",
+        "sha256": "8e29e74b3e63d926557447ad19f03c13b279a5b4c64bea23227543a8d61c6767"
+      },
+      "20": {
+        "path": "/home/dohyun/projects/afe2_runs/low7_b1_balanced_sweep_63ebefa/arms/cap512_ess025_alpha0010_cost/ckpt_20.pt",
+        "sha256": "d264c97306c4213b2953e61ff5abdd2e0ade1c0b47615851afb4def249b1a711"
+      },
+      "3": {
+        "path": "/home/dohyun/projects/afe2_runs/low7_b1_balanced_sweep_63ebefa/arms/cap512_ess025_alpha0010_cost/ckpt_3.pt",
+        "sha256": "b0f2d2e15d0eccf27bb03b335e3ce4399e42e4cb713384b489d20020074a37f0"
+      },
+      "4": {
+        "path": "/home/dohyun/projects/afe2_runs/low7_b1_balanced_sweep_63ebefa/arms/cap512_ess025_alpha0010_cost/ckpt_4.pt",
+        "sha256": "a7f39384b10ced5327034ba93c5567e52638db453efd6a9755ffdb2f7e362888"
+      },
+      "5": {
+        "path": "/home/dohyun/projects/afe2_runs/low7_b1_balanced_sweep_63ebefa/arms/cap512_ess025_alpha0010_cost/ckpt_5.pt",
+        "sha256": "8a60613b877591ba1421f44f9a0af5f90232602f2db24884490159888640e919"
+      },
+      "6": {
+        "path": "/home/dohyun/projects/afe2_runs/low7_b1_balanced_sweep_63ebefa/arms/cap512_ess025_alpha0010_cost/ckpt_6.pt",
+        "sha256": "b4f9e9aa4cf10e6dfe25db69668284da690c93199a0a01711c2c097831ed63c1"
+      },
+      "7": {
+        "path": "/home/dohyun/projects/afe2_runs/low7_b1_balanced_sweep_63ebefa/arms/cap512_ess025_alpha0010_cost/ckpt_7.pt",
+        "sha256": "539c54146ec898089f9f7dd6c0ff0cc72d4eb5e0bffb4779b6ca3087b698cd32"
+      },
+      "8": {
+        "path": "/home/dohyun/projects/afe2_runs/low7_b1_balanced_sweep_63ebefa/arms/cap512_ess025_alpha0010_cost/ckpt_8.pt",
+        "sha256": "d17ee1f3f97c053a0f13867bb078eb169dd23ee6d21e5ed018f1673a53d40983"
+      },
+      "9": {
+        "path": "/home/dohyun/projects/afe2_runs/low7_b1_balanced_sweep_63ebefa/arms/cap512_ess025_alpha0010_cost/ckpt_9.pt",
+        "sha256": "3dc1427e583d3087ba6e205fd4e2a7189751affa8848426791eb6d1a787a4b2d"
+      }
+    },
+    "source_checkpoint_contract_sha256": "d73bc2a6adbff6865711dc2ff6fd2b43f2bea37769de2f83b01d5848f0a9be9d",
+    "source_checkpoint_model_sha256": "02aa058368aa3576204a5bd01cf6832f1ae416b4f1c52b69c700224b22e4600d",
+    "source_checkpoint_sha256": "524c9c0a4fd071221ac509b9d8e6fbbfb85fdf1811aa04160317f2a9e2d3ef90",
+    "source_git_commit": "63ebefa7877c0b923c1c7cdea19228302dd6a0ca"
+  },
+  "scene": {
+    "dt": 0.1,
+    "goal": [
+      4.699999809265137,
+      4.699999809265137
+    ],
+    "obstacles": [
+      [
+        1.0,
+        1.0,
+        0.20000000298023224
+      ],
+      [
+        1.0,
+        2.0,
+        0.20000000298023224
+      ],
+      [
+        1.0,
+        3.0,
+        0.20000000298023224
+      ],
+      [
+        1.0,
+        4.0,
+        0.20000000298023224
+      ],
+      [
+        2.0,
+        1.0,
+        0.20000000298023224
+      ],
+      [
+        2.0,
+        4.0,
+        0.20000000298023224
+      ],
+      [
+        3.0,
+        1.0,
+        0.20000000298023224
+      ],
+      [
+        3.0,
+        4.0,
+        0.20000000298023224
+      ],
+      [
+        4.0,
+        1.0,
+        0.20000000298023224
+      ],
+      [
+        4.0,
+        2.0,
+        0.20000000298023224
+      ],
+      [
+        4.0,
+        3.0,
+        0.20000000298023224
+      ],
+      [
+        4.0,
+        4.0,
+        0.20000000298023224
+      ],
+      [
+        0.0,
+        5.199999809265137,
+        0.20000000298023224
+      ],
+      [
+        5.199999809265137,
+        0.0,
+        0.20000000298023224
+      ],
+      [
+        0.38461539149284363,
+        5.199999809265137,
+        0.20000000298023224
+      ],
+      [
+        5.199999809265137,
+        0.38461539149284363,
+        0.20000000298023224
+      ],
+      [
+        0.7692307829856873,
+        -0.20000000298023224,
+        0.20000000298023224
+      ],
+      [
+        0.7692307829856873,
+        5.199999809265137,
+        0.20000000298023224
+      ],
+      [
+        -0.20000000298023224,
+        0.7692307829856873,
+        0.20000000298023224
+      ],
+      [
+        5.199999809265137,
+        0.7692307829856873,
+        0.20000000298023224
+      ],
+      [
+        1.1538461446762085,
+        -0.20000000298023224,
+        0.20000000298023224
+      ],
+      [
+        1.1538461446762085,
+        5.199999809265137,
+        0.20000000298023224
+      ],
+      [
+        -0.20000000298023224,
+        1.1538461446762085,
+        0.20000000298023224
+      ],
+      [
+        5.199999809265137,
+        1.1538461446762085,
+        0.20000000298023224
+      ],
+      [
+        1.5384615659713745,
+        -0.20000000298023224,
+        0.20000000298023224
+      ],
+      [
+        1.5384615659713745,
+        5.199999809265137,
+        0.20000000298023224
+      ],
+      [
+        -0.20000000298023224,
+        1.5384615659713745,
+        0.20000000298023224
+      ],
+      [
+        5.199999809265137,
+        1.5384615659713745,
+        0.20000000298023224
+      ],
+      [
+        1.923076868057251,
+        -0.20000000298023224,
+        0.20000000298023224
+      ],
+      [
+        1.923076868057251,
+        5.199999809265137,
+        0.20000000298023224
+      ],
+      [
+        -0.20000000298023224,
+        1.923076868057251,
+        0.20000000298023224
+      ],
+      [
+        5.199999809265137,
+        1.923076868057251,
+        0.20000000298023224
+      ],
+      [
+        2.307692289352417,
+        -0.20000000298023224,
+        0.20000000298023224
+      ],
+      [
+        2.307692289352417,
+        5.199999809265137,
+        0.20000000298023224
+      ],
+      [
+        -0.20000000298023224,
+        2.307692289352417,
+        0.20000000298023224
+      ],
+      [
+        5.199999809265137,
+        2.307692289352417,
+        0.20000000298023224
+      ],
+      [
+        2.692307710647583,
+        -0.20000000298023224,
+        0.20000000298023224
+      ],
+      [
+        2.692307710647583,
+        5.199999809265137,
+        0.20000000298023224
+      ],
+      [
+        -0.20000000298023224,
+        2.692307710647583,
+        0.20000000298023224
+      ],
+      [
+        5.199999809265137,
+        2.692307710647583,
+        0.20000000298023224
+      ],
+      [
+        3.076923131942749,
+        -0.20000000298023224,
+        0.20000000298023224
+      ],
+      [
+        3.076923131942749,
+        5.199999809265137,
+        0.20000000298023224
+      ],
+      [
+        -0.20000000298023224,
+        3.076923131942749,
+        0.20000000298023224
+      ],
+      [
+        5.199999809265137,
+        3.076923131942749,
+        0.20000000298023224
+      ],
+      [
+        3.461538553237915,
+        -0.20000000298023224,
+        0.20000000298023224
+      ],
+      [
+        3.461538553237915,
+        5.199999809265137,
+        0.20000000298023224
+      ],
+      [
+        -0.20000000298023224,
+        3.461538553237915,
+        0.20000000298023224
+      ],
+      [
+        5.199999809265137,
+        3.461538553237915,
+        0.20000000298023224
+      ],
+      [
+        3.846153736114502,
+        -0.20000000298023224,
+        0.20000000298023224
+      ],
+      [
+        3.846153736114502,
+        5.199999809265137,
+        0.20000000298023224
+      ],
+      [
+        -0.20000000298023224,
+        3.846153736114502,
+        0.20000000298023224
+      ],
+      [
+        5.199999809265137,
+        3.846153736114502,
+        0.20000000298023224
+      ],
+      [
+        4.230769157409668,
+        -0.20000000298023224,
+        0.20000000298023224
+      ],
+      [
+        4.230769157409668,
+        5.199999809265137,
+        0.20000000298023224
+      ],
+      [
+        -0.20000000298023224,
+        4.230769157409668,
+        0.20000000298023224
+      ],
+      [
+        5.199999809265137,
+        4.230769157409668,
+        0.20000000298023224
+      ],
+      [
+        4.615384578704834,
+        -0.20000000298023224,
+        0.20000000298023224
+      ],
+      [
+        -0.20000000298023224,
+        4.615384578704834,
+        0.20000000298023224
+      ],
+      [
+        5.0,
+        -0.20000000298023224,
+        0.20000000298023224
+      ],
+      [
+        -0.20000000298023224,
+        5.0,
+        0.20000000298023224
+      ],
+      [
+        0.38461539149284363,
+        -0.20000000298023224,
+        0.20000000298023224
+      ],
+      [
+        4.615384578704834,
+        5.199999809265137,
+        0.20000000298023224
+      ],
+      [
+        -0.20000000298023224,
+        0.38461539149284363,
+        0.20000000298023224
+      ],
+      [
+        5.199999809265137,
+        4.615384578704834,
+        0.20000000298023224
+      ],
+      [
+        0.0,
+        -0.20000000298023224,
+        0.20000000298023224
+      ],
+      [
+        -0.20000000298023224,
+        0.0,
+        0.20000000298023224
+      ],
+      [
+        5.199999809265137,
+        5.0,
+        0.20000000298023224
+      ],
+      [
+        5.0,
+        5.199999809265137,
+        0.20000000298023224
+      ],
+      [
+        2.5,
+        2.5,
+        1.0
+      ]
+    ],
+    "profile": {
+      "center_replacement_radius": 1.0,
+      "description": "Endpoint-matched giant-obstacle OOD task: replace the four central radius-0.2 disks by one radius-1.0 disk at (2.5,2.5).",
+      "goal": [
+        4.7,
+        4.7
+      ],
+      "name": "low7_radius1_canonical_v1",
+      "start": [
+        0.3,
+        0.3
+      ],
+      "wall_plugs": 8
+    },
+    "robot_radius": 0.0,
+    "sha256": "356d6d48b3af2b017b529562b530f35285c86f9107da512a73de6ef664b03e72",
+    "start_state": [
+      0.30000001192092896,
+      0.30000001192092896,
+      0.0,
+      0.0
+    ],
+    "u_max": 1.0,
+    "workspace_bounds": [
+      0.0,
+      5.0,
+      0.0,
+      5.0
+    ]
+  },
+  "selected_round_fixed_before_holdout": 19,
+  "source": {
+    "commit": "63ebefa7877c0b923c1c7cdea19228302dd6a0ca",
+    "parent": "716aff08dcd170abb56f43f576c6816d21c9a2e5",
+    "root": "/home/dohyun/projects/safeMPPI-b1-balanced-codex-63ebefa",
+    "tracked_dirty": false,
+    "untracked_runtime_sources": []
+  },
+  "verifier_workers": 128
+}

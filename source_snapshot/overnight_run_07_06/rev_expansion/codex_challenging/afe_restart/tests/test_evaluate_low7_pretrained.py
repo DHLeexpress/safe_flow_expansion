@@ -11,20 +11,40 @@ from afe_restart import evaluate_low7_pretrained as evaluation
 from afe_restart.policy import model_state_hash
 
 
-def _candidate_checkpoint(path: Path, *, fixed_goal_grid: bool = False) -> str:
+def _candidate_checkpoint(
+    path: Path,
+    *,
+    fixed_goal_grid: bool = False,
+    reflection_paired: bool = False,
+    equivariance_weight: float = 0.0,
+    reflection_group_average: bool = False,
+) -> str:
+    conditioning_schema = (
+        evaluation.LOW7_TIE_SCHEMA
+        if reflection_group_average
+        else evaluation.LOW7_SCHEMA
+    )
     policy = evaluation.HP.GridHPFlowPolicy(
         repr_dim=32,
         grid_hw=(32, 32),
         trunk_hidden=(160, 96),
         enc_depth=3,
         raw_condition_dim=7,
-        conditioning_schema="low7_closest_boundary",
+        conditioning_schema=conditioning_schema,
+        reflection_group_average=reflection_group_average,
     )
     evaluation.HP.save_hp(
         policy,
         path,
         extra={
-            "stage_schema": evaluation.CHECKPOINT_STAGE_SCHEMA,
+            "stage_schema": (
+                evaluation.GROUP_AVERAGED_CHECKPOINT_STAGE_SCHEMA
+                if reflection_group_average
+                else evaluation.EQUIVARIANT_CHECKPOINT_STAGE_SCHEMA
+                if equivariance_weight > 0.0
+                else evaluation.REFLECTION_CHECKPOINT_STAGE_SCHEMA if reflection_paired
+                else evaluation.CHECKPOINT_STAGE_SCHEMA
+            ),
             "fresh_from_scratch": True,
             "endpoint_free": True,
             "domain_randomized_start_goal": not fixed_goal_grid,
@@ -39,6 +59,18 @@ def _candidate_checkpoint(path: Path, *, fixed_goal_grid: bool = False) -> str:
             "model_state_sha256": model_state_hash(policy),
             "best_epoch": 12,
             "best_validation_cfm": 0.25,
+            "reflection_paired_pretraining": reflection_paired,
+            "equivariance_weight": equivariance_weight,
+            "reflection_group_average": reflection_group_average,
+            "conditioning_transform": (
+                {
+                    "name": "equal-nearest-boundary-vector-mean-v1",
+                    "source_low7_authenticated_before_transform": True,
+                    "transformed_low7_sha256": "b" * 64,
+                }
+                if reflection_group_average
+                else None
+            ),
         },
     )
     return evaluation.sha256_file(path)
@@ -71,6 +103,55 @@ def test_candidate_loader_accepts_fixed_goal_full_grid_provenance(
     _policy, contract = evaluation.load_low7_candidate(checkpoint, checksum, "cpu")
 
     assert contract["fixed_goal_grid"] is True
+
+
+def test_candidate_loader_accepts_reflection_paired_pretraining(
+    tmp_path: Path,
+) -> None:
+    checkpoint = tmp_path / "reflection_candidate.pt"
+    checksum = _candidate_checkpoint(
+        checkpoint, fixed_goal_grid=True, reflection_paired=True
+    )
+
+    _policy, contract = evaluation.load_low7_candidate(checkpoint, checksum, "cpu")
+
+    assert contract["reflection_paired_pretraining"] is True
+    assert contract["stage_schema"] == evaluation.REFLECTION_CHECKPOINT_STAGE_SCHEMA
+
+
+def test_candidate_loader_accepts_explicit_equivariance_pretraining(
+    tmp_path: Path,
+) -> None:
+    checkpoint = tmp_path / "equivariant_candidate.pt"
+    checksum = _candidate_checkpoint(
+        checkpoint,
+        fixed_goal_grid=True,
+        reflection_paired=True,
+        equivariance_weight=10.0,
+    )
+
+    _policy, contract = evaluation.load_low7_candidate(checkpoint, checksum, "cpu")
+
+    assert contract["stage_schema"] == evaluation.EQUIVARIANT_CHECKPOINT_STAGE_SCHEMA
+    assert contract["equivariance_weight"] == 10.0
+
+
+def test_candidate_loader_accepts_exact_group_averaged_pretraining(
+    tmp_path: Path,
+) -> None:
+    checkpoint = tmp_path / "group_averaged_candidate.pt"
+    checksum = _candidate_checkpoint(
+        checkpoint,
+        fixed_goal_grid=True,
+        reflection_paired=True,
+        reflection_group_average=True,
+    )
+
+    policy, contract = evaluation.load_low7_candidate(checkpoint, checksum, "cpu")
+
+    assert policy.reflection_group_average is True
+    assert contract["stage_schema"] == evaluation.GROUP_AVERAGED_CHECKPOINT_STAGE_SCHEMA
+    assert contract["reflection_group_average"] is True
 
 
 @pytest.mark.parametrize(
@@ -114,9 +195,11 @@ def test_declared_scenes_have_canonical_endpoints_and_exact_ood_geometry() -> No
 
 class _ZeroPolicy:
     d = 20
+    reflection_group_average = False
 
     def __init__(self) -> None:
         self.conditions: list[torch.Tensor] = []
+        self.noises: list[torch.Tensor] = []
 
     def ctx_from(
         self, grid: torch.Tensor, condition: torch.Tensor, history: torch.Tensor
@@ -140,6 +223,7 @@ class _ZeroPolicy:
     ) -> torch.Tensor:
         assert context.shape == (n, 39)
         assert initial_noise.shape == (n, 20)
+        self.noises.append(initial_noise.detach().cpu().clone())
         return torch.zeros(n, 10, 2, device=context.device)
 
 
@@ -174,6 +258,61 @@ def test_raw_rollout_uses_low7_gamma_last_and_never_calls_verifier(
             conditions[:, -1], torch.tensor((0.1, 0.1, 0.7, 0.7))
         )
     assert plans[0]["seed"] == evaluation.raw_noise_seed(0.1, 0, 0)
+
+
+def test_reflection_antithetic_raw_noise_pairs_without_changing_temperature() -> None:
+    class GroupAveragedZeroPolicy(_ZeroPolicy):
+        reflection_group_average = True
+
+    env = evaluation.build_scene(
+        evaluation.get_scene_profile("low7_radius1_canonical_v1")
+    )
+    policy = GroupAveragedZeroPolicy()
+
+    episodes, plans = evaluation.run_raw_rollouts(
+        policy,
+        env,
+        "low7_radius1_canonical_v1",
+        m=4,
+        gammas=(0.1,),
+        horizon=1,
+        device="cpu",
+        reflection_antithetic=True,
+    )
+
+    assert len(episodes) == 4
+    noise = policy.noises[0]
+    torch.testing.assert_close(noise[2], noise[0].reshape(-1, 2).flip(-1).reshape(-1))
+    torch.testing.assert_close(noise[3], noise[1].reshape(-1, 2).flip(-1).reshape(-1))
+    assert plans[0]["seed"] == plans[2]["seed"]
+    assert plans[1]["seed"] == plans[3]["seed"]
+    assert plans[2]["reflection_pair_index"] == 0
+
+
+def test_reflection_antithetic_raw_noise_rejects_invalid_contracts() -> None:
+    env = evaluation.build_scene(
+        evaluation.get_scene_profile("low7_radius1_canonical_v1")
+    )
+    with pytest.raises(ValueError, match="even M"):
+        evaluation.run_raw_rollouts(
+            _ZeroPolicy(),
+            env,
+            "low7_radius1_canonical_v1",
+            m=3,
+            gammas=(0.1,),
+            horizon=1,
+            reflection_antithetic=True,
+        )
+    with pytest.raises(ValueError, match="group-averaged"):
+        evaluation.run_raw_rollouts(
+            _ZeroPolicy(),
+            env,
+            "low7_radius1_canonical_v1",
+            m=2,
+            gammas=(0.1,),
+            horizon=1,
+            reflection_antithetic=True,
+        )
 
 
 def test_seed_stream_is_fixed_and_plan_validity_matches_existing_progress_bar() -> None:

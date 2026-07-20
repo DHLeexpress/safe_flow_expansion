@@ -1,0 +1,560 @@
+{
+  "B": 4,
+  "K": 16,
+  "M_eval": 0,
+  "T": 300,
+  "acquisition_memory": "round 1: verified-positive pretrained calibration seed; later rounds: at most 512 full-H positives from the current and previous 1 rounds, selected without replacement by round_gamma_replica_context; re-embedded with current phi; frozen within round",
+  "acquisition_mode": "sequential",
+  "adaptive_beta_contexts_per_gamma": 64,
+  "adaptive_beta_equalize_gammas": true,
+  "adaptive_ess_target": 0.25,
+  "afe_lr": 1e-05,
+  "afe_steps": 0,
+  "algorithm": "afe_rbf_low7_b1_balanced_r0_sweep_v1",
+  "arm": "afe",
+  "artifact_profile": "sweep_compact",
+  "artifact_profile_description": "omit final DStore; retain checkpoints at the declared compact interval and training-viz rounds 1..10/every10; probe, calibration, and completion hashes remain complete",
+  "base_lengthscale": 0.20032394292220754,
+  "batch": 128,
+  "beta": 0.00869098801767839,
+  "beta_protocol": "round-1 operational calibration followed after every round by a beta-neutral current-policy calibration targeting median ESS=0.25; beta_n is frozen during round n",
+  "calibration_budget": {
+    "disjoint_context_archive": {
+      "positives": 816,
+      "queries": 884,
+      "socp_errors": 0,
+      "socp_solves": 884,
+      "verifier_cpu_seconds": 5.0177055997774005
+    },
+    "enters_round1_GP": "exactly the declared operational_gp_size seed positives",
+    "enters_training_Dplus": false,
+    "score_vector_seconds": 1.344128703698516,
+    "seed_archive": {
+      "positives": 813,
+      "queries": 884,
+      "socp_errors": 0,
+      "socp_solves": 884,
+      "verifier_cpu_seconds": 2.6985465865582228
+    },
+    "total_positives": 1629,
+    "total_queries": 1768,
+    "total_socp_errors": 0,
+    "total_socp_solves": 1768,
+    "total_wall_seconds": 7.959980661049485
+  },
+  "calibration_control_steps": 4,
+  "calibration_limitation": "beta is solved on beta-neutral random pending orders; realized first-step ESS/K and stage-normalized ESS/M_remaining are logged during expansion",
+  "calibration_replicas": 8,
+  "calibration_scope": "round-0 acquisition-only verifier budget; the seed archive supplies the declared round-1 GP but neither archive enters cumulative training D+ or audit",
+  "compact_checkpoint_every": 1,
+  "conditioning_schema": "low7_closest_boundary_tie_mean",
+  "demo_buffer_isolation": null,
+  "demo_frac": 0.0,
+  "demo_objective_semantics": null,
+  "demo_reference": null,
+  "execution": "nominal_hp_safemppi_cost; execution-verified (full-H or certified goal prefix) and, for nominal_hp rules, the first executed state satisfies the nominal SafeMPPI DTCBF level-set condition; NVP terminates; no expert/fallback",
+  "execution_rule": "nominal_hp_safemppi_cost",
+  "freeze_visual_encoder": true,
+  "gammas": [
+    0.1,
+    0.2,
+    0.3,
+    0.4,
+    0.5,
+    0.7,
+    1.0
+  ],
+  "gp_cap": 512,
+  "gp_lam": 0.01,
+  "gp_replay_sampling": "round_gamma_replica_context",
+  "gp_replay_window": 2,
+  "grad_clip": 1.0,
+  "gradient_clip_semantics": "the declared replay measure defines the pre-clip objective; existing global gradient clipping is then applied and its active-step fraction is logged",
+  "kernel": "RBF",
+  "learning_memory": "hierarchically round/gamma/replica/context/query-interleaved replay over full-H positives from the current and previous 1 rounds; cumulative D+ archive is retained",
+  "lengthscale": 0.20032394292220754,
+  "lengthscale_multiplier": 1.0,
+  "lengthscale_protocol": "declared multiplier times the mean pairwise embedding distance of exactly 50 samples from the pretrained model",
+  "methodological_scope": "task-specific peptide-style RBF AFE adaptation; previous-round cap and parallel frozen acquisition are explicit computational assumptions",
+  "negative_alpha": 0.01,
+  "negative_alpha_semantics": "paper gradient-norm target: g = g_pos - rho*g_neg, rho=alpha*||g_pos||/||g_neg||; alpha=0 is exact positive-only update",
+  "negative_population": "all successfully observed B queries at a terminal NVP context from the same replay window; this task-specific closed-loop viability signal may overlap full-H D+ and excludes SOCP errors",
+  "nfe": 8,
+  "no_anchor": true,
+  "no_curriculum": true,
+  "no_fallback": true,
+  "no_prox": true,
+  "nvp_all_k_audit": "at the unchanged NVP context only, verify unselected K-B candidates and classify acquisition miss versus nominal-Hp gate versus finite-K failure; audit candidates never enter D/D+, GP, beta, execution, or training",
+  "optimizer_draw_interpretation": "exactly |eligible D+| unique positive draws; every eligible positive appears once; samples are partitioned into ceil(|eligible D+|/batch) minibatches whose sizes differ by at most one; the declared replay-loss measure, not draw count, sets each positive's gradient coefficient",
+  "optimizer_draws_formula": "|eligible D+|",
+  "optimizer_draws_per_round": null,
+  "optimizer_steps_formula": "ceil(|eligible D+|/batch)",
+  "optimizer_steps_per_round": 0,
+  "outcome_evaluation": "not produced by the trainer; stored checkpoints require a separate raw, untilted temperature-1 evaluation",
+  "parallel_sampling": "8 closed-loop replicas per gamma advanced synchronously; one GPU proposal batch per control tick; 48 persistent spawned CPU verifier workers; no within-round GP update",
+  "protocol_profile": "b1_balanced_r0_sweep",
+  "raw_condition_dim": 7,
+  "rbf_offline_sweep": false,
+  "reach": 0.15,
+  "reference_code_semantics": "sequential Schur complements are the B<K budget-consistent adaptation of the public peptide implementation's batch-conditional covariance",
+  "replay_epochs": 1,
+  "replay_loss_measure": "equal nested mass over active positive-support gamma, (round, episode), context, and positive query; all eligible positives remain in the exact epoch; a size-b minibatch in an S-step epoch applies weight b*S*mu_q before clipping",
+  "replay_loss_measure_limitation": "gamma/episode/context groups with zero eligible full-H positives cannot carry positive CFM mass and are logged as missing support",
+  "replay_loss_weighting": "gamma_episode_context_query_equal_mass",
+  "replay_sampling": "round_gamma_replica_context",
+  "replay_update_mode": "one_epoch_without_replacement",
+  "replay_window": 2,
+  "rollout_replicas": 8,
+  "rounds": 20,
+  "route_diagnostics": {
+    "ambiguity_band_m": 0.05,
+    "early_control_steps": 10,
+    "intervention": false,
+    "mode_definition": "U/R is the sign of plan-endpoint cross-track displacement from the oriented canonical start-goal line; ambiguous values are retained",
+    "training_populations": [
+      "all_K",
+      "selected_B",
+      "full_H_positive",
+      "executed"
+    ]
+  },
+  "runtime": {
+    "CUDA_VISIBLE_DEVICES": "1",
+    "cuda_available": true,
+    "cuda_device_name": "NVIDIA H100 NVL",
+    "cuda_device_uuid": "50fb5dae-52a8-5843-bc81-b869586dccde",
+    "cuda_runtime": "12.4",
+    "logical_cuda_index": 0,
+    "numpy": "2.4.6",
+    "python": "3.11.15 | packaged by conda-forge | (main, Mar  5 2026, 16:45:40) [GCC 14.3.0]",
+    "requested_device": "cuda",
+    "torch": "2.6.0+cu124"
+  },
+  "s": 0.9,
+  "scene": {
+    "dt": 0.1,
+    "goal": [
+      4.699999809265137,
+      4.699999809265137
+    ],
+    "obstacles": [
+      [
+        1.0,
+        1.0,
+        0.20000000298023224
+      ],
+      [
+        1.0,
+        2.0,
+        0.20000000298023224
+      ],
+      [
+        1.0,
+        3.0,
+        0.20000000298023224
+      ],
+      [
+        1.0,
+        4.0,
+        0.20000000298023224
+      ],
+      [
+        2.0,
+        1.0,
+        0.20000000298023224
+      ],
+      [
+        2.0,
+        4.0,
+        0.20000000298023224
+      ],
+      [
+        3.0,
+        1.0,
+        0.20000000298023224
+      ],
+      [
+        3.0,
+        4.0,
+        0.20000000298023224
+      ],
+      [
+        4.0,
+        1.0,
+        0.20000000298023224
+      ],
+      [
+        4.0,
+        2.0,
+        0.20000000298023224
+      ],
+      [
+        4.0,
+        3.0,
+        0.20000000298023224
+      ],
+      [
+        4.0,
+        4.0,
+        0.20000000298023224
+      ],
+      [
+        0.0,
+        5.199999809265137,
+        0.20000000298023224
+      ],
+      [
+        5.199999809265137,
+        0.0,
+        0.20000000298023224
+      ],
+      [
+        0.38461539149284363,
+        5.199999809265137,
+        0.20000000298023224
+      ],
+      [
+        5.199999809265137,
+        0.38461539149284363,
+        0.20000000298023224
+      ],
+      [
+        0.7692307829856873,
+        -0.20000000298023224,
+        0.20000000298023224
+      ],
+      [
+        0.7692307829856873,
+        5.199999809265137,
+        0.20000000298023224
+      ],
+      [
+        -0.20000000298023224,
+        0.7692307829856873,
+        0.20000000298023224
+      ],
+      [
+        5.199999809265137,
+        0.7692307829856873,
+        0.20000000298023224
+      ],
+      [
+        1.1538461446762085,
+        -0.20000000298023224,
+        0.20000000298023224
+      ],
+      [
+        1.1538461446762085,
+        5.199999809265137,
+        0.20000000298023224
+      ],
+      [
+        -0.20000000298023224,
+        1.1538461446762085,
+        0.20000000298023224
+      ],
+      [
+        5.199999809265137,
+        1.1538461446762085,
+        0.20000000298023224
+      ],
+      [
+        1.5384615659713745,
+        -0.20000000298023224,
+        0.20000000298023224
+      ],
+      [
+        1.5384615659713745,
+        5.199999809265137,
+        0.20000000298023224
+      ],
+      [
+        -0.20000000298023224,
+        1.5384615659713745,
+        0.20000000298023224
+      ],
+      [
+        5.199999809265137,
+        1.5384615659713745,
+        0.20000000298023224
+      ],
+      [
+        1.923076868057251,
+        -0.20000000298023224,
+        0.20000000298023224
+      ],
+      [
+        1.923076868057251,
+        5.199999809265137,
+        0.20000000298023224
+      ],
+      [
+        -0.20000000298023224,
+        1.923076868057251,
+        0.20000000298023224
+      ],
+      [
+        5.199999809265137,
+        1.923076868057251,
+        0.20000000298023224
+      ],
+      [
+        2.307692289352417,
+        -0.20000000298023224,
+        0.20000000298023224
+      ],
+      [
+        2.307692289352417,
+        5.199999809265137,
+        0.20000000298023224
+      ],
+      [
+        -0.20000000298023224,
+        2.307692289352417,
+        0.20000000298023224
+      ],
+      [
+        5.199999809265137,
+        2.307692289352417,
+        0.20000000298023224
+      ],
+      [
+        2.692307710647583,
+        -0.20000000298023224,
+        0.20000000298023224
+      ],
+      [
+        2.692307710647583,
+        5.199999809265137,
+        0.20000000298023224
+      ],
+      [
+        -0.20000000298023224,
+        2.692307710647583,
+        0.20000000298023224
+      ],
+      [
+        5.199999809265137,
+        2.692307710647583,
+        0.20000000298023224
+      ],
+      [
+        3.076923131942749,
+        -0.20000000298023224,
+        0.20000000298023224
+      ],
+      [
+        3.076923131942749,
+        5.199999809265137,
+        0.20000000298023224
+      ],
+      [
+        -0.20000000298023224,
+        3.076923131942749,
+        0.20000000298023224
+      ],
+      [
+        5.199999809265137,
+        3.076923131942749,
+        0.20000000298023224
+      ],
+      [
+        3.461538553237915,
+        -0.20000000298023224,
+        0.20000000298023224
+      ],
+      [
+        3.461538553237915,
+        5.199999809265137,
+        0.20000000298023224
+      ],
+      [
+        -0.20000000298023224,
+        3.461538553237915,
+        0.20000000298023224
+      ],
+      [
+        5.199999809265137,
+        3.461538553237915,
+        0.20000000298023224
+      ],
+      [
+        3.846153736114502,
+        -0.20000000298023224,
+        0.20000000298023224
+      ],
+      [
+        3.846153736114502,
+        5.199999809265137,
+        0.20000000298023224
+      ],
+      [
+        -0.20000000298023224,
+        3.846153736114502,
+        0.20000000298023224
+      ],
+      [
+        5.199999809265137,
+        3.846153736114502,
+        0.20000000298023224
+      ],
+      [
+        4.230769157409668,
+        -0.20000000298023224,
+        0.20000000298023224
+      ],
+      [
+        4.230769157409668,
+        5.199999809265137,
+        0.20000000298023224
+      ],
+      [
+        -0.20000000298023224,
+        4.230769157409668,
+        0.20000000298023224
+      ],
+      [
+        5.199999809265137,
+        4.230769157409668,
+        0.20000000298023224
+      ],
+      [
+        4.615384578704834,
+        -0.20000000298023224,
+        0.20000000298023224
+      ],
+      [
+        -0.20000000298023224,
+        4.615384578704834,
+        0.20000000298023224
+      ],
+      [
+        5.0,
+        -0.20000000298023224,
+        0.20000000298023224
+      ],
+      [
+        -0.20000000298023224,
+        5.0,
+        0.20000000298023224
+      ],
+      [
+        0.38461539149284363,
+        -0.20000000298023224,
+        0.20000000298023224
+      ],
+      [
+        4.615384578704834,
+        5.199999809265137,
+        0.20000000298023224
+      ],
+      [
+        -0.20000000298023224,
+        0.38461539149284363,
+        0.20000000298023224
+      ],
+      [
+        5.199999809265137,
+        4.615384578704834,
+        0.20000000298023224
+      ],
+      [
+        0.0,
+        -0.20000000298023224,
+        0.20000000298023224
+      ],
+      [
+        -0.20000000298023224,
+        0.0,
+        0.20000000298023224
+      ],
+      [
+        5.199999809265137,
+        5.0,
+        0.20000000298023224
+      ],
+      [
+        5.0,
+        5.199999809265137,
+        0.20000000298023224
+      ],
+      [
+        2.5,
+        2.5,
+        1.0
+      ]
+    ],
+    "profile": {
+      "center_replacement_radius": 1.0,
+      "description": "Endpoint-matched giant-obstacle OOD task: replace the four central radius-0.2 disks by one radius-1.0 disk at (2.5,2.5).",
+      "goal": [
+        4.7,
+        4.7
+      ],
+      "name": "low7_radius1_canonical_v1",
+      "start": [
+        0.3,
+        0.3
+      ],
+      "wall_plugs": 8
+    },
+    "robot_radius": 0.0,
+    "sha256": "356d6d48b3af2b017b529562b530f35285c86f9107da512a73de6ef664b03e72",
+    "start_state": [
+      0.30000001192092896,
+      0.30000001192092896,
+      0.0,
+      0.0
+    ],
+    "u_max": 1.0,
+    "workspace_bounds": [
+      0.0,
+      5.0,
+      0.0,
+      5.0
+    ]
+  },
+  "seed": 910,
+  "single_arm": true,
+  "source_checkpoint": "/home/dohyun/projects/afe2_runs/low7_groupavg_tiemean_r0_pair_0f0c128/seed_20260718_eq_0_ga_1/pretrain/data/checkpoint_candidate.pt",
+  "source_checkpoint_contract": {
+    "assumption_level": "file_model_architecture_and_paired_pretraining_provenance; external disjoint raw qualification required by B1 launcher",
+    "balanced_r0_qualification": {
+      "M_per_gamma": 100,
+      "checkpoint_sha256": "524c9c0a4fd071221ac509b9d8e6fbbfb85fdf1811aa04160317f2a9e2d3ef90",
+      "confirmation": "/home/dohyun/projects/afe2_runs/low7_groupavg_tiemean_antithetic_r0_716aff0/confirmation/qualification.json",
+      "confirmation_sha256": "4c33a82c4ec02d98a7d8644a6f7e3b6a48a98e6fb41514f4e035b7bb2e65992f",
+      "delivery_manifest": "/home/dohyun/projects/afe2_runs/low7_groupavg_tiemean_antithetic_r0_716aff0/DELIVERY_COMPLETE.json",
+      "delivery_manifest_sha256": "e1b81b508eb8e5ae2927ea9bc2750b802fd401b229f15ca42d7987bd54a43528",
+      "minimum_balance": 0.8,
+      "minimum_resolved_fraction": 0.95,
+      "minimum_success_balance": 0.8,
+      "minimum_successes": 10
+    },
+    "checkpoint_file_sha256": "524c9c0a4fd071221ac509b9d8e6fbbfb85fdf1811aa04160317f2a9e2d3ef90",
+    "checkpoint_model_state_sha256": "02aa058368aa3576204a5bd01cf6832f1ae416b4f1c52b69c700224b22e4600d",
+    "conditioning_schema": "low7_closest_boundary_tie_mean",
+    "ctx_dim": 39,
+    "endpoint_free": true,
+    "equivariance_weight": 0.0,
+    "expansion_promotion": false,
+    "fresh_from_scratch": true,
+    "name": "qualified_reflection_paired_low7_candidate_v1",
+    "parameter_count": 70308,
+    "raw_condition_dim": 7,
+    "reflection_group_average": true,
+    "reflection_paired_pretraining": true,
+    "source_manifest": "/home/dohyun/projects/afe2_runs/low7_fixed_grid_8c80cf0/combined/manifest.json",
+    "source_query_hash_digest": "88f19ea801de154835477506809d6d2bc9b0573720431fe8009fdedf5b2320b8",
+    "stage_schema": "afe_fresh_pretrain_v5_low7_reflection_group_average",
+    "trunk_input_dim": 91
+  },
+  "source_checkpoint_contract_sha256": "d73bc2a6adbff6865711dc2ff6fd2b43f2bea37769de2f83b01d5848f0a9be9d",
+  "source_checkpoint_model_sha256": "02aa058368aa3576204a5bd01cf6832f1ae416b4f1c52b69c700224b22e4600d",
+  "source_checkpoint_sha256": "524c9c0a4fd071221ac509b9d8e6fbbfb85fdf1811aa04160317f2a9e2d3ef90",
+  "source_git_commit": "63ebefa7877c0b923c1c7cdea19228302dd6a0ca",
+  "training_probes": false,
+  "uncertainty_meaning": "RBF posterior variance conditioned on the acquisition buffer and only the locations already selected within the same B-budget query; not validity probability and not a safety certificate",
+  "update": "gamma/episode/context/query equal-mass weighted CFM lr 1e-05, batch 128, one exact without-replacement epoch over eligible D+; dynamic optimizer steps ceil(|eligible D+|/batch), NVP signed-gradient alpha 0.01, no prox",
+  "verifier_workers": 48
+}

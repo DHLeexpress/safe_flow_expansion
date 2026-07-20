@@ -213,6 +213,7 @@ def context_from_state_low7(
     executed_controls: list[np.ndarray] | np.ndarray,
     env,
     *,
+    tie_average_boundary: bool = False,
     dynamics: DynamicsConfig = DynamicsConfig(),
     verifier: VerifierConfig = VerifierConfig(),
 ) -> QueryContext:
@@ -239,6 +240,7 @@ def context_from_state_low7(
         obstacle_array,
         float(env.r_robot),
         K=grid_features.K_HIST,
+        tie_average=tie_average_boundary,
     )
     return QueryContext(
         grid=grid,

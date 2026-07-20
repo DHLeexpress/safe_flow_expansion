@@ -1,0 +1,40 @@
+{
+  "M_per_gamma": 50,
+  "metrics": "/home/dohyun/projects/afe2_runs/low7_b1_balanced_sweep_63ebefa/confirmation/metrics.jsonl",
+  "mode": "holdout",
+  "presentation": [
+    "/home/dohyun/projects/afe2_runs/low7_b1_balanced_sweep_63ebefa/confirmation/report.png",
+    "/home/dohyun/projects/afe2_runs/low7_b1_balanced_sweep_63ebefa/confirmation/report.pdf",
+    "/home/dohyun/projects/afe2_runs/low7_b1_balanced_sweep_63ebefa/confirmation/selected_raw_m50_gallery.png",
+    "/home/dohyun/projects/afe2_runs/low7_b1_balanced_sweep_63ebefa/confirmation/selected_raw_m50_gallery.pdf"
+  ],
+  "rounds": [
+    0,
+    19,
+    20
+  ],
+  "selection": {
+    "rounds": [
+      0,
+      19,
+      20
+    ],
+    "selected_round": 19,
+    "selection_source": "fixed Stage A result; M50 did not select or change checkpoint"
+  },
+  "status": "AFE_RBF_B1_BALANCED_HOLDOUT_COMPLETE",
+  "timings": [
+    {
+      "elapsed_seconds": 96.39061514381319,
+      "round": 0
+    },
+    {
+      "elapsed_seconds": 149.2515191230923,
+      "round": 19
+    },
+    {
+      "elapsed_seconds": 151.25770453270525,
+      "round": 20
+    }
+  ]
+}

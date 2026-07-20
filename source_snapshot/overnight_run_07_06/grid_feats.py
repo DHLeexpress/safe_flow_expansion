@@ -68,7 +68,14 @@ def low5(state, goal, gamma):
     return np.array([rg[0], rg[1], v[0] / V_SCALE, v[1] / V_SCALE, float(gamma)], dtype=np.float32)
 
 
-def closest_boundary_vector(position, obstacles, r_robot=0.0, sensing=SENSING):
+def closest_boundary_vector(
+    position,
+    obstacles,
+    r_robot=0.0,
+    sensing=SENSING,
+    *,
+    tie_average=False,
+):
     """World-frame vector to the closest inflated circular-obstacle boundary.
 
     For a collision-free point, the vector points toward the nearest boundary
@@ -77,6 +84,10 @@ def closest_boundary_vector(position, obstacles, r_robot=0.0, sensing=SENSING):
     exit.  The vector is divided by the same sensing radius used by nominal
     ``H_P``.  Zero can mean either no obstacle in range or exact contact; the
     accompanying ``H_P`` grid disambiguates those cases.
+
+    ``tie_average=True`` averages the boundary vectors of numerically equal
+    nearest obstacles.  This removes obstacle-array-order bias while retaining
+    the legacy single-argmin behavior by default.
     """
 
     point = np.asarray(position, dtype=np.float64).reshape(-1)[:2]
@@ -93,17 +104,29 @@ def closest_boundary_vector(position, obstacles, r_robot=0.0, sensing=SENSING):
     center_distance = np.linalg.norm(center_delta, axis=1)
     signed_clearance = center_distance - obs[:, 2] - float(r_robot)
     index = int(np.argmin(signed_clearance))
-    if float(signed_clearance[index]) > float(sensing):
+    minimum = float(signed_clearance[index])
+    if minimum > float(sensing):
         return np.zeros(2, dtype=np.float32)
-    distance = float(center_distance[index])
-    if distance <= 1.0e-12:
-        direction = np.asarray((1.0, 0.0), dtype=np.float64)
-    else:
-        direction = center_delta[index] / distance
-    return (direction * signed_clearance[index] / float(sensing)).astype(np.float32)
+    if not tie_average:
+        distance = float(center_distance[index])
+        if distance <= 1.0e-12:
+            direction = np.asarray((1.0, 0.0), dtype=np.float64)
+        else:
+            direction = center_delta[index] / distance
+        return (direction * signed_clearance[index] / float(sensing)).astype(np.float32)
+
+    tolerance = 1.0e-12 * max(1.0, abs(minimum))
+    tied = np.flatnonzero(np.abs(signed_clearance - minimum) <= tolerance)
+    directions = np.zeros((len(tied), 2), dtype=np.float64)
+    nonzero = center_distance[tied] > 1.0e-12
+    directions[nonzero] = (
+        center_delta[tied][nonzero] / center_distance[tied][nonzero, None]
+    )
+    vectors = directions * signed_clearance[tied, None] / float(sensing)
+    return vectors.mean(axis=0).astype(np.float32)
 
 
-def low7(state, goal, gamma, obstacles, r_robot=0.0):
+def low7(state, goal, gamma, obstacles, r_robot=0.0, *, tie_average=False):
     """Relative goal, velocity, closest-boundary vector, then gamma.
 
     Gamma remains the final scalar because acquisition, audit, and replay code
@@ -111,7 +134,9 @@ def low7(state, goal, gamma, obstacles, r_robot=0.0):
     """
 
     base = low5(state, goal, gamma)
-    boundary = closest_boundary_vector(state[:2], obstacles, r_robot)
+    boundary = closest_boundary_vector(
+        state[:2], obstacles, r_robot, tie_average=tie_average
+    )
     return np.concatenate((base[:4], boundary, base[4:5])).astype(
         np.float32, copy=False
     )
@@ -133,12 +158,29 @@ def featurize(state, goal, gamma, ctrl_hist, obstacles, r_robot=0.0, K=K_HIST):
             hist_pad(ctrl_hist, K))
 
 
-def featurize_low7(state, goal, gamma, ctrl_hist, obstacles, r_robot=0.0, K=K_HIST):
+def featurize_low7(
+    state,
+    goal,
+    gamma,
+    ctrl_hist,
+    obstacles,
+    r_robot=0.0,
+    K=K_HIST,
+    *,
+    tie_average=False,
+):
     """Conditioning record with direct closest-boundary geometry (low7)."""
 
     return (
         axis_grid(state[:2], obstacles, r_robot),
-        low7(state, goal, gamma, obstacles, r_robot),
+        low7(
+            state,
+            goal,
+            gamma,
+            obstacles,
+            r_robot,
+            tie_average=tie_average,
+        ),
         hist_pad(ctrl_hist, K),
     )
 

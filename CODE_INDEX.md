@@ -1,4 +1,28 @@
-# Phase C code index and blind-spot map
+# B1_current_best and Phase C code index
+
+Start with [`B1_CURRENT_BEST.md`](B1_CURRENT_BEST.md). The files listed in its
+code-location table are the current handoff. The source snapshot now includes
+the B1 changes through algorithm commit
+`63ebefa7877c0b923c1c7cdea19228302dd6a0ca` and the additive recovery files from
+`ba699bc42dfd393a3bffb4f97b3fe3e425c813d5`. The Phase C map below is retained
+because it is the immediate negative-result predecessor and documents the
+shared implementation closure.
+
+## B1_current_best additions
+
+| File | Role | Blind spot / warning |
+|---|---|---|
+| `run_low7_b1_balanced_sweep.sh` | Frozen 24-arm launcher and resource gates. | Original delivery required exclusive GPUs 1 and 3. |
+| `analysis/low7_b1_balanced_sweep_driver.py` | Defines cap/ESS/negative-alpha/execution arms, selection, and disjoint holdout. | Finite M10 screening noise still affects selection. |
+| `analysis/low7_balanced_r0_qualification.py` | Ordinary-iid and paired pretraining qualification. | Symmetry qualification is not the expansion result. |
+| `analysis/finalize_low7_b1_balanced_sweep.py` | Validates already-complete outputs and renders missing presentation artifacts without rerunning science. | Explicitly cannot make the recovered delivery canonical. |
+| `afe_signed_update.py` | Combines positive CFM and NVP negative gradients with norm scaling. | The NVP population is a task-specific viability proxy. |
+| `afe_context.py` | Implements the order-invariant tie-mean closest-boundary vector. | A single vector still compresses multi-obstacle geometry. |
+| `afe_execution.py` | Implements nominal-Hp eligibility and exact SafeMPPI-cost ranking. | One-step choice does not prove recursive feasibility. |
+| `paper_results/low7_raw_m50_eval.py` | Disjoint raw temperature-1 evaluator. | Its legacy clearance mean includes failures; see the B1 clearance decomposition. |
+| `paper_results/b1_current_best_gallery.py` | Renders the fixed-index 5x3 comparison and archives red-X failure positions. | Its Kazuki rows are M10 diagnostics and both time out. |
+| `kazuki_baseline.py` | CFM-MPPI baseline with an additive low7 context adapter. | Zero guidance is not raw generation because MPPI refinement remains active. |
+| `scripts/analyze_b1_clearance.py` | Recomputes all/success/failure clearance splits from the retained M50 cells. | It does not measure clearance only to the giant obstacle. |
 
 This index explains why every source family was copied. `SOURCE_MANIFEST.json` is the byte-level inventory; this file is the semantic inventory. A file being present does not mean that Phase C endorses every historical mode in that file.
 

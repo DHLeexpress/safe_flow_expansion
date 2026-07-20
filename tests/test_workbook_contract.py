@@ -49,6 +49,42 @@ def test_checkpoint_hashes():
     assert sha256_file(ROOT / "checkpoints" / "phase_c_selected_r25.pt") == (
         "ab6ce3c39671554ef114234c464f23cc18828ea751a4bbb5547beb59793c1b54"
     )
+    assert sha256_file(ROOT / "checkpoints" / "b1_balanced_pretrained.pt") == (
+        "524c9c0a4fd071221ac509b9d8e6fbbfb85fdf1811aa04160317f2a9e2d3ef90"
+    )
+    assert sha256_file(ROOT / "checkpoints" / "b1_current_best_r19.pt") == (
+        "60c155472f5ed0e4a1d53581857f09aead7924f8ce11e8e3adf890d5a57fc079"
+    )
+
+
+def test_b1_current_best_recipe():
+    recipe = json.loads((ROOT / "configs" / "b1_current_best_recipe.json").read_text())
+    assert recipe["source_git_commit"] == "63ebefa7877c0b923c1c7cdea19228302dd6a0ca"
+    assert recipe["execution_rule"] == "nominal_hp_safemppi_cost"
+    assert recipe["conditioning_schema"] == "low7_closest_boundary_tie_mean"
+    assert recipe["kernel"] == "RBF"
+    assert recipe["gp_cap"] == 512
+    assert recipe["adaptive_ess_target"] == 0.25
+    assert recipe["negative_alpha"] == 0.01
+    assert recipe["replay_window"] == 2
+    assert recipe["optimizer_steps_formula"] == "ceil(|eligible D+|/batch)"
+    assert recipe["freeze_visual_encoder"] is True
+    assert recipe["no_fallback"] is True
+
+
+def test_b1_clearance_is_explicitly_split_by_outcome():
+    payload = json.loads(
+        (ROOT / "provenance" / "b1_current_best" / "clearance_breakdown.json").read_text()
+    )
+    row = next(
+        item for item in payload["rows"]
+        if item["round"] == 20 and item["gamma"] == 0.1
+    )
+    assert row["all"]["n"] == 50
+    assert row["success_only"]["n"] == 45
+    assert row["failure_only"]["n"] == 5
+    assert abs(row["all"]["mean"] - 0.04909099576696931) < 1e-12
+    assert abs(row["success_only"]["mean"] - 0.054879736618134445) < 1e-12
 
 
 def test_paper_assets_exist():
@@ -59,6 +95,11 @@ def test_paper_assets_exist():
         "assets/results/report.png",
         "assets/results/selected_raw_m50_gallery.png",
         "assets/results/selected_expansion_diagnostic.mp4",
+        "assets/results/b1_current_best/report.png",
+        "assets/results/b1_current_best/selected_raw_m50_gallery.png",
+        "assets/results/b1_current_best/selected_expansion.mp4",
+        "assets/results/b1_current_best/b1_current_best_5x3_gallery.png",
+        "assets/results/b1_current_best/b1_current_best_5x3_gallery.pdf",
     )
     for relative in expected:
         assert (ROOT / relative).is_file(), relative

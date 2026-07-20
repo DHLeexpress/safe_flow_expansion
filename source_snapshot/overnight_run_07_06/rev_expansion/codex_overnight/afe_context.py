@@ -32,7 +32,9 @@ from codex_challenging.afe_restart.scene import (  # noqa: E402
 
 LOW5_SCHEMA = "low5"
 LOW7_SCHEMA = "low7_closest_boundary"
-SCHEMA_DIMS = {LOW5_SCHEMA: 5, LOW7_SCHEMA: 7}
+LOW7_TIE_SCHEMA = "low7_closest_boundary_tie_mean"
+LOW7_SCHEMAS = (LOW7_SCHEMA, LOW7_TIE_SCHEMA)
+SCHEMA_DIMS = {LOW5_SCHEMA: 5, LOW7_SCHEMA: 7, LOW7_TIE_SCHEMA: 7}
 
 
 def declared_gamma_storage_map(gammas) -> dict[float, float]:
@@ -83,6 +85,7 @@ def policy_contract(policy: Any) -> ConditioningContract:
     expected = {
         LOW5_SCHEMA: (5, 37, 89),
         LOW7_SCHEMA: (7, 39, 91),
+        LOW7_TIE_SCHEMA: (7, 39, 91),
     }.get(schema)
     if expected is None:
         raise RuntimeError(f"unsupported policy conditioning schema {schema!r}")
@@ -118,9 +121,14 @@ def build_context(
     """Build and validate one exact policy/verifier query context."""
 
     schema = str(schema)
-    if schema == LOW7_SCHEMA:
+    if schema in LOW7_SCHEMAS:
         record = context_from_state_low7(
-            state, goal, gamma, executed_controls, env
+            state,
+            goal,
+            gamma,
+            executed_controls,
+            env,
+            tie_average_boundary=(schema == LOW7_TIE_SCHEMA),
         )
     elif schema == LOW5_SCHEMA:
         record = context_from_state(state, goal, gamma, executed_controls, env)
@@ -135,9 +143,16 @@ def build_context(
         )
     if not np.isclose(condition[-1], float(gamma), atol=5.0e-7, rtol=0.0):
         raise RuntimeError("context gamma is not the final raw condition")
-    if schema == LOW7_SCHEMA:
+    if schema in LOW7_SCHEMAS:
         obstacles = env.obstacles.detach().cpu().numpy()
-        exact = GF.low7(state, goal, gamma, obstacles, float(env.r_robot))
+        exact = GF.low7(
+            state,
+            goal,
+            gamma,
+            obstacles,
+            float(env.r_robot),
+            tie_average=(schema == LOW7_TIE_SCHEMA),
+        )
         if not np.array_equal(condition, exact):
             raise RuntimeError(
                 "context_from_state_low7 disagrees with shared low7 featurization"

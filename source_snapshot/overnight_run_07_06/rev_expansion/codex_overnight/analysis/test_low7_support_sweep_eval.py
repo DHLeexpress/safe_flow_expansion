@@ -60,6 +60,20 @@ def test_m50_holdout_is_not_the_m10_prefix():
     assert metadata["disjoint_from_screen_prefix"] is True
 
 
+def test_b1_screen_and_holdout_have_the_declared_sizes_and_disjoint_banks():
+    screen, screen_meta = RAW.build_noise_bank(
+        EV.SCENE, 20, EV.B1_SCREEN_PROFILE
+    )
+    holdout, holdout_meta = EV.holdout_noise_bank(
+        EV.SCENE, 20, profile=EV.B1_HOLDOUT_PROFILE, study="b1"
+    )
+    assert screen.shape == (7, 10, 300, 20)
+    assert holdout.shape == (7, 50, 300, 20)
+    assert holdout_meta["screen_sha256"] == screen_meta["sha256"]
+    assert not np.array_equal(holdout[:, :10], screen)
+    assert EV.B1_SCREEN_PROFILE.checkpoint_stride == 1
+
+
 def test_successful_route_coverage_uses_all_attempts_as_denominator():
     rows = [
         {"success": True, "route_mode_closest": 1},

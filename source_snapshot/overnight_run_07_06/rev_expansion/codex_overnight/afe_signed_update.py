@@ -29,6 +29,26 @@ def _query_batch(store, query_ids: list[int], batch: int, rng):
     return grid, low, hist, controls, ids
 
 
+def _query_batch_ids(store, query_ids: list[int]):
+    """Reconstruct one explicitly declared query-id batch."""
+
+    ids = [int(query_id) for query_id in query_ids]
+    if not ids:
+        raise ValueError("query batch cannot be empty")
+    sids = [int(store.q_sid[query_id]) for query_id in ids]
+    grid = store.grid3_of(sids)
+    low = torch.stack([
+        torch.as_tensor(store.ctx_low5[sid], dtype=torch.float32) for sid in sids
+    ])
+    hist = torch.stack([
+        torch.as_tensor(store.ctx_hist[sid], dtype=torch.float32) for sid in sids
+    ])
+    controls = torch.stack([
+        torch.as_tensor(store.q_U[query_id], dtype=torch.float32) for query_id in ids
+    ])
+    return grid, low, hist, controls, ids
+
+
 def _negative_ids(store, *, round_i, replay_window) -> list[int]:
     """Queries from terminal NVP contexts; SOCP errors were never stored.
 
@@ -462,4 +482,357 @@ def update_round_signed(
         "negative_replay_eligible_round_counts": negative_stats["eligible_round_counts"],
         "negative_replay_draw_round_counts": negative_stats["draw_round_counts"],
         "negative_replay_fresh_fraction": negative_stats["fresh_fraction"],
+    }
+
+
+def update_round_exact_positive_signed(
+    policy,
+    opt,
+    store,
+    cfg,
+    device,
+    rng,
+    round_i=None,
+    *,
+    alpha: float = 0.0,
+    negative_rng=None,
+    eps: float = 1.0e-12,
+):
+    """Use every eligible positive exactly once and add normalized NVP descent.
+
+    Alpha zero delegates immediately to the existing exact-positive update, so
+    the B1 control path remains byte-for-byte free of negative sampling and
+    autograd.  For alpha > 0, positive mass remains equal over
+    gamma->episode->context->query.  Each optimizer step draws an independent
+    NVP batch from that same hierarchy on the negative support and applies
+    ``g_pos - alpha*||g_pos||/||g_neg||*g_neg``.
+    """
+
+    if alpha == 0:
+        return AFE2.update_round(policy, opt, store, cfg, device, rng, round_i)
+    alpha = float(alpha)
+    if not math.isfinite(alpha) or alpha < 0.0:
+        raise ValueError("signed-update alpha must be finite and non-negative")
+    if not math.isfinite(eps) or eps <= 0.0:
+        raise ValueError("signed-update epsilon must be finite and positive")
+    if getattr(cfg, "arm", "afe") != "afe":
+        raise ValueError("signed replay is defined only for the AFE arm")
+    if getattr(cfg, "replay_update_mode", None) != "one_epoch_without_replacement":
+        raise ValueError("exact signed update requires one exact positive epoch")
+    if getattr(cfg, "replay_sampling", None) != "round_gamma_replica_context":
+        raise ValueError("exact signed update requires hierarchical positive ordering")
+    if getattr(cfg, "replay_loss_weighting", None) != (
+        "gamma_episode_context_query_equal_mass"
+    ):
+        raise ValueError("exact signed update requires hierarchical positive mass")
+
+    replay_window = getattr(cfg, "replay_window", None)
+    eligible_positive = store.positive_ids(
+        round_i=round_i, replay_window=replay_window
+    )
+    if not eligible_positive:
+        return None
+    eligible_negative = _negative_ids(
+        store, round_i=round_i, replay_window=replay_window
+    )
+    if not eligible_negative:
+        result = AFE2.update_round(policy, opt, store, cfg, device, rng, round_i)
+        if result is not None:
+            result = dict(result)
+            result.update({
+                "alpha": alpha,
+                "signed_active": False,
+                "negative_replay_eligible": 0,
+                "negative_drawn_ids": {},
+                "negative_n_distinct": 0,
+            })
+        return result
+
+    epoch_ids = store.positive_epoch_ids(
+        rng,
+        eligible_ids=eligible_positive,
+        sampling=cfg.replay_sampling,
+    )
+    batch = int(cfg.batch)
+    if batch < 1:
+        raise ValueError("positive replay batch size must be positive")
+    n_steps = (len(epoch_ids) + batch - 1) // batch
+    base_size, larger = divmod(len(epoch_ids), n_steps)
+    epoch_batches = []
+    offset = 0
+    for batch_index in range(n_steps):
+        size = base_size + int(batch_index < larger)
+        epoch_batches.append(epoch_ids[offset:offset + size])
+        offset += size
+    if offset != len(epoch_ids) or any(not values for values in epoch_batches):
+        raise RuntimeError("failed to partition the exact positive replay epoch")
+
+    positive_mass, positive_mass_diagnostics = store.positive_hierarchy_equal_mass(
+        cfg.gammas, eligible_ids=eligible_positive
+    )
+    negative_mass, negative_mass_diagnostics = store.positive_hierarchy_equal_mass(
+        cfg.gammas, eligible_ids=eligible_negative
+    )
+    ordered_negative = sorted(eligible_negative)
+    probabilities = np.asarray(
+        [negative_mass[query_id] for query_id in ordered_negative], np.float64
+    )
+    probabilities /= probabilities.sum()
+    if negative_rng is None:
+        negative_rng = np.random.default_rng(AFE2.named_seed(
+            getattr(cfg, "seed", 0), "negative_replay", round_i
+        ))
+
+    policy.train()
+    groups = {
+        name: list(module.parameters())
+        for name, module in policy.module_groups().items()
+    }
+    before_norm = {
+        name: _parameter_norm(parameters) for name, parameters in groups.items()
+    }
+    snapshot = {
+        name: [parameter.detach().clone() for parameter in parameters]
+        for name, parameters in groups.items()
+    }
+    trainable = [parameter for parameter in policy.parameters() if parameter.requires_grad]
+    if not trainable:
+        raise RuntimeError("signed replay requires at least one trainable parameter")
+
+    positive_draws: dict[int, int] = {}
+    negative_draws: dict[int, int] = {}
+    positive_losses: list[float] = []
+    negative_losses: list[float] = []
+    signed_objectives: list[float] = []
+    functional_steps: list[float] = []
+    preclip_norms: list[float] = []
+    clipped_steps = 0
+    step_diagnostics = []
+    group_history = {name: [] for name in groups}
+    applied_weights = []
+    probe = None
+    value_before = None
+
+    for positive_ids in epoch_batches:
+        grid_pos, low_pos, hist_pos, controls_pos, positive_ids = (
+            _query_batch_ids(store, positive_ids)
+        )
+        negative_ids = [
+            ordered_negative[int(index)]
+            for index in negative_rng.choice(
+                len(ordered_negative), size=batch, replace=True, p=probabilities
+            )
+        ]
+        grid_neg, low_neg, hist_neg, controls_neg, negative_ids = (
+            _query_batch_ids(store, negative_ids)
+        )
+        for query_id in positive_ids:
+            positive_draws[query_id] = positive_draws.get(query_id, 0) + 1
+        for query_id in negative_ids:
+            negative_draws[query_id] = negative_draws.get(query_id, 0) + 1
+
+        grid_pos, low_pos, hist_pos, controls_pos = (
+            value.to(device) for value in (grid_pos, low_pos, hist_pos, controls_pos)
+        )
+        grid_neg, low_neg, hist_neg, controls_neg = (
+            value.to(device) for value in (grid_neg, low_neg, hist_neg, controls_neg)
+        )
+        if probe is None:
+            count = min(len(controls_pos), 128)
+            probe_x = 0.5 * (controls_pos[:count] / policy.u_max).reshape(
+                count, policy.d
+            )
+            probe_t = torch.full((count,), 0.5, device=device)
+            probe_context = policy.ctx_from(
+                grid_pos[:count], low_pos[:count], hist_pos[:count]
+            ).detach()
+            with torch.no_grad():
+                value_before = policy(
+                    probe_x, probe_t, policy._expand_ctx(probe_context, count)
+                ).detach()
+            probe = (probe_x, probe_t, probe_context, count)
+
+        weights = torch.as_tensor(
+            [
+                len(positive_ids) * n_steps * positive_mass[query_id]
+                for query_id in positive_ids
+            ],
+            dtype=controls_pos.dtype,
+            device=device,
+        )
+        applied_weights.extend(float(value) for value in weights.detach().cpu())
+        positive_loss = policy.cfm_loss(
+            controls_pos,
+            policy.ctx_from(grid_pos, low_pos, hist_pos),
+            weights=weights,
+        )
+        negative_loss = policy.cfm_loss(
+            controls_neg,
+            policy.ctx_from(grid_neg, low_neg, hist_neg),
+        )
+        positive_gradients = torch.autograd.grad(
+            positive_loss, trainable, allow_unused=True
+        )
+        negative_gradients = torch.autograd.grad(
+            negative_loss, trainable, allow_unused=True
+        )
+        positive_norm = _gradient_norm(positive_gradients, device)
+        negative_norm = _gradient_norm(negative_gradients, device)
+        rho_tensor = alpha * positive_norm / (negative_norm + eps)
+        rho = float(rho_tensor)
+
+        dot = torch.zeros((), dtype=torch.float64, device=device)
+        combined = []
+        for positive_gradient, negative_gradient in zip(
+            positive_gradients, negative_gradients
+        ):
+            if positive_gradient is not None and negative_gradient is not None:
+                dot += (
+                    positive_gradient.detach().to(torch.float64)
+                    * negative_gradient.detach().to(torch.float64)
+                ).sum()
+            if positive_gradient is None and negative_gradient is None:
+                combined.append(None)
+            elif positive_gradient is None:
+                combined.append(-rho * negative_gradient.detach())
+            elif negative_gradient is None:
+                combined.append(positive_gradient.detach())
+            else:
+                combined.append(
+                    positive_gradient.detach() - rho * negative_gradient.detach()
+                )
+        denominator = positive_norm * negative_norm
+        cosine = (
+            float((dot / denominator).clamp(-1.0, 1.0))
+            if float(denominator) > eps else 0.0
+        )
+        combined_norm = _gradient_norm(combined, device)
+
+        opt.zero_grad(set_to_none=True)
+        for parameter, gradient in zip(trainable, combined):
+            parameter.grad = None if gradient is None else gradient.clone()
+        preclip = float(combined_norm)
+        if cfg.grad_clip > 0:
+            preclip = float(torch.nn.utils.clip_grad_norm_(trainable, cfg.grad_clip))
+            clipped_steps += int(preclip > float(cfg.grad_clip))
+        preclip_norms.append(preclip)
+        for name, parameters in groups.items():
+            group_history[name].append(float(_gradient_norm(
+                [parameter.grad for parameter in parameters], device
+            )))
+        opt.step()
+
+        positive_value = float(positive_loss.detach())
+        negative_value = float(negative_loss.detach())
+        positive_losses.append(positive_value)
+        negative_losses.append(negative_value)
+        signed_objectives.append(positive_value - rho * negative_value)
+        step_diagnostics.append({
+            "positive_grad_norm": float(positive_norm),
+            "negative_grad_norm": float(negative_norm),
+            "scaled_negative_grad_norm": float(rho_tensor * negative_norm),
+            "signed_grad_norm": float(combined_norm),
+            "gradient_cosine": cosine,
+            "rho": rho,
+        })
+        probe_x, probe_t, probe_context, count = probe
+        with torch.no_grad():
+            value_after = policy(
+                probe_x, probe_t, policy._expand_ctx(probe_context, count)
+            )
+            functional_steps.append(float(
+                (value_after - value_before).norm(dim=1).mean()
+                / value_before.norm(dim=1).mean().clamp_min(1.0e-9)
+            ))
+
+    positive_total = sum(positive_draws.values())
+    positive_duplicates = positive_total - len(positive_draws)
+    if (
+        positive_duplicates != 0
+        or set(positive_draws) != set(eligible_positive)
+        or positive_total != len(eligible_positive)
+    ):
+        raise RuntimeError("signed update violated the exact positive epoch")
+    relative_change = {}
+    for name, parameters in groups.items():
+        delta = _parameter_norm([
+            parameter.detach() - original
+            for parameter, original in zip(parameters, snapshot[name])
+        ])
+        relative_change[name] = delta / max(before_norm[name], 1.0e-12)
+    positive_stats = _draw_diagnostics(
+        store, eligible_positive, positive_draws, round_i
+    )
+    negative_stats = _draw_diagnostics(
+        store, eligible_negative, negative_draws, round_i
+    )
+    replay_mass = np.asarray(
+        [positive_mass[query_id] for query_id in eligible_positive], np.float64
+    )
+    replay_ess = float(replay_mass.sum() ** 2 / np.square(replay_mass).sum())
+
+    def mean_diagnostic(key):
+        return float(np.mean([value[key] for value in step_diagnostics]))
+
+    return {
+        "steps": n_steps,
+        "stop": "exact_positive_epoch_signed_complete",
+        "cfm": float(np.mean(positive_losses)),
+        "cfm_first": positive_losses[0],
+        "cfm_last": positive_losses[-1],
+        "negative_cfm": float(np.mean(negative_losses)),
+        "negative_cfm_first": negative_losses[0],
+        "negative_cfm_last": negative_losses[-1],
+        "signed_objective": float(np.mean(signed_objectives)),
+        "fstep_final": functional_steps[-1],
+        "fstep_max": max(functional_steps),
+        "grad_norm": {
+            name: float(np.mean(values)) for name, values in group_history.items()
+        },
+        "rel_param_change": relative_change,
+        "alpha": alpha,
+        "signed_active": True,
+        "positive_grad_norm": mean_diagnostic("positive_grad_norm"),
+        "negative_grad_norm": mean_diagnostic("negative_grad_norm"),
+        "scaled_negative_grad_norm": mean_diagnostic("scaled_negative_grad_norm"),
+        "signed_grad_norm": mean_diagnostic("signed_grad_norm"),
+        "gradient_cosine": mean_diagnostic("gradient_cosine"),
+        "rho": mean_diagnostic("rho"),
+        "signed_step_diagnostics": step_diagnostics,
+        "drawn_ids": positive_draws,
+        "n_distinct": len(positive_draws),
+        "negative_drawn_ids": negative_draws,
+        "negative_n_distinct": len(negative_draws),
+        "replay_window": replay_window,
+        "replay_eligible": len(eligible_positive),
+        "replay_sampling": cfg.replay_sampling,
+        "replay_update_mode": cfg.replay_update_mode,
+        "replay_loss_weighting": cfg.replay_loss_weighting,
+        "replay_mass_diagnostics": positive_mass_diagnostics,
+        "replay_weight_ess": replay_ess,
+        "replay_weight_ess_fraction": replay_ess / len(replay_mass),
+        "replay_applied_weight_min": min(applied_weights),
+        "replay_applied_weight_max": max(applied_weights),
+        "replay_applied_weight_mean": float(np.mean(applied_weights)),
+        "preclip_grad_norm_mean": float(np.mean(preclip_norms)),
+        "grad_clipped_steps": clipped_steps,
+        "grad_clipped_fraction": clipped_steps / n_steps,
+        "optimizer_draws": positive_total,
+        "replay_duplicate_draws": positive_duplicates,
+        "replay_epoch_coverage": 1.0,
+        "replay_batch_sizes": [len(values) for values in epoch_batches],
+        "replay_fresh_draws": positive_stats["fresh_draws"],
+        "replay_fresh_distinct": positive_stats["fresh_distinct"],
+        "replay_eligible_round_counts": positive_stats["eligible_round_counts"],
+        "replay_draw_round_counts": positive_stats["draw_round_counts"],
+        "replay_fresh_fraction": positive_stats["fresh_fraction"],
+        "negative_replay_eligible": len(eligible_negative),
+        "negative_replay_mass_diagnostics": negative_mass_diagnostics,
+        "negative_replay_fresh_draws": negative_stats["fresh_draws"],
+        "negative_replay_fresh_distinct": negative_stats["fresh_distinct"],
+        "negative_replay_eligible_round_counts": negative_stats["eligible_round_counts"],
+        "negative_replay_draw_round_counts": negative_stats["draw_round_counts"],
+        "negative_replay_fresh_fraction": negative_stats["fresh_fraction"],
+        "negative_replay_coverage": len(negative_draws) / len(eligible_negative),
+        "negative_replay_duplicate_draws": sum(negative_draws.values()) - len(negative_draws),
     }

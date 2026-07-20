@@ -359,6 +359,85 @@ def test_codex_checkpoint_contract_requires_both_allowlist_and_promotion_witness
         )
 
 
+def test_reflection_paired_low7_contract_requires_embedded_model_provenance(
+    afe2_modules,
+) -> None:
+    _, AFE2 = afe2_modules
+    from codex_challenging.afe_restart.policy import model_state_hash
+
+    policy = AFE2.HP.GridHPFlowPolicy(
+        repr_dim=32,
+        grid_hw=(32, 32),
+        trunk_hidden=(160, 96),
+        enc_depth=3,
+        raw_condition_dim=7,
+        conditioning_schema=AFE2.CX.LOW7_SCHEMA,
+    )
+    checkpoint = {
+        "config": policy.config(),
+        "stage_schema": "afe_fresh_pretrain_v3_low7_reflection_paired",
+        "fresh_from_scratch": True,
+        "endpoint_free": True,
+        "encoder_trainable_during_pretraining": True,
+        "expansion_promotion": False,
+        "reflection_paired_pretraining": True,
+        "fixed_goal": [4.7, 4.7],
+        "source_manifest": "/sealed/low7/manifest.json",
+        "source_query_hash_digest": "e" * 64,
+        "model_state_sha256": model_state_hash(policy),
+    }
+
+    model_hash, contract, digest = AFE2.validate_checkpoint_contract(
+        "low7_radius1_canonical_v1", policy, checkpoint, "f" * 64
+    )
+
+    assert contract["name"] == "qualified_reflection_paired_low7_candidate_v1"
+    assert contract["reflection_paired_pretraining"] is True
+    assert contract["checkpoint_model_state_sha256"] == model_hash
+    assert AFE2._canonical_json_sha256(contract) == digest
+    corrupted = dict(checkpoint, model_state_sha256="0" * 64)
+    with pytest.raises(RuntimeError, match="embedded model hash"):
+        AFE2.validate_checkpoint_contract(
+            "low7_radius1_canonical_v1", policy, corrupted, "f" * 64
+        )
+
+    equivariant = dict(
+        checkpoint,
+        stage_schema="afe_fresh_pretrain_v4_low7_reflection_equivariant",
+        equivariance_weight=10.0,
+    )
+    _model_hash, eq_contract, _digest = AFE2.validate_checkpoint_contract(
+        "low7_radius1_canonical_v1", policy, equivariant, "f" * 64
+    )
+    assert eq_contract["equivariance_weight"] == 10.0
+
+    group_policy = AFE2.HP.GridHPFlowPolicy(
+        repr_dim=32,
+        grid_hw=(32, 32),
+        trunk_hidden=(160, 96),
+        enc_depth=3,
+        raw_condition_dim=7,
+        conditioning_schema=AFE2.CX.LOW7_TIE_SCHEMA,
+        reflection_group_average=True,
+    )
+    group_averaged = {
+        **checkpoint,
+        "config": group_policy.config(),
+        "stage_schema": "afe_fresh_pretrain_v5_low7_reflection_group_average",
+        "reflection_group_average": True,
+        "conditioning_transform": {
+            "name": "equal-nearest-boundary-vector-mean-v1",
+            "source_low7_authenticated_before_transform": True,
+            "transformed_low7_sha256": "b" * 64,
+        },
+        "model_state_sha256": model_state_hash(group_policy),
+    }
+    _model_hash, group_contract, _digest = AFE2.validate_checkpoint_contract(
+        "low7_radius1_canonical_v1", group_policy, group_averaged, "f" * 64
+    )
+    assert group_contract["reflection_group_average"] is True
+
+
 def test_query_context_archive_preserves_embedding_inputs_in_float32(afe2_modules) -> None:
     AC, _ = afe2_modules
     store = AC.DStore()

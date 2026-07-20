@@ -55,6 +55,26 @@ HOLDOUT_PROFILE = EV.EvaluationProfile(
     summary_status="AFE_RBF_V3_SUPPORT_HOLDOUT_COMPLETE",
     delivery_status="AFE_RBF_V3_SUPPORT_HOLDOUT_DELIVERY_COMPLETE",
 )
+B1_SCREEN_PROFILE = EV.EvaluationProfile(
+    name="b1_balanced_screen_m10",
+    m=10,
+    checkpoint_stride=1,
+    metric_version="afe_rbf_b1_balanced_screen_m10_v1",
+    caption="B1 balanced-r0 raw temperature-1 M=10/gamma screening",
+    filename_tag="b1_balanced_screen_m10",
+    summary_status="AFE_RBF_B1_BALANCED_SCREEN_COMPLETE",
+    delivery_status="AFE_RBF_B1_BALANCED_SCREEN_DELIVERY_COMPLETE",
+)
+B1_HOLDOUT_PROFILE = EV.EvaluationProfile(
+    name="b1_balanced_holdout_m50",
+    m=50,
+    checkpoint_stride=1,
+    metric_version="afe_rbf_b1_balanced_holdout_m50_v1",
+    caption="disjoint B1 balanced-r0 raw temperature-1 M=50/gamma confirmation",
+    filename_tag="b1_balanced_holdout_m50",
+    summary_status="AFE_RBF_B1_BALANCED_HOLDOUT_COMPLETE",
+    delivery_status="AFE_RBF_B1_BALANCED_HOLDOUT_DELIVERY_COMPLETE",
+)
 SCENE = "low7_radius1_canonical_v1"
 COARSE_ROUNDS = (0, *range(5, 101, 5))
 
@@ -71,17 +91,24 @@ def write_metrics(path: Path, rows: list[dict[str, Any]]) -> None:
             stream.write(json.dumps(EV.AFE2._json_safe(row), sort_keys=True, allow_nan=False) + "\n")
 
 
-def holdout_noise_bank(scene_profile: str, policy_dim: int):
+def holdout_noise_bank(
+    scene_profile: str,
+    policy_dim: int,
+    *,
+    profile: EV.EvaluationProfile = HOLDOUT_PROFILE,
+    study: str = "support",
+):
     raw = (
-        "afe-rbf-v3-support|genuinely-disjoint-M50-holdout|"
+        f"afe-rbf-{study}|genuinely-disjoint-M50-holdout|"
         f"{scene_profile}|temperature-1"
     ).encode()
     seed = int.from_bytes(hashlib.sha256(raw).digest()[:8], "big") % (2**63 - 1)
     generator = np.random.default_rng(seed)
     bank = generator.standard_normal(
-        (len(EV.GAMMAS), HOLDOUT_PROFILE.m, EV.T, int(policy_dim)), dtype=np.float32
+        (len(EV.GAMMAS), profile.m, EV.T, int(policy_dim)), dtype=np.float32
     )
-    screen, screen_meta = EV.build_noise_bank(scene_profile, policy_dim, SCREEN_PROFILE)
+    screen_profile = B1_SCREEN_PROFILE if study == "b1" else SCREEN_PROFILE
+    screen, screen_meta = EV.build_noise_bank(scene_profile, policy_dim, screen_profile)
     if seed == int(screen_meta["seed"]):
         raise RuntimeError("M50 holdout and M10 screening resolved to the same master seed")
     if np.array_equal(bank[:, :SCREEN_PROFILE.m], screen):
@@ -379,7 +406,7 @@ def _draw_scene(axis, env):
 
 
 def _render_holdout_gallery(outdir: Path, env, rounds, selected_round):
-    display_rounds = [0, int(selected_round), 100]
+    display_rounds = [0, int(selected_round), max(int(value) for value in rounds)]
     fig, axes = plt.subplots(len(EV.GAMMAS), len(display_rounds), figsize=(4 * len(display_rounds), 3.5 * len(EV.GAMMAS)))
     cmap = plt.get_cmap("plasma")
     colors = {gamma: cmap(0.08 + 0.84 * i / 6) for i, gamma in enumerate(EV.GAMMAS)}
@@ -438,7 +465,7 @@ def _render_holdout_report(outdir: Path, rows, rounds, selected_round):
         f"mean minimum clearance={pooled['minimum_clearance']['mean']:.3f} m",
     ]
     axes[1, 1].axis("off"); axes[1, 1].text(0, 1, "\n".join(text), va="top", fontsize=11)
-    fig.suptitle("Low7 giant-obstacle AFE support sweep — M50 confirmation")
+    fig.suptitle("Low7 giant-obstacle AFE — disjoint raw M50 confirmation")
     fig.tight_layout(rect=(0, 0, 1, .96))
     outputs = []
     for suffix in ("png", "pdf"):
@@ -462,31 +489,54 @@ def main():
     parser.add_argument("--run-root", type=Path, required=True)
     parser.add_argument("--outdir", type=Path, required=True)
     parser.add_argument("--mode", choices=("screen", "holdout"), required=True)
+    parser.add_argument("--study", choices=("support", "b1"), default="support")
     parser.add_argument("--selected-round", type=int)
     parser.add_argument("--reference-r0-evaluation", type=Path)
     parser.add_argument("--verifier-workers", type=int, required=True)
     args = parser.parse_args()
     if args.outdir.exists():
         raise FileExistsError(f"support evaluation output must be absent: {args.outdir}")
-    profile = SCREEN_PROFILE if args.mode == "screen" else HOLDOUT_PROFILE
+    profile = (
+        (B1_SCREEN_PROFILE if args.mode == "screen" else B1_HOLDOUT_PROFILE)
+        if args.study == "b1"
+        else (SCREEN_PROFILE if args.mode == "screen" else HOLDOUT_PROFILE)
+    )
     contract = EV.validate_completed_run(
         args.run_root, SCENE, EV.V2_SMOKE_EVAL_PROFILE
     )
-    if contract["algorithm"] != "afe_rbf_low7_v3_optimizer_demo_support_v1":
-        raise RuntimeError("support evaluator received the wrong trainer algorithm")
+    expected_algorithm = (
+        "afe_rbf_low7_b1_balanced_r0_sweep_v1"
+        if args.study == "b1"
+        else "afe_rbf_low7_v3_optimizer_demo_support_v1"
+    )
+    if contract["algorithm"] != expected_algorithm:
+        raise RuntimeError(f"{args.study} evaluator received the wrong trainer algorithm")
+    final_round = int(contract["completed_round"])
+    expected_final = 20 if args.study == "b1" else 100
+    if final_round != expected_final:
+        raise RuntimeError(
+            f"{args.study} evaluator expected r{expected_final}, got r{final_round}"
+        )
     source = EV.require_clean_additive_source(contract["source_git_commit"])
     gpu = EV._gpu_record()
     policy0, _, r0_sha, conditioning = EV._load_policy(contract, 0, "cpu")
     if r0_sha != contract["source_checkpoint_model_sha256"]:
         raise RuntimeError("support r0 checkpoint differs from authenticated pretraining")
     if args.mode == "screen":
-        bank, bank_meta = EV.build_noise_bank(SCENE, int(policy0.d), SCREEN_PROFILE)
-        rounds = list(COARSE_ROUNDS)
+        bank, bank_meta = EV.build_noise_bank(SCENE, int(policy0.d), profile)
+        rounds = (
+            list(range(final_round + 1))
+            if args.study == "b1" else list(COARSE_ROUNDS)
+        )
     else:
-        if args.selected_round is None or not 0 <= args.selected_round <= 100:
-            raise ValueError("holdout requires a fixed selected round in [0,100]")
-        bank, bank_meta = holdout_noise_bank(SCENE, int(policy0.d))
-        rounds = sorted({0, int(args.selected_round), 100})
+        if args.selected_round is None or not 0 <= args.selected_round <= final_round:
+            raise ValueError(
+                f"holdout requires a fixed selected round in [0,{final_round}]"
+            )
+        bank, bank_meta = holdout_noise_bank(
+            SCENE, int(policy0.d), profile=profile, study=args.study
+        )
+        rounds = sorted({0, int(args.selected_round), final_round})
     del policy0
     scene_profile = get_scene_profile(SCENE)
     env = build_scene(scene_profile)
@@ -525,10 +575,12 @@ def main():
             rows.extend(new_rows)
             timings.append({"round": round_i, "elapsed_seconds": elapsed})
             print(f"[support {args.mode}] r{round_i:03d} complete in {elapsed:.1f}s", flush=True)
-        if args.mode == "screen":
+        if args.mode == "screen" and args.study == "support":
             coarse_best, coarse_ranking = select_round(rows, rounds)
             local = [
-                value for value in range(max(0, coarse_best - 2), min(100, coarse_best + 2) + 1)
+                value for value in range(
+                    max(0, coarse_best - 2), min(final_round, coarse_best + 2) + 1
+                )
                 if value not in rounds
             ]
             for round_i in local:
@@ -551,10 +603,10 @@ def main():
         curves = [_render_screen_curves(args.outdir, rows, scores, best_round)]
         selection = {
             "rule": "maximize mean_gamma C_gamma; then SR, CR, timeout, clearance, earlier round",
-            "coarse_rounds": list(COARSE_ROUNDS),
-            "coarse_best_round": coarse_best,
-            "coarse_ranking": coarse_ranking,
-            "local_rounds": local,
+            "coarse_rounds": list(COARSE_ROUNDS) if args.study == "support" else None,
+            "coarse_best_round": coarse_best if args.study == "support" else None,
+            "coarse_ranking": coarse_ranking if args.study == "support" else None,
+            "local_rounds": local if args.study == "support" else [],
             "best_round": best_round,
             "ranking": ranking,
             "pareto_SR_J": pareto_frontier(scores),

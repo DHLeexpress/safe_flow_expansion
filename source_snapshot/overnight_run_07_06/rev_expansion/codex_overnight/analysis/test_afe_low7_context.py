@@ -92,6 +92,20 @@ def test_giant_scene_and_boundary_vector_orientation() -> None:
     assert left[-1] == right[-1] == pytest.approx(0.3)
 
 
+def test_tie_mean_schema_removes_canonical_start_obstacle_order_bias() -> None:
+    env = _env()
+    state = env.x0.numpy().astype(np.float32)
+    legacy = CX.build_context(
+        state, env.goal.numpy(), 0.1, [], env, CX.LOW7_SCHEMA
+    ).low5
+    tie_mean = CX.build_context(
+        state, env.goal.numpy(), 0.1, [], env, CX.LOW7_TIE_SCHEMA
+    ).low5
+
+    assert legacy[4] != pytest.approx(legacy[5])
+    assert tie_mean[4] == pytest.approx(tie_mean[5], abs=1.0e-8)
+
+
 def test_policy_and_trainability_contract_is_exact_low7() -> None:
     policy = _policy()
     contract = CX.policy_contract(policy)

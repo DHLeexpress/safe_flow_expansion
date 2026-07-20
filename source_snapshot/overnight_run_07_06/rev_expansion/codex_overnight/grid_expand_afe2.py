@@ -247,9 +247,15 @@ def validate_checkpoint_contract(profile_name, policy, checkpoint, checkpoint_sh
         and tuple(getattr(policy, "grid_shape", ())) == (1, 32, 32)
         and getattr(policy, "boundary_adapter", None) is False
     )
+    low7_schema = config.get("conditioning_schema")
+    low7_model_schema = {
+        CX.LOW7_SCHEMA: "w8sg-hp-v3-low7-closest-boundary",
+        CX.LOW7_TIE_SCHEMA: "w8sg-hp-v4-low7-closest-boundary-tie-mean",
+    }.get(low7_schema)
     low7_architecture = (
         config.get("arch") == "hp-repr"
-        and config.get("schema_version") == "w8sg-hp-v3-low7-closest-boundary"
+        and low7_model_schema is not None
+        and config.get("schema_version") == low7_model_schema
         and int(config.get("H_pred", -1)) == 10
         and tuple(config.get("grid_shape", ())) == (1, 32, 32)
         and int(config.get("K_hist", -1)) == 16
@@ -258,11 +264,11 @@ def validate_checkpoint_contract(profile_name, policy, checkpoint, checkpoint_sh
         and config.get("boundary_adapter", False) is False
         and int(config.get("repr_dim", -1)) == 32
         and int(config.get("raw_condition_dim", -1)) == 7
-        and config.get("conditioning_schema") == CX.LOW7_SCHEMA
+        and config.get("conditioning_schema") == low7_schema
         and int(config.get("ctx_dim", -1)) == 39
         and int(getattr(policy, "repr_dim", -1)) == 32
         and int(getattr(policy, "raw_condition_dim", -1)) == 7
-        and getattr(policy, "conditioning_schema", None) == CX.LOW7_SCHEMA
+        and getattr(policy, "conditioning_schema", None) == low7_schema
         and int(getattr(policy, "ctx_dim", -1)) == 39
         and int(getattr(policy, "H_pred", -1)) == 10
         and tuple(getattr(policy, "grid_shape", ())) == (1, 32, 32)
@@ -336,17 +342,62 @@ def validate_checkpoint_contract(profile_name, policy, checkpoint, checkpoint_sh
             raise RuntimeError(
                 "low7 expansion requires ctx=39, trunk input=91, and 70,308 parameters"
             )
-        if checkpoint_sha256 != LOW7_CANDIDATE_CHECKPOINT_SHA256:
-            raise RuntimeError("low7 expansion requires the declared candidate checkpoint bytes")
-        if model_sha256 != LOW7_CANDIDATE_MODEL_SHA256:
-            raise RuntimeError("low7 candidate model-state hash mismatch")
-        required_payload = {
-            "stage_schema": "afe_fresh_pretrain_v2_low7_uniform_pairs",
-            "fresh_from_scratch": True,
-            "endpoint_free": True,
-            "encoder_trainable_during_pretraining": True,
-            "expansion_promotion": False,
+        reflection_schemas = {
+            "afe_fresh_pretrain_v3_low7_reflection_paired",
+            "afe_fresh_pretrain_v4_low7_reflection_equivariant",
+            "afe_fresh_pretrain_v5_low7_reflection_group_average",
         }
+        reflection_paired = checkpoint.get("stage_schema") in reflection_schemas
+        if reflection_paired:
+            if checkpoint.get("model_state_sha256") != model_sha256:
+                raise RuntimeError(
+                    "reflection-paired low7 checkpoint embedded model hash mismatch"
+                )
+            required_payload = {
+                "stage_schema": checkpoint.get("stage_schema"),
+                "fresh_from_scratch": True,
+                "endpoint_free": True,
+                "encoder_trainable_during_pretraining": True,
+                "expansion_promotion": False,
+                "reflection_paired_pretraining": True,
+            }
+            if (
+                checkpoint.get("stage_schema")
+                == "afe_fresh_pretrain_v4_low7_reflection_equivariant"
+                and not float(checkpoint.get("equivariance_weight", 0.0)) > 0.0
+            ):
+                raise RuntimeError(
+                    "equivariant low7 checkpoint lacks a positive consistency weight"
+                )
+            if (
+                checkpoint.get("stage_schema")
+                == "afe_fresh_pretrain_v5_low7_reflection_group_average"
+                and (
+                    checkpoint.get("reflection_group_average") is not True
+                    or config.get("reflection_group_average") is not True
+                    or low7_schema != CX.LOW7_TIE_SCHEMA
+                    or not isinstance(checkpoint.get("conditioning_transform"), dict)
+                    or checkpoint["conditioning_transform"].get("name")
+                    != "equal-nearest-boundary-vector-mean-v1"
+                )
+            ):
+                raise RuntimeError(
+                    "group-averaged low7 checkpoint lacks its exact symmetry contract"
+                )
+        else:
+            if checkpoint_sha256 != LOW7_CANDIDATE_CHECKPOINT_SHA256:
+                raise RuntimeError(
+                    "legacy low7 expansion requires the declared candidate checkpoint bytes"
+                )
+            if model_sha256 != LOW7_CANDIDATE_MODEL_SHA256:
+                raise RuntimeError("low7 candidate model-state hash mismatch")
+            required_payload = {
+                "stage_schema": "afe_fresh_pretrain_v2_low7_uniform_pairs",
+                "fresh_from_scratch": True,
+                "endpoint_free": True,
+                "encoder_trainable_during_pretraining": True,
+                "expansion_promotion": False,
+            }
         for field, expected in required_payload.items():
             if checkpoint.get(field) != expected:
                 raise RuntimeError(
@@ -359,8 +410,16 @@ def validate_checkpoint_contract(profile_name, policy, checkpoint, checkpoint_sh
         if not isinstance(source_digest, str) or len(source_digest) != 64:
             raise RuntimeError("low7 checkpoint lacks its source-query digest")
         contract = {
-            "name": "authenticated_low7_candidate_v1",
-            "assumption_level": "exact_file_model_architecture_and_provenance_contract",
+            "name": (
+                "qualified_reflection_paired_low7_candidate_v1"
+                if reflection_paired else "authenticated_low7_candidate_v1"
+            ),
+            "assumption_level": (
+                "file_model_architecture_and_paired_pretraining_provenance; "
+                "external disjoint raw qualification required by B1 launcher"
+                if reflection_paired
+                else "exact_file_model_architecture_and_provenance_contract"
+            ),
             "checkpoint_file_sha256": checkpoint_sha256,
             "checkpoint_model_state_sha256": model_sha256,
             "stage_schema": checkpoint["stage_schema"],
@@ -369,11 +428,18 @@ def validate_checkpoint_contract(profile_name, policy, checkpoint, checkpoint_sh
             "expansion_promotion": checkpoint["expansion_promotion"],
             "source_manifest": checkpoint.get("source_manifest"),
             "source_query_hash_digest": source_digest,
-            "conditioning_schema": CX.LOW7_SCHEMA,
+            "conditioning_schema": low7_schema,
             "raw_condition_dim": 7,
             "ctx_dim": 39,
             "trunk_input_dim": 91,
             "parameter_count": 70_308,
+            "reflection_paired_pretraining": reflection_paired,
+            "equivariance_weight": float(
+                checkpoint.get("equivariance_weight", 0.0)
+            ),
+            "reflection_group_average": bool(
+                checkpoint.get("reflection_group_average", False)
+            ),
         }
     else:
         raise ValueError(f"unsupported checkpoint-contract profile: {profile_name}")

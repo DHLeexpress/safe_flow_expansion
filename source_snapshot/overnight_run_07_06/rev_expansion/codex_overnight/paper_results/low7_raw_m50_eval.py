@@ -84,6 +84,7 @@ SUPPORTED_ALGORITHMS = {
     "afe_rbf_low7_v2_sample_complete_smoke_v2",
     "afe_rbf_low7_v2_lineage_mass_smoke_v1",
     "afe_rbf_low7_v3_optimizer_demo_support_v1",
+    "afe_rbf_low7_b1_balanced_r0_sweep_v1",
 }
 
 

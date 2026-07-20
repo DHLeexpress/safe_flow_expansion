@@ -98,6 +98,70 @@ class AFERBFConfig(AFE2.AFE2Config):
     demo_frac: float = 0.0
 
 
+def validate_balanced_r0_delivery(path, checkpoint_path, checkpoint_sha256) -> dict:
+    """Bind B1 to one reflection-paired checkpoint and disjoint raw gate."""
+
+    delivery_path = os.path.abspath(os.fspath(path))
+    with open(delivery_path) as stream:
+        delivery = json.load(stream)
+    if (
+        delivery.get("status") != "LOW7_BALANCED_R0_DELIVERY_COMPLETE"
+        or delivery.get("confirmation_passed") is not True
+    ):
+        raise RuntimeError("B1 requires a passed balanced-r0 delivery manifest")
+    selected = delivery.get("selected") or {}
+    if os.path.abspath(selected.get("checkpoint", "")) != os.path.abspath(checkpoint_path):
+        raise RuntimeError("balanced-r0 manifest selected a different checkpoint")
+    if str(selected.get("checkpoint_sha256", "")).lower() != checkpoint_sha256.lower():
+        raise RuntimeError("balanced-r0 manifest checkpoint SHA mismatch")
+    confirmation_path = os.path.abspath(delivery.get("confirmation", ""))
+    with open(confirmation_path) as stream:
+        confirmation = json.load(stream)
+    if (
+        confirmation.get("passed") is not True
+        or int(confirmation.get("M_per_gamma", -1)) != 100
+        or confirmation.get("raw_noise_design")
+        != "reflection-antithetic common-random-number pairs"
+        or confirmation.get("checkpoint", {}).get("file_sha256")
+        != checkpoint_sha256.lower()
+    ):
+        raise RuntimeError("B1 balanced-r0 disjoint M100/gamma confirmation failed")
+    per_gamma = confirmation.get("per_gamma", {})
+    if len(per_gamma) != 7:
+        raise RuntimeError("balanced-r0 confirmation lacks seven gamma cells")
+    for gamma, row in per_gamma.items():
+        routes = row.get("all_routes", {})
+        successful_routes = row.get("successful_routes", {})
+        route_interval = routes.get("u_fraction_wilson95", (-1.0, -1.0))
+        successful_interval = successful_routes.get(
+            "u_fraction_wilson95", (-1.0, -1.0)
+        )
+        if (
+            float(routes.get("balance", -1.0)) < 0.8
+            or float(routes.get("resolved_fraction", -1.0)) < 0.95
+            or int(row.get("success_count", -1)) < 10
+            or float(successful_routes.get("balance", -1.0)) < 0.8
+            or float(successful_routes.get("resolved_fraction", -1.0)) < 0.95
+            or not (float(route_interval[0]) <= 0.5 <= float(route_interval[1]))
+            or not (
+                float(successful_interval[0]) <= 0.5 <= float(successful_interval[1])
+            )
+        ):
+            raise RuntimeError(f"balanced-r0 confirmation failed at gamma={gamma}")
+    return {
+        "delivery_manifest": delivery_path,
+        "delivery_manifest_sha256": AFE2._sha256_file(delivery_path),
+        "confirmation": confirmation_path,
+        "confirmation_sha256": AFE2._sha256_file(confirmation_path),
+        "M_per_gamma": 100,
+        "minimum_balance": 0.8,
+        "minimum_success_balance": 0.8,
+        "minimum_successes": 10,
+        "minimum_resolved_fraction": 0.95,
+        "checkpoint_sha256": checkpoint_sha256.lower(),
+    }
+
+
 def configure_policy_trainability(policy, freeze_visual_encoder: bool) -> dict:
     """Freeze exactly the visual grid encoder when requested."""
 
@@ -595,7 +659,11 @@ def run_parallel_episodes(
                     primary = (
                         chosen["step_progress"]
                         if cfg.execution_rule == EX.MAX_STEP_PROGRESS
-                        else chosen["nominal_hp_step_margin"]
+                        else (
+                            -chosen["safemppi_cost"]
+                            if cfg.execution_rule == EX.SAFEMPPI_COST
+                            else chosen["nominal_hp_step_margin"]
+                        )
                     )
                     best = (float(primary), query_id, controls, candidate_id, result)
 
@@ -721,6 +789,13 @@ def run_parallel_episodes(
                         None if execution_selection is None
                         else [
                             float(row["nominal_hp_step_margin"])
+                            for row in execution_selection["per_candidate"]
+                        ]
+                    ),
+                    "safemppi_cost": (
+                        None if execution_selection is None
+                        else [
+                            row["safemppi_cost"]
                             for row in execution_selection["per_candidate"]
                         ]
                     ),
@@ -1339,6 +1414,10 @@ def run(policy, env, cfg, device, outdir, checkpoint_path, checkpoint_sha256,
 
         if cfg.protocol_profile in {"v3_support_sweep", "v3_support_preflight"}:
             algorithm = "afe_rbf_low7_v3_optimizer_demo_support_v1"
+        elif cfg.protocol_profile in {
+            "b1_balanced_r0_sweep", "b1_balanced_r0_preflight"
+        }:
+            algorithm = "afe_rbf_low7_b1_balanced_r0_sweep_v1"
         elif cfg.protocol_profile == "v2_lineage_mass_smoke":
             algorithm = "afe_rbf_low7_v2_lineage_mass_smoke_v1"
         elif cfg.protocol_profile == "v2_smoke":
@@ -1403,9 +1482,10 @@ def run(policy, env, cfg, device, outdir, checkpoint_path, checkpoint_sha256,
                 else "query-uniform"
             )
             update_description = (
-                f"positive-only {weighting_text} CFM lr {cfg.afe_lr:g}, batch {cfg.batch}, one exact "
+                f"{weighting_text} CFM lr {cfg.afe_lr:g}, batch {cfg.batch}, one exact "
                 "without-replacement epoch over eligible D+; dynamic optimizer steps "
-                "ceil(|eligible D+|/batch), alpha 0, no prox"
+                f"ceil(|eligible D+|/batch), NVP signed-gradient alpha "
+                f"{cfg.negative_alpha:g}, no prox"
             )
             optimizer_draws_per_round = None
             optimizer_draw_interpretation = (
@@ -1722,6 +1802,11 @@ def run(policy, env, cfg, device, outdir, checkpoint_path, checkpoint_sha256,
                         policy, optimizer, store, cfg, device, replay_rng, round_i,
                         demo_reference,
                     )
+                elif cfg.replay_update_mode == "one_epoch_without_replacement":
+                    update = SU.update_round_exact_positive_signed(
+                        policy, optimizer, store, cfg, device, replay_rng, round_i,
+                        alpha=cfg.negative_alpha,
+                    )
                 else:
                     update = SU.update_round_signed(
                         policy, optimizer, store, cfg, device, replay_rng, round_i,
@@ -2006,9 +2091,14 @@ def validate_protocol_args(args) -> None:
     support_profile = args.protocol_profile in {
         "v3_support_sweep", "v3_support_preflight"
     }
+    b1_balanced_sweep = args.protocol_profile in {
+        "b1_balanced_r0_sweep", "b1_balanced_r0_preflight"
+    }
     if args.protocol_profile not in {
         "v2_smoke", "v2_lineage_mass_smoke",
         "v3_support_sweep", "v3_support_preflight",
+        "b1_balanced_r0_sweep",
+        "b1_balanced_r0_preflight",
     }:
         raise ValueError(f"unknown RBF protocol profile: {args.protocol_profile}")
 
@@ -2017,6 +2107,8 @@ def validate_protocol_args(args) -> None:
         "rounds": (
             1 if args.protocol_profile == "v3_support_preflight"
             else 100 if args.protocol_profile == "v3_support_sweep"
+            else 1 if args.protocol_profile == "b1_balanced_r0_preflight"
+            else 20 if b1_balanced_sweep
             else 10
         ),
         "rollout_replicas": 8,
@@ -2027,10 +2119,8 @@ def validate_protocol_args(args) -> None:
         "batch": 128,
         "afe_steps": 0,
         "afe_lr": 1.0e-5,
-        "gp_cap": 512,
         "gp_lam": 1.0e-2,
         "acquisition_mode": "sequential",
-        "adaptive_ess_target": 0.5,
         "adaptive_beta_contexts_per_gamma": 64,
         "adaptive_beta_equalize_gammas": True,
         "replay_window": 2,
@@ -2049,15 +2139,17 @@ def validate_protocol_args(args) -> None:
         "gp_replay_window": 2,
         "gp_replay_sampling": "round_gamma_replica_context",
         "lengthscale_multiplier": 1.0,
-        "negative_alpha": 0.0,
         "execution_rule": (
             "nominal_hp_max_step_margin"
             if args.protocol_profile in {
                 "v2_lineage_mass_smoke", "v3_support_sweep", "v3_support_preflight"
             }
+            else args.execution_rule if b1_balanced_sweep
             else "nominal_hp_max_step_margin_only"
         ),
-        "conditioning_schema": CX.LOW7_SCHEMA,
+        "conditioning_schema": (
+            CX.LOW7_TIE_SCHEMA if b1_balanced_sweep else CX.LOW7_SCHEMA
+        ),
         "freeze_visual_encoder": True,
         "skip_training_probes": True,
         "calibration_replicas": 8,
@@ -2066,8 +2158,31 @@ def validate_protocol_args(args) -> None:
         "compact_checkpoint_every": 1,
         "route_metric_steps": 10,
         "route_ambiguity_band": RM.DEFAULT_AMBIGUITY_BAND,
-        "nvp_audit_all_k": args.protocol_profile == "v2_lineage_mass_smoke",
+        "nvp_audit_all_k": (
+            args.protocol_profile == "v2_lineage_mass_smoke" or b1_balanced_sweep
+        ),
     }
+    if b1_balanced_sweep:
+        if not getattr(args, "balanced_r0_delivery", None):
+            raise ValueError("B1 balanced sweep requires --balanced-r0-delivery")
+        if args.gp_cap not in {512, 768}:
+            raise ValueError("B1 balanced sweep GP cap must be 512 or 768")
+        if args.adaptive_ess_target not in {0.25, 0.5}:
+            raise ValueError("B1 balanced sweep ESS target must be 0.25 or 0.5")
+        if args.negative_alpha not in {0.0, 0.001, 0.01}:
+            raise ValueError("B1 balanced sweep alpha must be 0, 0.001, or 0.01")
+        if args.execution_rule not in {EX.MAX_STEP_MARGIN, EX.SAFEMPPI_COST}:
+            raise ValueError("B1 balanced sweep execution rule is undeclared")
+        exact.update({
+            "replay_loss_weighting": "gamma_episode_context_query_equal_mass",
+            "execution_rule": args.execution_rule,
+        })
+    else:
+        exact.update({
+            "gp_cap": 512,
+            "adaptive_ess_target": 0.5,
+            "negative_alpha": 0.0,
+        })
     if support_profile:
         if getattr(args, "optimizer_steps_per_round", 0) not in {16, 32}:
             raise ValueError("V3 support optimizer dose must be 16 or 32")
@@ -2098,6 +2213,8 @@ def main():
         choices=(
             "v1", "v2_smoke", "v2_lineage_mass_smoke",
             "v3_support_sweep", "v3_support_preflight",
+            "b1_balanced_r0_sweep",
+            "b1_balanced_r0_preflight",
         ),
         default="v1",
     )
@@ -2158,12 +2275,13 @@ def main():
             "nominal_hp_max_step_progress",
             "nominal_hp_max_step_margin",
             "nominal_hp_max_step_margin_only",
+            "nominal_hp_safemppi_cost",
         ),
         default="legacy_max_horizon_progress",
     )
     parser.add_argument(
         "--conditioning-schema",
-        choices=(CX.LOW5_SCHEMA, CX.LOW7_SCHEMA),
+        choices=(CX.LOW5_SCHEMA, *CX.LOW7_SCHEMAS),
         default=CX.LOW5_SCHEMA,
     )
     parser.add_argument("--freeze-visual-encoder", action="store_true")
@@ -2182,6 +2300,7 @@ def main():
     parser.add_argument("--nvp-audit-all-k", action="store_true")
     parser.add_argument("--optimizer-steps-per-round", type=int, default=0)
     parser.add_argument("--demo-frac", type=float, default=0.0)
+    parser.add_argument("--balanced-r0-delivery")
     parser.add_argument("--verifier-workers", type=int, default=16)
     parser.add_argument("--seed", type=int, default=910)
     args = parser.parse_args()
@@ -2193,16 +2312,16 @@ def main():
             raise ValueError("fixed-step replay requires positive AFE steps")
     elif args.afe_steps != 0:
         raise ValueError("exact-epoch replay requires --afe-steps 0 as a non-operative sentinel")
-    if args.replay_update_mode in {
-        "one_epoch_without_replacement", "fixed_macro_steps_exact_epoch"
-    } and args.negative_alpha != 0.0:
-        raise ValueError("exact positive replay epoch currently requires negative alpha zero")
+    if (
+        args.replay_update_mode == "fixed_macro_steps_exact_epoch"
+        and args.negative_alpha != 0.0
+    ):
+        raise ValueError("fixed-macro support replay currently requires negative alpha zero")
     if args.replay_loss_weighting != "query_uniform" and (
         args.replay_update_mode not in {
             "one_epoch_without_replacement", "fixed_macro_steps_exact_epoch"
         }
         or args.replay_sampling != "round_gamma_replica_context"
-        or args.negative_alpha != 0.0
     ):
         raise ValueError(
             "hierarchical equal-mass loss requires hierarchical exact positive replay"
@@ -2263,20 +2382,49 @@ def main():
             profile.name, policy, checkpoint, checkpoint_sha256
         )
     )
+    if args.protocol_profile in {
+        "b1_balanced_r0_sweep", "b1_balanced_r0_preflight"
+    }:
+        if checkpoint_contract.get("reflection_paired_pretraining") is not True:
+            raise RuntimeError("B1 balanced profiles require reflection-paired pretraining")
+        qualification = validate_balanced_r0_delivery(
+            args.balanced_r0_delivery, args.ckpt, checkpoint_sha256
+        )
+        checkpoint_contract = dict(checkpoint_contract)
+        checkpoint_contract["balanced_r0_qualification"] = qualification
+        checkpoint_contract_sha256 = AFE2._canonical_json_sha256(
+            checkpoint_contract
+        )
+    elif checkpoint_contract.get("reflection_paired_pretraining") is True:
+        raise ValueError(
+            "reflection-paired low7 checkpoints are reserved for B1 balanced profiles"
+        )
+    elif args.balanced_r0_delivery is not None:
+        raise ValueError("--balanced-r0-delivery is exclusive to B1 balanced profiles")
     policy_contract = CX.require_declared_contract(
         policy,
         args.conditioning_schema,
-        7 if args.conditioning_schema == CX.LOW7_SCHEMA else 5,
+        7 if args.conditioning_schema in CX.LOW7_SCHEMAS else 5,
     )
     if profile.name in {
         "low7_radius1_canonical_v1",
         "low7_radius03_canonical_v1",
     }:
-        if args.conditioning_schema != CX.LOW7_SCHEMA or not args.freeze_visual_encoder:
-            raise ValueError(
-                "low7 OOD expansion requires low7 closest-boundary conditioning "
-                "and a frozen visual encoder"
-            )
+        expected_low7_schema = (
+            CX.LOW7_TIE_SCHEMA
+            if args.protocol_profile in {
+                "b1_balanced_r0_sweep", "b1_balanced_r0_preflight"
+            }
+            else CX.LOW7_SCHEMA
+        )
+        if (
+            args.conditioning_schema != expected_low7_schema
+            or not args.freeze_visual_encoder
+        ):
+                raise ValueError(
+                    "low7 closest-boundary conditioning must match the profile and the "
+                    "visual encoder must be frozen"
+                )
     elif args.conditioning_schema != CX.LOW5_SCHEMA or args.freeze_visual_encoder:
         raise ValueError("legacy scenes retain low5 conditioning and a trainable encoder")
     trainability = configure_policy_trainability(policy, args.freeze_visual_encoder)

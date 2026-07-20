@@ -39,7 +39,8 @@ class GridHPFlowPolicy(GP2.GridGRUFlowPolicy2):
                  trunk_hidden=(128, 64), enc_depth=2, raw_condition_dim=5,
                  conditioning_schema="low5", boundary_adapter=False,
                  boundary_adapter_hidden=0, boundary_origin_gate=(1.25, 0.65, 0.50, 0.47),
-                 boundary_goal_gate=(3.95, 4.05, 0.55, 0.55), **kw):
+                 boundary_goal_gate=(3.95, 4.05, 0.55, 0.55),
+                 reflection_group_average=False, **kw):
         super().__init__(grid_shape=(1, grid_hw[0], grid_hw[1]), width=width, depth=depth, u_max=u_max,
                          use_gru=use_gru, encode_low=False, use_grid=True, **kw)
         self.repr_dim = repr_dim
@@ -53,10 +54,21 @@ class GridHPFlowPolicy(GP2.GridGRUFlowPolicy2):
         if (self.raw_condition_dim, self.conditioning_schema) not in {
             (5, "low5"),
             (7, "low7_closest_boundary"),
+            (7, "low7_closest_boundary_tie_mean"),
         }:
             raise ValueError(
                 "conditioning dimension and schema must declare low5 or "
                 "low7_closest_boundary"
+            )
+        self.reflection_group_average = bool(reflection_group_average)
+        if self.reflection_group_average and (
+            self.conditioning_schema != "low7_closest_boundary_tie_mean"
+            or use_gru
+            or boundary_adapter
+        ):
+            raise ValueError(
+                "reflection group averaging requires tie-mean low7 conditioning "
+                "conditioning without a GRU or boundary adapter"
             )
         # 1-ch CNN (enc_depth conv layers) + AdaptiveAvgPool → 32 H_P token; pool scales with grid resolution
         ph, pw = (8, 8) if max(grid_hw) >= 24 else (4, 3)        # 32x32 -> (8,8); 16x12 -> (4,3)
@@ -124,6 +136,26 @@ class GridHPFlowPolicy(GP2.GridGRUFlowPolicy2):
         return origin, goal
 
     def forward(self, x, tau, ctx, return_features=False):
+        if self.reflection_group_average:
+            if ctx.ndim != 2 or ctx.shape[1] != 2 * self.ctx_dim:
+                raise ValueError(
+                    "group-averaged context must contain original and reflected branches"
+                )
+            original_context, reflected_context = ctx.split(self.ctx_dim, dim=1)
+            reflected_x = x.reshape(len(x), self.T, 2).flip(-1).reshape_as(x)
+            combined_features = self.features(
+                torch.cat((x, reflected_x), dim=0),
+                torch.cat((tau, tau), dim=0),
+                torch.cat((original_context, reflected_context), dim=0),
+            )
+            original_features, reflected_features = combined_features.split(len(x))
+            original_velocity = self.head(original_features)
+            reflected_velocity = self.head(reflected_features).reshape(
+                len(x), self.T, 2
+            ).flip(-1).reshape_as(original_velocity)
+            velocity = 0.5 * (original_velocity + reflected_velocity)
+            features = 0.5 * (original_features + reflected_features)
+            return (velocity, features) if return_features else velocity
         h = self.features(x, tau, ctx)
         v = self.head(h)
         if self.boundary_adapter:
@@ -133,7 +165,55 @@ class GridHPFlowPolicy(GP2.GridGRUFlowPolicy2):
 
     def ctx_from(self, grid, low5, hist):
         hp = grid[..., 2:3, :, :]                                 # H_P channel from the standard [.,3,16,12]
-        return super().ctx_from(hp, low5, hist)
+        context = super().ctx_from(hp, low5, hist)
+        if not self.reflection_group_average:
+            return context
+        if grid.dim() == 3:
+            grid = grid.unsqueeze(0)
+        if low5.dim() == 1:
+            low5 = low5.unsqueeze(0)
+        if hist.dim() == 2:
+            hist = hist.unsqueeze(0)
+        n_theta = int(grid.shape[-2])
+        if n_theta % 4:
+            raise ValueError("x/y reflection requires a polar grid divisible by four")
+        indices = torch.remainder(
+            n_theta // 4 - torch.arange(n_theta, device=grid.device) - 1,
+            n_theta,
+        )
+        reflected_grid = grid.index_select(-2, indices)
+        reflected_low = low5[:, (1, 0, 3, 2, 5, 4, 6)]
+        reflected_hp = reflected_grid[..., 2:3, :, :]
+        reflected_context = super().ctx_from(
+            reflected_hp, reflected_low, hist.flip(-1)
+        )
+        return torch.cat((context, reflected_context), dim=1)
+
+    @torch.no_grad()
+    def phi_s(self, controls, ctx, s=0.9):
+        if not self.reflection_group_average:
+            return super().phi_s(controls, ctx, s=s)
+        batch = controls.shape[0]
+        x1 = (controls / self.u_max).reshape(batch, self.d)
+        ctx = self._expand_ctx(ctx, batch)
+        if len(self.noise_templates) % 2:
+            raise RuntimeError("group-averaged feature templates must have even size")
+        base_templates = self.noise_templates[: len(self.noise_templates) // 2]
+        templates = torch.cat(
+            (
+                base_templates,
+                base_templates.reshape(-1, self.T, 2).flip(-1).reshape(
+                    -1, self.d
+                ),
+            ),
+            dim=0,
+        )
+        features = []
+        for template in templates:
+            x_s = (1.0 - s) * template[None] + s * x1
+            tau = torch.full((batch,), s, device=x1.device, dtype=x1.dtype)
+            features.append(self.forward(x_s, tau, ctx, return_features=True)[1])
+        return torch.stack(features, dim=0).mean(dim=0)
 
     def _low_raw(self, low, hist):
         """Retain every declared raw condition; the inherited method drops extras."""
@@ -153,7 +233,9 @@ class GridHPFlowPolicy(GP2.GridGRUFlowPolicy2):
 
     def config(self):
         return dict(arch="hp-repr" if self.repr_dim else "hp-reduced-32",
-                    schema_version=("w8sg-hp-v3-low7-closest-boundary"
+                    schema_version=("w8sg-hp-v4-low7-closest-boundary-tie-mean"
+                                    if self.conditioning_schema == "low7_closest_boundary_tie_mean"
+                                    else "w8sg-hp-v3-low7-closest-boundary"
                                     if self.conditioning_schema == "low7_closest_boundary"
                                     else "w8sg-hp-v2-low5-only"),
                     raw_start_goal=False,
@@ -168,7 +250,8 @@ class GridHPFlowPolicy(GP2.GridGRUFlowPolicy2):
                     boundary_adapter=bool(self.boundary_adapter),
                     boundary_adapter_hidden=int(self.boundary_adapter_hidden),
                     boundary_origin_gate=list(self.boundary_origin_gate),
-                    boundary_goal_gate=list(self.boundary_goal_gate))
+                    boundary_goal_gate=list(self.boundary_goal_gate),
+                    reflection_group_average=self.reflection_group_average)
 
 
 def save_hp(policy, path, extra=None):
@@ -190,7 +273,8 @@ def load_hp(path, device="cpu"):
                            boundary_adapter=c.get("boundary_adapter", False),
                            boundary_adapter_hidden=c.get("boundary_adapter_hidden", 0),
                            boundary_origin_gate=tuple(c.get("boundary_origin_gate", (1.25, .65, .50, .47))),
-                           boundary_goal_gate=tuple(c.get("boundary_goal_gate", (3.95, 4.05, .55, .55))))
+                           boundary_goal_gate=tuple(c.get("boundary_goal_gate", (3.95, 4.05, .55, .55))),
+                           reflection_group_average=c.get("reflection_group_average", False))
     pol.load_state_dict(ck["state_dict"])
     return pol.to(device).eval(), ck
 

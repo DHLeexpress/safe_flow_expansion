@@ -202,3 +202,69 @@ def test_segments_are_computed_from_candidate_controls(monkeypatch) -> None:
     )
 
     assert selection["chosen"]["step_progress"] == pytest.approx(0.005)
+
+
+def test_safemppi_cost_matches_frozen_double_integrator_objective(monkeypatch) -> None:
+    monkeypatch.setattr(EX.GS, "mode1_config", lambda: {
+        "horizon": 2,
+        "running_goal_weight": 1.0,
+        "terminal_goal_weight": 2.0,
+        "control_weight": 3.0,
+        "smooth_weight": 4.0,
+        "progress_weight": 5.0,
+        "soft_clearance_weight": 6.0,
+        "safety_margin": 0.0,
+        "barrier_extra_margin": 0.0,
+    })
+    monkeypatch.setattr(
+        EX.GS, "planner_obstacles", lambda env: np.empty((0, 3), dtype=np.float32)
+    )
+    state = np.asarray((0.0, 0.0, 0.0, 0.0), dtype=np.float32)
+    controls = np.asarray([[[1.0, 0.0], [0.0, 0.0]]], dtype=np.float32)
+    positions = np.asarray([[[0.1, 0.0], [0.2, 0.0]]], dtype=np.float32)
+    env = SimpleNamespace(goal=np.asarray((1.0, 0.0)))
+
+    costs = EX.safemppi_plan_costs(state, controls, positions, env)
+
+    # running 1.45 + effort 3 + smooth 8 + progress -1.5 + terminal 1.28
+    assert costs == pytest.approx([12.23])
+
+
+def test_safemppi_cost_selector_ranks_only_after_existing_gates(monkeypatch) -> None:
+    calls = {}
+    obstacle_token = _patch_nominal_hp(
+        monkeypatch, lambda points: np.ones(len(points)), calls
+    )
+    original_config = EX.GS.mode1_config
+    monkeypatch.setattr(EX.GS, "mode1_config", lambda: {
+        **original_config(),
+        "horizon": 2,
+        "safety_margin": 0.0,
+        "barrier_extra_margin": 0.0,
+    })
+    monkeypatch.setattr(
+        EX.GS,
+        "planner_obstacles",
+        lambda env: np.empty((0, 3), dtype=np.float32),
+    )
+    state, controls, env = _inputs(count=2)
+    segments = np.asarray([
+        [[0.2, 0.0], [0.8, 0.0]],
+        [[0.1, 0.0], [-0.2, 0.0]],
+    ])
+
+    selection = EX.nominal_hp_safemppi_cost(
+        state,
+        controls,
+        [{"y": 1}, {"y": 1}],
+        0.5,
+        env,
+        segments=segments,
+        candidate_ids=[8, 3],
+    )
+
+    assert obstacle_token is not None
+    assert selection["chosen"]["candidate_id"] == 8
+    assert selection["per_candidate"][0]["safemppi_cost"] < (
+        selection["per_candidate"][1]["safemppi_cost"]
+    )

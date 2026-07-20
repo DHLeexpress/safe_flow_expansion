@@ -1,0 +1,32 @@
+{
+  "M": 50,
+  "archive": "/home/dohyun/projects/afe2_runs/low7_b1_balanced_sweep_63ebefa/confirmation/cells/r020_g0.4.npz",
+  "archive_sha256": "e0b7458cfa52365f921ffcc6f4374e06f29b1ca5e6611dd976f773bcdaa25c2c",
+  "checkpoint": {
+    "path": "/home/dohyun/projects/afe2_runs/low7_b1_balanced_sweep_63ebefa/arms/cap512_ess025_alpha0010_cost/ckpt_20.pt",
+    "sha256": "d264c97306c4213b2953e61ff5abdd2e0ade1c0b47615851afb4def249b1a711"
+  },
+  "checkpoint_model_state_sha256": "20c3547c29b041277f31d2e7d41918b6768449817e0348e6440c00ae7dc0909f",
+  "gamma": 0.4,
+  "mode": "raw temperature-1; no tilt, verifier filtering, controller, or fallback",
+  "noise_bank": {
+    "disjoint_from_screen_prefix": true,
+    "dtype": "float32",
+    "independence": "fixed across the three selected-arm endpoint comparison checkpoints",
+    "indexing": "[gamma, rollout_index, control_time, latent_dimension]",
+    "master_seed_disjoint_from_screen": true,
+    "screen_seed": 910748408648085943,
+    "screen_sha256": "01a7d8f796e26794641f4001911f9d42483e5b1993d7cb0eba16c8b2635c1816",
+    "seed": 3920417869907838514,
+    "sha256": "8164b116bf8aa09c6b1d44376c7bbd566cc127984ea77287d85f9aa8a95588bc",
+    "shape": [
+      7,
+      50,
+      300,
+      20
+    ]
+  },
+  "round": 20,
+  "scene_sha256": "356d6d48b3af2b017b529562b530f35285c86f9107da512a73de6ef664b03e72",
+  "trainer_complete_sha256": "83b25a8312bbbe66e5fae216942197cd08a624d7190b0fa43733f17c1f1c245f"
+}

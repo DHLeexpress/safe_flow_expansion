@@ -2,9 +2,16 @@
 
 This directory is the standalone working record for the current SafeMPPI → conditional flow matching → Safe Flow Expansion pipeline. It is intended for a new collaborator who has not followed the experiment history, and for later paper writing where every claim must point to a source file, an authenticated artifact, or an explicit limitation.
 
-The exact Phase C source snapshot comes from Git commit `e63ebd80e5fa4f712a1a7cf590ec74c116768873`. The current coverage-aware selected checkpoint is `opt032_demo0250@r25`, not the final round. Its SHA-256 is `ab6ce3c39671554ef114234c464f23cc18828ea751a4bbb5547beb59793c1b54`.
+The current empirical best is [`B1_current_best`](B1_CURRENT_BEST.md): arm
+`cap512_ess025_alpha0010_cost`, selected at round 19 before its disjoint M50
+holdout was read. Its checkpoint SHA-256 is
+`60c155472f5ed0e4a1d53581857f09aead7924f8ce11e8e3adf890d5a57fc079`.
+The algorithm source is commit `63ebefa7877c0b923c1c7cdea19228302dd6a0ca`;
+the additive no-science recovery/finalizer is commit
+`ba699bc42dfd393a3bffb4f97b3fe3e425c813d5`. Phase C remains preserved below
+as a validated negative result, not as the current model.
 
-## TL;DR: A → B → C
+## TL;DR: A → B → C → B1_current_best
 
 This section is append-only. Add a dated item here whenever a new sweep, visualization, failure, or promoted model changes the working conclusion.
 
@@ -13,27 +20,38 @@ This section is append-only. Add a dated item here whenever a new sweep, visuali
 | **A — establish the task and diagnose update instability** | Rebuilt the low7 pretraining data over the full free-space start grid; added the closest-obstacle-boundary vector; moved from the radius-0.3 OOD task to the canonical radius-1.0 giant obstacle; screened the $2\ell\times3\alpha\times4\text{ steps}\times2\text{ execution rules}$ matrix; separated raw evaluation from tilted gathering; introduced the nominal-$H_P$ one-step execution gate. | The radius-0.3 task was largely recoverable, while the giant obstacle exposed the real failure. Large per-round CFM updates caused successful-mode forgetting; the margin execution rule collected much longer trajectories than progress execution; visualization and raw evaluation, not gather statistics, exposed the collapse. | One rollout lineage could dominate a round. Most gathered positives came from repeatedly traversing one route. A valid $H$-step window was not the same as a viable closed-loop trajectory. Negative-loss variants and optimizer-dose changes did not by themselves solve route collapse. |
 | **B — sample-complete, parallel, lineage-balanced V2** | Used independent synchronous replicas per $\gamma$, $K=16,B=4$, adaptive per-round acquisition temperature, 64 calibration contexts per $\gamma$, $W=2$, all eligible positives once per exact epoch, and equal mass over $\gamma\rightarrow\text{episode lineage}\rightarrow\text{context}\rightarrow\text{query}$. | Raw SR rose from 34.3% at round 0 to 78.6% at round 7 in the M10 screen. The bookkeeping fixes worked: all positive windows were used once, long episodes and positive-rich contexts no longer received automatic extra loss mass, and training U/R counts became balanced. | Raw successful-route balance still collapsed from 0.686 at round 0 to 0.029 at rounds 7 and 10. Balanced queried/training populations did **not** imply balanced probability mass under the raw generator. |
 | **C — support-preserving V3, current snapshot** | Kept the Phase B sampling/replay structure, swept fixed optimizer steps $\{16,32\}$ and authenticated expert-demo objective mass $\{0,0.125,0.25\}$, froze the visual encoder, and selected checkpoints using a coverage-aware raw M10 objective before a disjoint raw M50 confirmation. | `opt032_demo0250@r25` improved disjoint M50 raw SR from 36.0% to 66.57%, CR from 64.0% to 33.43%, and $V_{\rm safe}$ from 11.14% to 37.71%. Demo mass 0.25 preserved task success better than no-demo or 0.125. | Coverage did not survive confirmation: successful routes changed from U/R = 71/55 at round 0 to 201/32 at round 25, and $J$ fell from 29.14% to 18.29%. By round 100 SR was 73.14% but $J$ was only 9.71%. Demo and positive gradients conflicted strongly (cosine $-0.7532$). Phase C is a validated negative result about density transfer, not a solved expansion algorithm. |
+| **B1_current_best — balanced r0 + cost execution + signed NVP update** | Returned to the sample-complete B1 pipeline, replaced the order-sensitive nearest-boundary tie with a tie-mean low7 input and reflection group-averaged policy, used SafeMPPI-cost execution, RBF cap 512 / ESS target 0.25, and NVP signed-gradient $\alpha=0.01$. | The pre-holdout-selected r19 achieved disjoint raw temperature-1 M50 SR 96.0%, CR 4.0%, $V_{\rm safe}$ 86.29%, and successful U/R = 174/162, versus r0 SR 57.43% and U/R = 94/107. | The delivery is explicitly recovered-noncanonical because GPU exclusivity was violated during final artifact assembly. The finite seed-bank result is strong empirical evidence, not a probabilistic guarantee; RBF memory is still capped and finite-H verification does not prove recursive feasibility. |
 
-The current conclusion is precise: **Safe Flow Expansion increased local verified-window support and raw task success, but the learned generator did not preserve both global route modes.** Equalizing the replay measure fixes sample accounting; it does not impose symmetry or global homotopy coverage on $p_\theta(U\mid c)$.
+The current conclusion is now two-part. Phase C showed that replay accounting and
+demo mass alone did not preserve route support. `B1_current_best` then recovered
+high raw task success **and** both observed U/R modes on a disjoint M50 seed bank,
+after removing the boundary-input tie bias and changing the execution/negative
+signal. This remains empirical: equal route counts on one finite audit do not
+constitute a global homotopy or safety guarantee.
+
+![B1_current_best: expert, pretrained, expanded, and Kazuki diagnostics](assets/results/b1_current_best/b1_current_best_5x3_gallery.png)
 
 ## What is in this folder
 
 ```text
 safe_flow_expansion_workbook/
 ├── README.md                       # pipeline, equations, results, and limitations
+├── B1_CURRENT_BEST.md              # exact current recipe, result, caveats, and handoff
 ├── CODE_INDEX.md                   # per-file role and blind-spot map
 ├── SOURCE_MANIFEST.json            # hashes for the frozen source and packaged assets
 ├── assets/
 │   ├── data/                       # start/goal and expert/pretraining visualizations
 │   ├── polytopes/                  # nominal/verifier polytope PNG, GIF, and MP4
-│   └── results/                    # current Phase C report, gallery, and diagnostic video
+│   └── results/                    # preserved Phase C plus current B1 paper assets
 ├── checkpoints/
 │   ├── low7_pretrained_checkpoint.pt
-│   └── phase_c_selected_r25.pt
+│   ├── phase_c_selected_r25.pt
+│   ├── b1_balanced_pretrained.pt
+│   └── b1_current_best_r19.pt
 ├── configs/                        # selected exact recipe and RBF calibration
-├── provenance/                     # data, pretraining, Phase B reference, and Phase C manifests
+├── provenance/                     # data, Phase B/C history, and B1 manifests/cells
 ├── scripts/                        # package verification and Helios data-link helpers
-├── source_snapshot/                # exact Phase C code plus its practical import closure
+├── source_snapshot/                # Phase C closure plus exact B1 algorithm/gallery deltas
 └── tests/                           # focused verification entry point
 ```
 

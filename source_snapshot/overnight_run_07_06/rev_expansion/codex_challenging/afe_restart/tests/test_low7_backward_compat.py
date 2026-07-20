@@ -85,11 +85,33 @@ def test_closest_boundary_vector_and_low7_keep_gamma_last() -> None:
     assert condition[-1] == pytest.approx(0.7)
 
 
+def test_tie_mean_closest_boundary_is_order_invariant_and_legacy_is_unchanged() -> None:
+    features = challenging_hp.GF
+    obstacles = np.asarray(((1.0, 0.0, 0.2), (0.0, 1.0, 0.2)))
+    point = np.asarray((0.0, 0.0))
+
+    legacy = features.closest_boundary_vector(point, obstacles, r_robot=0.1)
+    legacy_reordered = features.closest_boundary_vector(
+        point, obstacles[::-1], r_robot=0.1
+    )
+    tied = features.closest_boundary_vector(
+        point, obstacles, r_robot=0.1, tie_average=True
+    )
+    tied_reordered = features.closest_boundary_vector(
+        point, obstacles[::-1], r_robot=0.1, tie_average=True
+    )
+
+    assert not np.array_equal(legacy, legacy_reordered)
+    np.testing.assert_allclose(tied, tied_reordered)
+    np.testing.assert_allclose(tied, tied[::-1])
+
+
 @pytest.mark.parametrize(
     ("raw_condition_dim", "conditioning_schema", "ctx_dim", "trunk_in"),
     (
         (5, "low5", 37, 89),
         (7, "low7_closest_boundary", 39, 91),
+        (7, "low7_closest_boundary_tie_mean", 39, 91),
     ),
 )
 def test_low5_and_low7_context_and_trunk_dimensions(

@@ -83,7 +83,17 @@ SCENE_LABELS = {
 }
 METRIC_VERSION = "low7_pretrained_raw_v1"
 CHECKPOINT_STAGE_SCHEMA = "afe_fresh_pretrain_v2_low7_uniform_pairs"
+REFLECTION_CHECKPOINT_STAGE_SCHEMA = "afe_fresh_pretrain_v3_low7_reflection_paired"
+EQUIVARIANT_CHECKPOINT_STAGE_SCHEMA = (
+    "afe_fresh_pretrain_v4_low7_reflection_equivariant"
+)
+GROUP_AVERAGED_CHECKPOINT_STAGE_SCHEMA = (
+    "afe_fresh_pretrain_v5_low7_reflection_group_average"
+)
 MODEL_SCHEMA = "w8sg-hp-v3-low7-closest-boundary"
+GROUP_AVERAGED_MODEL_SCHEMA = "w8sg-hp-v4-low7-closest-boundary-tie-mean"
+LOW7_SCHEMA = "low7_closest_boundary"
+LOW7_TIE_SCHEMA = "low7_closest_boundary_tie_mean"
 T = 300
 REACH = 0.15
 NFE = 12
@@ -183,9 +193,13 @@ def load_low7_candidate(
     config = payload.get("config")
     if not isinstance(config, Mapping):
         raise CheckpointContractError("checkpoint has no model config")
+    stage_schema = payload.get("stage_schema")
+    group_averaged = stage_schema == GROUP_AVERAGED_CHECKPOINT_STAGE_SCHEMA
     exact_fields = {
         "arch": "hp-repr",
-        "schema_version": MODEL_SCHEMA,
+        "schema_version": (
+            GROUP_AVERAGED_MODEL_SCHEMA if group_averaged else MODEL_SCHEMA
+        ),
         "raw_start_goal": False,
         "H_pred": 10,
         "grid_shape": (1, 32, 32),
@@ -195,7 +209,7 @@ def load_low7_candidate(
         "u_max": 1.0,
         "ctx_dim": 39,
         "raw_condition_dim": 7,
-        "conditioning_schema": "low7_closest_boundary",
+        "conditioning_schema": LOW7_TIE_SCHEMA if group_averaged else LOW7_SCHEMA,
         "use_gru": False,
         "repr_dim": 32,
         "grid_hw": (32, 32),
@@ -205,8 +219,16 @@ def load_low7_candidate(
     }
     for field, expected_value in exact_fields.items():
         _require_exact(config, field, expected_value)
+    if stage_schema not in {
+        CHECKPOINT_STAGE_SCHEMA,
+        REFLECTION_CHECKPOINT_STAGE_SCHEMA,
+        EQUIVARIANT_CHECKPOINT_STAGE_SCHEMA,
+        GROUP_AVERAGED_CHECKPOINT_STAGE_SCHEMA,
+    }:
+        raise CheckpointContractError(
+            f"checkpoint payload stage_schema={stage_schema!r} is not supported"
+        )
     required_payload = {
-        "stage_schema": CHECKPOINT_STAGE_SCHEMA,
         "fresh_from_scratch": True,
         "endpoint_free": True,
         "encoder_trainable_during_pretraining": True,
@@ -216,6 +238,36 @@ def load_low7_candidate(
         if payload.get(field) != expected_value:
             raise CheckpointContractError(
                 f"checkpoint payload {field}={payload.get(field)!r}, expected {expected_value!r}"
+            )
+    if stage_schema in {
+        REFLECTION_CHECKPOINT_STAGE_SCHEMA,
+        EQUIVARIANT_CHECKPOINT_STAGE_SCHEMA,
+        GROUP_AVERAGED_CHECKPOINT_STAGE_SCHEMA,
+    }:
+        if payload.get("reflection_paired_pretraining") is not True:
+            raise CheckpointContractError(
+                "reflection-paired checkpoint lost its pretraining contract"
+            )
+    if stage_schema == EQUIVARIANT_CHECKPOINT_STAGE_SCHEMA:
+        if not float(payload.get("equivariance_weight", 0.0)) > 0.0:
+            raise CheckpointContractError(
+                "equivariant checkpoint lacks a positive consistency weight"
+            )
+    if stage_schema == GROUP_AVERAGED_CHECKPOINT_STAGE_SCHEMA:
+        if payload.get("reflection_group_average") is not True:
+            raise CheckpointContractError(
+                "group-averaged checkpoint lost its exact symmetry contract"
+            )
+        if config.get("reflection_group_average") is not True:
+            raise CheckpointContractError(
+                "group-averaged checkpoint does not reconstruct the symmetric model"
+            )
+        transform = payload.get("conditioning_transform")
+        if not isinstance(transform, Mapping) or transform.get("name") != (
+            "equal-nearest-boundary-vector-mean-v1"
+        ):
+            raise CheckpointContractError(
+                "group-averaged checkpoint lacks its tie-mean conditioning transform"
             )
     fixed_goal_grid = payload.get("fixed_goal") is not None
     if fixed_goal_grid:
@@ -252,7 +304,15 @@ def load_low7_candidate(
         "caller_hash_verified": True,
         "model_state_sha256": actual_state_hash,
         "config": dict(config),
-        "stage_schema": payload["stage_schema"],
+        "stage_schema": stage_schema,
+        "reflection_paired_pretraining": bool(
+            payload.get("reflection_paired_pretraining", False)
+        ),
+        "equivariance_weight": float(payload.get("equivariance_weight", 0.0)),
+        "reflection_group_average": bool(
+            payload.get("reflection_group_average", False)
+        ),
+        "conditioning_transform": payload.get("conditioning_transform"),
         "source_manifest": payload["source_manifest"],
         "source_query_hash_digest": payload["source_query_hash_digest"],
         "best_epoch": int(payload["best_epoch"]),
@@ -314,11 +374,17 @@ def validate_scene_contract(name: str, env: Any) -> dict[str, Any]:
     return snapshot
 
 
-def raw_noise_seed(gamma: float, rollout_index: int, control_t: int) -> int:
+def raw_noise_seed(
+    gamma: float,
+    rollout_index: int,
+    control_t: int,
+    *,
+    seed_bank: str = METRIC_VERSION,
+) -> int:
     """Common-random-number seed; deliberately independent of scene geometry."""
 
     key = (
-        f"{METRIC_VERSION}|raw|gamma={float(gamma):.1f}|"
+        f"{seed_bank}|raw|gamma={float(gamma):.1f}|"
         f"index={int(rollout_index)}|t={int(control_t)}"
     ).encode()
     return int.from_bytes(hashlib.sha256(key).digest()[:8], "big") % (2**63 - 1)
@@ -336,10 +402,20 @@ def run_raw_rollouts(
     reach: float = REACH,
     nfe: int = NFE,
     device: str | torch.device = "cpu",
+    seed_bank: str = METRIC_VERSION,
+    reflection_antithetic: bool = False,
 ) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
     """Generate raw receding-horizon trajectories without any verifier call."""
 
     device = torch.device(device)
+    if reflection_antithetic:
+        if m % 2:
+            raise ValueError("reflection-antithetic raw evaluation requires even M")
+        if not bool(getattr(policy, "reflection_group_average", False)):
+            raise ValueError(
+                "reflection-antithetic raw evaluation requires an exactly "
+                "reflection-group-averaged policy"
+            )
     start = env.x0.detach().cpu().numpy().astype(np.float64)
     goal = env.goal.detach().cpu().numpy().astype(np.float64)
     obstacles = env.obstacles.detach().cpu().numpy().astype(np.float64)
@@ -369,17 +445,39 @@ def run_raw_rollouts(
             state = episode["state"]
             grids.append(GF.axis_grid(state[:2], obstacles, robot_radius))
             conditions.append(
-                GF.low7(state, goal, episode["gamma"], obstacles, robot_radius)
+                GF.low7(
+                    state,
+                    goal,
+                    episode["gamma"],
+                    obstacles,
+                    robot_radius,
+                    tie_average=(
+                        getattr(policy, "conditioning_schema", LOW7_SCHEMA)
+                        == LOW7_TIE_SCHEMA
+                    ),
+                )
             )
             recent = np.asarray(episode["history"][-GF.K_HIST :], dtype=np.float32)
             histories.append(
                 GF.hist_pad(recent if recent.size else np.zeros((0, 2)), GF.K_HIST)
             )
+            pair_size = m // 2 if reflection_antithetic else m
+            base_rollout_index = (
+                episode["rollout_index"] % pair_size
+                if reflection_antithetic
+                else episode["rollout_index"]
+            )
             seed = raw_noise_seed(
-                episode["gamma"], episode["rollout_index"], control_t
+                episode["gamma"],
+                base_rollout_index,
+                control_t,
+                seed_bank=seed_bank,
             )
             generator = torch.Generator(device=device).manual_seed(seed)
-            noises.append(torch.randn(policy.d, generator=generator, device=device))
+            noise = torch.randn(policy.d, generator=generator, device=device)
+            if reflection_antithetic and episode["rollout_index"] >= pair_size:
+                noise = noise.reshape(-1, 2).flip(-1).reshape_as(noise)
+            noises.append(noise)
         grid_tensor = torch.as_tensor(np.asarray(grids), device=device)
         condition_tensor = torch.as_tensor(np.asarray(conditions), device=device)
         history_tensor = torch.as_tensor(np.asarray(histories), device=device)
@@ -393,8 +491,17 @@ def run_raw_rollouts(
         ).detach().cpu().numpy()
         for episode, window in zip(active, windows):
             state_before = episode["state"].copy()
+            pair_size = m // 2 if reflection_antithetic else m
+            base_rollout_index = (
+                episode["rollout_index"] % pair_size
+                if reflection_antithetic
+                else episode["rollout_index"]
+            )
             seed = raw_noise_seed(
-                episode["gamma"], episode["rollout_index"], control_t
+                episode["gamma"],
+                base_rollout_index,
+                control_t,
+                seed_bank=seed_bank,
             )
             sampled_plans.append(
                 {
@@ -403,6 +510,8 @@ def run_raw_rollouts(
                     "rollout_index": int(episode["rollout_index"]),
                     "control_t": int(control_t),
                     "seed": int(seed),
+                    "reflection_antithetic": bool(reflection_antithetic),
+                    "reflection_pair_index": int(base_rollout_index),
                     "state": state_before,
                     "plan": np.asarray(window, dtype=np.float32),
                 }

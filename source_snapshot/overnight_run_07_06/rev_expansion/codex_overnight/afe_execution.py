@@ -17,12 +17,20 @@ for _path in (_WORK, _REV, _HERE):
 import grid_feats as GF
 import grid_rollout as GR
 import grid_scene as GS
+from cfm_mppi.safegpc_adapter.safemppi import SafeMPPIConfig
 
 
 NOMINAL_HP_TOLERANCE = 1.0e-8
 MAX_STEP_PROGRESS = "nominal_hp_max_step_progress"
 MAX_STEP_MARGIN = "nominal_hp_max_step_margin"
 MAX_STEP_MARGIN_ONLY = "nominal_hp_max_step_margin_only"
+SAFEMPPI_COST = "nominal_hp_safemppi_cost"
+NOMINAL_HP_SELECTORS = (
+    MAX_STEP_PROGRESS,
+    MAX_STEP_MARGIN,
+    MAX_STEP_MARGIN_ONLY,
+    SAFEMPPI_COST,
+)
 
 
 def _numpy(value) -> np.ndarray:
@@ -41,7 +49,88 @@ def _selection_key(row: dict, selector: str) -> tuple[float | int, ...]:
         return margin, progress, -candidate_id
     if selector == MAX_STEP_MARGIN_ONLY:
         return margin, -candidate_id
+    if selector == SAFEMPPI_COST:
+        return -float(row["safemppi_cost"]), -candidate_id
     raise ValueError(f"unknown execution selector: {selector}")
+
+
+def safemppi_plan_costs(current_state, candidates, planned_positions, env) -> np.ndarray:
+    """Evaluate SafeMPPI's deterministic DI trajectory cost, without its barrier gate.
+
+    The caller has already applied the full verifier and nominal first-step H_P
+    gate.  This function therefore reproduces only SafeMPPI's cost ranking; it
+    does not introduce a second feasibility label or a fallback.
+    """
+
+    state = _numpy(current_state).astype(np.float64, copy=False).reshape(-1)
+    controls = _numpy(candidates).astype(np.float64, copy=False)
+    positions = _numpy(planned_positions).astype(np.float64, copy=False)
+    if controls.ndim != 3 or controls.shape[2] != 2:
+        raise ValueError("candidates must have shape [B,H,2]")
+    if positions.shape != controls.shape:
+        raise ValueError("planned_positions must align with candidate horizons")
+
+    config = SafeMPPIConfig(**GS.mode1_config())
+    if int(config.horizon) != int(controls.shape[1]):
+        raise ValueError(
+            "candidate horizon does not match the frozen SafeMPPI expert cost"
+        )
+    goal = _numpy(env.goal).astype(np.float64, copy=False).reshape(-1)[:2]
+    distances = np.linalg.norm(positions - goal[None, None, :], axis=2)
+    initial_distance = float(np.linalg.norm(state[:2] - goal))
+
+    running_goal = float(config.running_goal_weight) * np.square(distances).sum(axis=1)
+    effort = float(config.control_weight) * np.square(controls).sum(axis=(1, 2))
+    previous_controls = np.concatenate(
+        (np.zeros((len(controls), 1, 2), dtype=np.float64), controls[:, :-1]),
+        axis=1,
+    )
+    smooth = float(config.smooth_weight) * np.square(
+        controls - previous_controls
+    ).sum(axis=(1, 2))
+    progress = -float(config.progress_weight) * (
+        initial_distance - distances
+    ).sum(axis=1)
+
+    retreat = np.zeros(len(controls), dtype=np.float64)
+    if float(config.goal_retreat_exp_weight) > 0.0:
+        previous_distances = np.concatenate(
+            (
+                np.full((len(controls), 1), initial_distance, dtype=np.float64),
+                distances[:, :-1],
+            ),
+            axis=1,
+        )
+        scale = max(float(config.goal_retreat_exp_scale), np.finfo(np.float64).eps)
+        normalized = np.minimum(
+            np.maximum(distances - previous_distances, 0.0) / scale,
+            max(float(config.goal_retreat_exp_cap), 0.0),
+        )
+        retreat = float(config.goal_retreat_exp_weight) * np.expm1(normalized).sum(axis=1)
+
+    obstacles = _numpy(GS.planner_obstacles(env)).astype(np.float64, copy=True)
+    if obstacles.size:
+        obstacles = obstacles.reshape(-1, 3)
+        obstacles[:, 2] += (
+            float(config.safety_margin) + float(config.barrier_extra_margin)
+        )
+        clearance = (
+            np.linalg.norm(
+                positions[:, :, None, :] - obstacles[None, None, :, :2], axis=3
+            )
+            - obstacles[None, None, :, 2]
+        ).min(axis=2)
+        soft_clearance = float(config.soft_clearance_weight) * np.square(
+            np.maximum(-clearance, 0.0)
+        ).sum(axis=1)
+    else:
+        soft_clearance = np.zeros(len(controls), dtype=np.float64)
+
+    terminal = float(config.terminal_goal_weight) * np.square(distances[:, -1])
+    costs = running_goal + effort + smooth + progress + retreat + soft_clearance + terminal
+    if not np.isfinite(costs).all():
+        raise RuntimeError("SafeMPPI execution cost produced a nonfinite value")
+    return costs
 
 
 def select_nominal_hp_execution(
@@ -70,7 +159,7 @@ def select_nominal_hp_execution(
     gamma_value = float(gamma)
     if not np.isfinite(gamma_value) or not 0.0 <= gamma_value <= 1.0:
         raise ValueError("gamma must be finite and in [0, 1]")
-    if selector not in (MAX_STEP_PROGRESS, MAX_STEP_MARGIN, MAX_STEP_MARGIN_ONLY):
+    if selector not in NOMINAL_HP_SELECTORS:
         raise ValueError(f"unknown execution selector: {selector}")
 
     controls = _numpy(candidates)
@@ -121,6 +210,10 @@ def select_nominal_hp_execution(
         raise ValueError("nominal H_P callable returned an unexpected shape")
     hp0 = float(hp_values[0])
     start_distance = float(np.linalg.norm(state[:2] - goal))
+    safemppi_costs = (
+        safemppi_plan_costs(state, controls, planned_positions, env)
+        if selector == SAFEMPPI_COST else None
+    )
 
     rows = []
     for local_index, (candidate_id, result, first_position, hp1) in enumerate(
@@ -138,6 +231,9 @@ def select_nominal_hp_execution(
             "execution_verifier_positive": execution_positive,
             "step_progress": progress,
             "nominal_hp_step_margin": margin,
+            "safemppi_cost": (
+                None if safemppi_costs is None else float(safemppi_costs[local_index])
+            ),
             "eligible": bool(
                 execution_positive
                 and finite_score
@@ -233,4 +329,28 @@ def nominal_hp_max_step_margin_only(
         segments=segments,
         candidate_ids=candidate_ids,
         selector=MAX_STEP_MARGIN_ONLY,
+    )
+
+
+def nominal_hp_safemppi_cost(
+    current_state,
+    candidates,
+    verifier_results: Sequence[dict],
+    gamma: float,
+    env,
+    *,
+    segments=None,
+    candidate_ids: Sequence[int] | None = None,
+) -> dict:
+    """Choose the eligible plan with minimum frozen SafeMPPI trajectory cost."""
+
+    return select_nominal_hp_execution(
+        current_state,
+        candidates,
+        verifier_results,
+        gamma,
+        env,
+        segments=segments,
+        candidate_ids=candidate_ids,
+        selector=SAFEMPPI_COST,
     )
