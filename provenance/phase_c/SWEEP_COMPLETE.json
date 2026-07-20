@@ -1,0 +1,59 @@
+{
+  "arms_completed": 6,
+  "checkpoint_sha256": "7ae44f773b3f5fe36579c4101542e495119cf6e348f622f5edbfedaa2855a46c",
+  "confirmation": {
+    "confirmation": "/home/dohyun/projects/afe2_runs/low7_rbf_v3_support_giant_e63ebd8/confirmation",
+    "evaluation_complete_sha256": "463af2c6a1ec6a387c432ef5627a1f83c1d673e8438761980f0832caf8225c90",
+    "holdout_noise_bank": {
+      "disjoint_from_screen_prefix": true,
+      "dtype": "float32",
+      "independence": "fixed across the three selected-arm endpoint comparison checkpoints",
+      "indexing": "[gamma, rollout_index, control_time, latent_dimension]",
+      "master_seed_disjoint_from_screen": true,
+      "screen_seed": 910748408648085943,
+      "screen_sha256": "01a7d8f796e26794641f4001911f9d42483e5b1993d7cb0eba16c8b2635c1816",
+      "seed": 2135174486016222427,
+      "sha256": "2acb495ecb27f08d37fcfbd6e6694e556414a001581f3a8ba9b4b75d4c06969e",
+      "shape": [
+        7,
+        50,
+        300,
+        20
+      ]
+    },
+    "selected_arm": "opt032_demo0250",
+    "selected_round": 25,
+    "video": {
+      "codec_name": "h264",
+      "height": 1008,
+      "nb_read_frames": "19",
+      "width": 1994
+    }
+  },
+  "elapsed_seconds": 27709.105923891068,
+  "scene_sha256": "356d6d48b3af2b017b529562b530f35285c86f9107da512a73de6ef664b03e72",
+  "selected": {
+    "CR": 0.2571428571428571,
+    "J": 0.2857142857142857,
+    "SR": 0.7428571428571429,
+    "V_full": 0.12857142857142856,
+    "V_safe": 0.4,
+    "arm_id": "opt032_demo0250",
+    "demo_frac_objective_mass": 0.25,
+    "final_CR": 0.2714285714285714,
+    "final_J": 0.14285714285714285,
+    "final_SR": 0.7285714285714285,
+    "final_V_full": 0.05714285714285714,
+    "final_V_safe": 0.4,
+    "final_minimum_clearance": 0.021054324686976267,
+    "final_round": 100,
+    "final_timeout": 0.0,
+    "minimum_clearance": 0.018181923916814054,
+    "optimizer_steps_per_round": 32,
+    "rollout_replicas": 8,
+    "round": 25,
+    "timeout": 0.0
+  },
+  "source_commit": "e63ebd80e5fa4f712a1a7cf590ec74c116768873",
+  "status": "LOW7_RBF_V3_SUPPORT_SWEEP_COMPLETE"
+}

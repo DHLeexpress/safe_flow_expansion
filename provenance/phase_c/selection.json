@@ -1,0 +1,9 @@
+{
+  "rounds": [
+    0,
+    25,
+    100
+  ],
+  "selected_round": 25,
+  "selection_source": "fixed Stage A result; M50 did not select or change checkpoint"
+}

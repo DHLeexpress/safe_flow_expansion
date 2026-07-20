@@ -1,0 +1,1616 @@
+{
+  "gpu": {
+    "cuda_visible_devices": "1",
+    "name": "NVIDIA H100 NVL",
+    "physical_index": 1,
+    "process_device": "cuda:0",
+    "uuid": "GPU-50fb5dae-52a8-5843-bc81-b869586dccde"
+  },
+  "mode": "holdout",
+  "noise_bank": {
+    "disjoint_from_screen_prefix": true,
+    "dtype": "float32",
+    "independence": "fixed across the three selected-arm endpoint comparison checkpoints",
+    "indexing": "[gamma, rollout_index, control_time, latent_dimension]",
+    "master_seed_disjoint_from_screen": true,
+    "screen_seed": 910748408648085943,
+    "screen_sha256": "01a7d8f796e26794641f4001911f9d42483e5b1993d7cb0eba16c8b2635c1816",
+    "seed": 2135174486016222427,
+    "sha256": "2acb495ecb27f08d37fcfbd6e6694e556414a001581f3a8ba9b4b75d4c06969e",
+    "shape": [
+      7,
+      50,
+      300,
+      20
+    ]
+  },
+  "profile": {
+    "caption": "disjoint raw temperature-1 M=50/gamma confirmation holdout",
+    "checkpoint_stride": 1,
+    "delivery_status": "AFE_RBF_V3_SUPPORT_HOLDOUT_DELIVERY_COMPLETE",
+    "filename_tag": "support_holdout_m50",
+    "m": 50,
+    "metric_version": "afe_rbf_v3_support_raw_holdout_m50_v1",
+    "name": "v3_support_holdout_m50",
+    "summary_status": "AFE_RBF_V3_SUPPORT_HOLDOUT_COMPLETE"
+  },
+  "raw_policy": "temperature=1, no tilt/filter/controller/fallback",
+  "run": {
+    "algorithm": "afe_rbf_low7_v3_optimizer_demo_support_v1",
+    "authenticated_artifact_count": 125,
+    "complete_sha256": "7d414fbe0fdb9236df313be1657d320799c7e58f3e3aec0fdc248b5dc09c694a",
+    "completed_round": 100,
+    "evaluation_profile": "v2_smoke_m10_every_round",
+    "evaluation_rounds": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20,
+      21,
+      22,
+      23,
+      24,
+      25,
+      26,
+      27,
+      28,
+      29,
+      30,
+      31,
+      32,
+      33,
+      34,
+      35,
+      36,
+      37,
+      38,
+      39,
+      40,
+      41,
+      42,
+      43,
+      44,
+      45,
+      46,
+      47,
+      48,
+      49,
+      50,
+      51,
+      52,
+      53,
+      54,
+      55,
+      56,
+      57,
+      58,
+      59,
+      60,
+      61,
+      62,
+      63,
+      64,
+      65,
+      66,
+      67,
+      68,
+      69,
+      70,
+      71,
+      72,
+      73,
+      74,
+      75,
+      76,
+      77,
+      78,
+      79,
+      80,
+      81,
+      82,
+      83,
+      84,
+      85,
+      86,
+      87,
+      88,
+      89,
+      90,
+      91,
+      92,
+      93,
+      94,
+      95,
+      96,
+      97,
+      98,
+      99,
+      100
+    ],
+    "final_checkpoint_alias": {
+      "path": "/home/dohyun/projects/afe2_runs/low7_rbf_v3_support_giant_e63ebd8/arms/opt032_demo0250/final.pt",
+      "sha256": "e6dff9e387969ce4518cb0b76cec7815eb6eded7c90ace74f8520fd2a8c9a0ff"
+    },
+    "kind": "single_afe_rbf_raw_sweep",
+    "method": "afe_rbf",
+    "probe_sha256": "e1af821eb1e96e38658e8bbca6c6e81cd78b1b279efca94ba390f9e0647cc7b4",
+    "recipe": {
+      "B": 4,
+      "K": 16,
+      "M_eval": 0,
+      "T": 300,
+      "acquisition_memory": "round 1: verified-positive pretrained calibration seed; later rounds: at most 512 full-H positives from the current and previous 1 rounds, selected without replacement by round_gamma_replica_context; re-embedded with current phi; frozen within round",
+      "acquisition_mode": "sequential",
+      "adaptive_beta_contexts_per_gamma": 64,
+      "adaptive_beta_equalize_gammas": true,
+      "adaptive_ess_target": 0.5,
+      "afe_lr": 1e-05,
+      "afe_steps": 0,
+      "algorithm": "afe_rbf_low7_v3_optimizer_demo_support_v1",
+      "arm": "afe",
+      "artifact_profile": "sweep_compact",
+      "artifact_profile_description": "omit final DStore; retain checkpoints at the declared compact interval and training-viz rounds 1..10/every10; probe, calibration, and completion hashes remain complete",
+      "base_lengthscale": 0.2256188330740796,
+      "batch": 128,
+      "beta": 0.026713714502178975,
+      "beta_protocol": "round-1 operational calibration followed after every round by a beta-neutral current-policy calibration targeting median ESS=0.5; beta_n is frozen during round n",
+      "calibration_budget": {
+        "disjoint_context_archive": {
+          "positives": 866,
+          "queries": 896,
+          "socp_errors": 0,
+          "socp_solves": 896,
+          "verifier_cpu_seconds": 5.369969859719276
+        },
+        "enters_round1_GP": "exactly the declared operational_gp_size seed positives",
+        "enters_training_Dplus": false,
+        "score_vector_seconds": 0.5264826705679297,
+        "seed_archive": {
+          "positives": 868,
+          "queries": 896,
+          "socp_errors": 0,
+          "socp_solves": 896,
+          "verifier_cpu_seconds": 2.5051193768158555
+        },
+        "total_positives": 1734,
+        "total_queries": 1792,
+        "total_socp_errors": 0,
+        "total_socp_solves": 1792,
+        "total_wall_seconds": 6.433904545381665
+      },
+      "calibration_control_steps": 4,
+      "calibration_limitation": "beta is solved on beta-neutral random pending orders; realized first-step ESS/K and stage-normalized ESS/M_remaining are logged during expansion",
+      "calibration_replicas": 8,
+      "calibration_scope": "round-0 acquisition-only verifier budget; the seed archive supplies the declared round-1 GP but neither archive enters cumulative training D+ or audit",
+      "compact_checkpoint_every": 1,
+      "conditioning_schema": "low7_closest_boundary",
+      "demo_buffer_isolation": "authenticated TRAIN reference never enters D/D+, RBF GP, beta, acquisition, verifier counts, execution, or raw evaluation",
+      "demo_frac": 0.25,
+      "demo_objective_semantics": "L=(1-demo_frac)*L_pos + demo_frac*L_demo; both source losses independently normalized; no update when W2 D+ is empty",
+      "demo_reference": {
+        "combined_manifest": "/home/dohyun/projects/afe2_runs/low7_fixed_grid_8c80cf0/combined/manifest.json",
+        "combined_manifest_sha256": "01551774e64192854f57edcd408d50a1d952544040ac2730ecd741276b89370a",
+        "dataset": "/home/dohyun/projects/afe2_runs/low7_fixed_grid_8c80cf0/combined/data/low7_randomized_all_gamma.pt",
+        "dataset_sha256": "4b8e2d9be794584fad232bcc46cf78c2c4f422efb3e0642f503c8a77fcd2e8ec",
+        "fixed_symmetry_audit": {
+          "canonical_context_recomputed": true,
+          "gamma_counts": {
+            "0.1": 3,
+            "0.2": 2,
+            "0.3": 2,
+            "0.4": 1,
+            "0.5": 2,
+            "0.7": 2,
+            "1": 2
+          },
+          "max_cached_grid_error": 0.0,
+          "max_history_error": 0.0,
+          "max_low7_error": 0.0,
+          "max_reflected_grid_symmetry_error": 0.0,
+          "nominal_verifier_invariance": [
+            {
+              "gamma": 0.1,
+              "margin_abs_error": 5.551115123125783e-17,
+              "progress_abs_error": 0.0,
+              "reason": "ok",
+              "row": 0,
+              "safe": true
+            },
+            {
+              "gamma": 0.2,
+              "margin_abs_error": 5.551115123125783e-17,
+              "progress_abs_error": 0.0,
+              "reason": "ok",
+              "row": 64371,
+              "safe": true
+            },
+            {
+              "gamma": 0.3,
+              "margin_abs_error": 5.551115123125783e-17,
+              "progress_abs_error": 0.0,
+              "reason": "ok",
+              "row": 113867,
+              "safe": true
+            },
+            {
+              "gamma": 0.4,
+              "margin_abs_error": 5.551115123125783e-17,
+              "progress_abs_error": 0.0,
+              "reason": "ok",
+              "row": 160203,
+              "safe": true
+            },
+            {
+              "gamma": 0.5,
+              "margin_abs_error": 5.551115123125783e-17,
+              "progress_abs_error": 0.0,
+              "reason": "ok",
+              "row": 205729,
+              "safe": true
+            },
+            {
+              "gamma": 0.7,
+              "margin_abs_error": 5.551115123125783e-17,
+              "progress_abs_error": 0.0,
+              "reason": "ok",
+              "row": 251094,
+              "safe": true
+            },
+            {
+              "gamma": 1.0,
+              "margin_abs_error": 5.551115123125783e-17,
+              "progress_abs_error": 0.0,
+              "reason": "ok",
+              "row": 295948,
+              "safe": true
+            }
+          ],
+          "reflection_involution": true,
+          "subset_rows": [
+            0,
+            26448,
+            52740,
+            79041,
+            105334,
+            131586,
+            157826,
+            184337,
+            210421,
+            236872,
+            263118,
+            289400,
+            315794,
+            341967
+          ],
+          "subset_train_only": true,
+          "tolerance": 2e-05
+        },
+        "pair_leakage": 0,
+        "pretrain_manifest": "/home/dohyun/projects/afe2_runs/low7_fixed_grid_8c80cf0/pretrain/manifest.json",
+        "pretrain_manifest_sha256": "a8824bf23c7afa38fe1be86987a5b3904221ea0ae35be7edb65e7652c85c93f9",
+        "source_checkpoint": "/home/dohyun/projects/afe2_runs/low7_fixed_grid_8c80cf0/pretrain/data/checkpoint_candidate.pt",
+        "source_checkpoint_model_sha256": "070ea40dda8c94a7bec503942c48cb046f1dd7ef0bde8ccd00c3805b9a9af368",
+        "source_checkpoint_sha256": "7ae44f773b3f5fe36579c4101542e495119cf6e348f622f5edbfedaa2855a46c",
+        "source_query_hash_digest": "88f19ea801de154835477506809d6d2bc9b0573720431fe8009fdedf5b2320b8",
+        "split_manifest": "/home/dohyun/projects/afe2_runs/low7_fixed_grid_8c80cf0/pretrain/logs/pair_split.json",
+        "split_manifest_sha256": "30836a9bfdc5372146a617cb78dd4a7e16fa82c81ed8c4420c8979d92c3198e1",
+        "train_pairs": 865,
+        "train_windows": 335454,
+        "validation_pairs": 16,
+        "validation_windows": 6514
+      },
+      "execution": "nominal_hp_max_step_margin; execution-verified (full-H or certified goal prefix) and, for nominal_hp rules, the first executed state satisfies the nominal SafeMPPI DTCBF level-set condition; NVP terminates; no expert/fallback",
+      "execution_rule": "nominal_hp_max_step_margin",
+      "freeze_visual_encoder": true,
+      "gammas": [
+        0.1,
+        0.2,
+        0.3,
+        0.4,
+        0.5,
+        0.7,
+        1.0
+      ],
+      "gp_cap": 512,
+      "gp_lam": 0.01,
+      "gp_replay_sampling": "round_gamma_replica_context",
+      "gp_replay_window": 2,
+      "grad_clip": 1.0,
+      "gradient_clip_semantics": "the declared replay measure defines the pre-clip objective; existing global gradient clipping is then applied and its active-step fraction is logged",
+      "kernel": "RBF",
+      "learning_memory": "hierarchically round/gamma/replica/context/query-interleaved replay over full-H positives from the current and previous 1 rounds; cumulative D+ archive is retained",
+      "lengthscale": 0.2256188330740796,
+      "lengthscale_multiplier": 1.0,
+      "lengthscale_protocol": "declared multiplier times the mean pairwise embedding distance of exactly 50 samples from the pretrained model",
+      "methodological_scope": "task-specific peptide-style RBF AFE adaptation; previous-round cap and parallel frozen acquisition are explicit computational assumptions",
+      "negative_alpha": 0.0,
+      "negative_alpha_semantics": "paper gradient-norm target: g = g_pos - rho*g_neg, rho=alpha*||g_pos||/||g_neg||; alpha=0 is exact positive-only update",
+      "negative_population": "all successfully observed B queries at a terminal NVP context from the same replay window; this task-specific closed-loop viability signal may overlap full-H D+ and excludes SOCP errors",
+      "nfe": 8,
+      "no_anchor": true,
+      "no_curriculum": true,
+      "no_fallback": true,
+      "no_prox": true,
+      "nvp_all_k_audit": false,
+      "optimizer_draw_interpretation": "exactly |eligible D+| unique positive draws; all positives appear once; macro-batches are balanced by hierarchical loss mass and each macro-batch causes exactly one Adam update",
+      "optimizer_draws_formula": "|eligible D+|",
+      "optimizer_draws_per_round": null,
+      "optimizer_steps_formula": "32",
+      "optimizer_steps_per_round": 32,
+      "outcome_evaluation": "not produced by the trainer; stored checkpoints require a separate raw, untilted temperature-1 evaluation",
+      "parallel_sampling": "8 closed-loop replicas per gamma advanced synchronously; one GPU proposal batch per control tick; 128 persistent spawned CPU verifier workers; no within-round GP update",
+      "protocol_profile": "v3_support_sweep",
+      "raw_condition_dim": 7,
+      "rbf_offline_sweep": false,
+      "reach": 0.15,
+      "reference_code_semantics": "sequential Schur complements are the B<K budget-consistent adaptation of the public peptide implementation's batch-conditional covariance",
+      "replay_epochs": 1,
+      "replay_loss_measure": "equal nested mass over active positive-support gamma, (round, episode), context, and positive query; all eligible positives remain in the exact epoch; a size-b minibatch in an S-step epoch applies weight b*S*mu_q before clipping",
+      "replay_loss_measure_limitation": "gamma/episode/context groups with zero eligible full-H positives cannot carry positive CFM mass and are logged as missing support",
+      "replay_loss_weighting": "gamma_episode_context_query_equal_mass",
+      "replay_sampling": "round_gamma_replica_context",
+      "replay_update_mode": "fixed_macro_steps_exact_epoch",
+      "replay_window": 2,
+      "rollout_replicas": 8,
+      "rounds": 100,
+      "route_diagnostics": {
+        "ambiguity_band_m": 0.05,
+        "early_control_steps": 10,
+        "intervention": false,
+        "mode_definition": "U/R is the sign of plan-endpoint cross-track displacement from the oriented canonical start-goal line; ambiguous values are retained",
+        "training_populations": [
+          "all_K",
+          "selected_B",
+          "full_H_positive",
+          "executed"
+        ]
+      },
+      "runtime": {
+        "CUDA_VISIBLE_DEVICES": "3",
+        "cuda_available": true,
+        "cuda_device_name": "NVIDIA H100 NVL",
+        "cuda_device_uuid": "b5993142-760d-a6fe-9430-3d0e65203b6d",
+        "cuda_runtime": "12.4",
+        "logical_cuda_index": 0,
+        "numpy": "2.4.6",
+        "python": "3.11.15 | packaged by conda-forge | (main, Mar  5 2026, 16:45:40) [GCC 14.3.0]",
+        "requested_device": "cuda",
+        "torch": "2.6.0+cu124"
+      },
+      "s": 0.9,
+      "scene": {
+        "dt": 0.1,
+        "goal": [
+          4.699999809265137,
+          4.699999809265137
+        ],
+        "obstacles": [
+          [
+            1.0,
+            1.0,
+            0.20000000298023224
+          ],
+          [
+            1.0,
+            2.0,
+            0.20000000298023224
+          ],
+          [
+            1.0,
+            3.0,
+            0.20000000298023224
+          ],
+          [
+            1.0,
+            4.0,
+            0.20000000298023224
+          ],
+          [
+            2.0,
+            1.0,
+            0.20000000298023224
+          ],
+          [
+            2.0,
+            4.0,
+            0.20000000298023224
+          ],
+          [
+            3.0,
+            1.0,
+            0.20000000298023224
+          ],
+          [
+            3.0,
+            4.0,
+            0.20000000298023224
+          ],
+          [
+            4.0,
+            1.0,
+            0.20000000298023224
+          ],
+          [
+            4.0,
+            2.0,
+            0.20000000298023224
+          ],
+          [
+            4.0,
+            3.0,
+            0.20000000298023224
+          ],
+          [
+            4.0,
+            4.0,
+            0.20000000298023224
+          ],
+          [
+            0.0,
+            5.199999809265137,
+            0.20000000298023224
+          ],
+          [
+            5.199999809265137,
+            0.0,
+            0.20000000298023224
+          ],
+          [
+            0.38461539149284363,
+            5.199999809265137,
+            0.20000000298023224
+          ],
+          [
+            5.199999809265137,
+            0.38461539149284363,
+            0.20000000298023224
+          ],
+          [
+            0.7692307829856873,
+            -0.20000000298023224,
+            0.20000000298023224
+          ],
+          [
+            0.7692307829856873,
+            5.199999809265137,
+            0.20000000298023224
+          ],
+          [
+            -0.20000000298023224,
+            0.7692307829856873,
+            0.20000000298023224
+          ],
+          [
+            5.199999809265137,
+            0.7692307829856873,
+            0.20000000298023224
+          ],
+          [
+            1.1538461446762085,
+            -0.20000000298023224,
+            0.20000000298023224
+          ],
+          [
+            1.1538461446762085,
+            5.199999809265137,
+            0.20000000298023224
+          ],
+          [
+            -0.20000000298023224,
+            1.1538461446762085,
+            0.20000000298023224
+          ],
+          [
+            5.199999809265137,
+            1.1538461446762085,
+            0.20000000298023224
+          ],
+          [
+            1.5384615659713745,
+            -0.20000000298023224,
+            0.20000000298023224
+          ],
+          [
+            1.5384615659713745,
+            5.199999809265137,
+            0.20000000298023224
+          ],
+          [
+            -0.20000000298023224,
+            1.5384615659713745,
+            0.20000000298023224
+          ],
+          [
+            5.199999809265137,
+            1.5384615659713745,
+            0.20000000298023224
+          ],
+          [
+            1.923076868057251,
+            -0.20000000298023224,
+            0.20000000298023224
+          ],
+          [
+            1.923076868057251,
+            5.199999809265137,
+            0.20000000298023224
+          ],
+          [
+            -0.20000000298023224,
+            1.923076868057251,
+            0.20000000298023224
+          ],
+          [
+            5.199999809265137,
+            1.923076868057251,
+            0.20000000298023224
+          ],
+          [
+            2.307692289352417,
+            -0.20000000298023224,
+            0.20000000298023224
+          ],
+          [
+            2.307692289352417,
+            5.199999809265137,
+            0.20000000298023224
+          ],
+          [
+            -0.20000000298023224,
+            2.307692289352417,
+            0.20000000298023224
+          ],
+          [
+            5.199999809265137,
+            2.307692289352417,
+            0.20000000298023224
+          ],
+          [
+            2.692307710647583,
+            -0.20000000298023224,
+            0.20000000298023224
+          ],
+          [
+            2.692307710647583,
+            5.199999809265137,
+            0.20000000298023224
+          ],
+          [
+            -0.20000000298023224,
+            2.692307710647583,
+            0.20000000298023224
+          ],
+          [
+            5.199999809265137,
+            2.692307710647583,
+            0.20000000298023224
+          ],
+          [
+            3.076923131942749,
+            -0.20000000298023224,
+            0.20000000298023224
+          ],
+          [
+            3.076923131942749,
+            5.199999809265137,
+            0.20000000298023224
+          ],
+          [
+            -0.20000000298023224,
+            3.076923131942749,
+            0.20000000298023224
+          ],
+          [
+            5.199999809265137,
+            3.076923131942749,
+            0.20000000298023224
+          ],
+          [
+            3.461538553237915,
+            -0.20000000298023224,
+            0.20000000298023224
+          ],
+          [
+            3.461538553237915,
+            5.199999809265137,
+            0.20000000298023224
+          ],
+          [
+            -0.20000000298023224,
+            3.461538553237915,
+            0.20000000298023224
+          ],
+          [
+            5.199999809265137,
+            3.461538553237915,
+            0.20000000298023224
+          ],
+          [
+            3.846153736114502,
+            -0.20000000298023224,
+            0.20000000298023224
+          ],
+          [
+            3.846153736114502,
+            5.199999809265137,
+            0.20000000298023224
+          ],
+          [
+            -0.20000000298023224,
+            3.846153736114502,
+            0.20000000298023224
+          ],
+          [
+            5.199999809265137,
+            3.846153736114502,
+            0.20000000298023224
+          ],
+          [
+            4.230769157409668,
+            -0.20000000298023224,
+            0.20000000298023224
+          ],
+          [
+            4.230769157409668,
+            5.199999809265137,
+            0.20000000298023224
+          ],
+          [
+            -0.20000000298023224,
+            4.230769157409668,
+            0.20000000298023224
+          ],
+          [
+            5.199999809265137,
+            4.230769157409668,
+            0.20000000298023224
+          ],
+          [
+            4.615384578704834,
+            -0.20000000298023224,
+            0.20000000298023224
+          ],
+          [
+            -0.20000000298023224,
+            4.615384578704834,
+            0.20000000298023224
+          ],
+          [
+            5.0,
+            -0.20000000298023224,
+            0.20000000298023224
+          ],
+          [
+            -0.20000000298023224,
+            5.0,
+            0.20000000298023224
+          ],
+          [
+            0.38461539149284363,
+            -0.20000000298023224,
+            0.20000000298023224
+          ],
+          [
+            4.615384578704834,
+            5.199999809265137,
+            0.20000000298023224
+          ],
+          [
+            -0.20000000298023224,
+            0.38461539149284363,
+            0.20000000298023224
+          ],
+          [
+            5.199999809265137,
+            4.615384578704834,
+            0.20000000298023224
+          ],
+          [
+            0.0,
+            -0.20000000298023224,
+            0.20000000298023224
+          ],
+          [
+            -0.20000000298023224,
+            0.0,
+            0.20000000298023224
+          ],
+          [
+            5.199999809265137,
+            5.0,
+            0.20000000298023224
+          ],
+          [
+            5.0,
+            5.199999809265137,
+            0.20000000298023224
+          ],
+          [
+            2.5,
+            2.5,
+            1.0
+          ]
+        ],
+        "profile": {
+          "center_replacement_radius": 1.0,
+          "description": "Endpoint-matched giant-obstacle OOD task: replace the four central radius-0.2 disks by one radius-1.0 disk at (2.5,2.5).",
+          "goal": [
+            4.7,
+            4.7
+          ],
+          "name": "low7_radius1_canonical_v1",
+          "start": [
+            0.3,
+            0.3
+          ],
+          "wall_plugs": 8
+        },
+        "robot_radius": 0.0,
+        "sha256": "356d6d48b3af2b017b529562b530f35285c86f9107da512a73de6ef664b03e72",
+        "start_state": [
+          0.30000001192092896,
+          0.30000001192092896,
+          0.0,
+          0.0
+        ],
+        "u_max": 1.0,
+        "workspace_bounds": [
+          0.0,
+          5.0,
+          0.0,
+          5.0
+        ]
+      },
+      "seed": 910,
+      "single_arm": true,
+      "source_checkpoint": "/home/dohyun/projects/afe2_runs/low7_fixed_grid_8c80cf0/pretrain/data/checkpoint_candidate.pt",
+      "source_checkpoint_contract": {
+        "assumption_level": "exact_file_model_architecture_and_provenance_contract",
+        "checkpoint_file_sha256": "7ae44f773b3f5fe36579c4101542e495119cf6e348f622f5edbfedaa2855a46c",
+        "checkpoint_model_state_sha256": "070ea40dda8c94a7bec503942c48cb046f1dd7ef0bde8ccd00c3805b9a9af368",
+        "conditioning_schema": "low7_closest_boundary",
+        "ctx_dim": 39,
+        "endpoint_free": true,
+        "expansion_promotion": false,
+        "fresh_from_scratch": true,
+        "name": "authenticated_low7_candidate_v1",
+        "parameter_count": 70308,
+        "raw_condition_dim": 7,
+        "source_manifest": "/home/dohyun/projects/afe2_runs/low7_fixed_grid_8c80cf0/combined/manifest.json",
+        "source_query_hash_digest": "88f19ea801de154835477506809d6d2bc9b0573720431fe8009fdedf5b2320b8",
+        "stage_schema": "afe_fresh_pretrain_v2_low7_uniform_pairs",
+        "trunk_input_dim": 91
+      },
+      "source_checkpoint_contract_sha256": "6a37690ae0c7d599b142cd839210410a7f3ddde3da14e6cdbfb328106cb862d3",
+      "source_checkpoint_model_sha256": "070ea40dda8c94a7bec503942c48cb046f1dd7ef0bde8ccd00c3805b9a9af368",
+      "source_checkpoint_sha256": "7ae44f773b3f5fe36579c4101542e495119cf6e348f622f5edbfedaa2855a46c",
+      "source_git_commit": "e63ebd80e5fa4f712a1a7cf590ec74c116768873",
+      "training_probes": false,
+      "uncertainty_meaning": "RBF posterior variance conditioned on the acquisition buffer and only the locations already selected within the same B-budget query; not validity probability and not a safety certificate",
+      "update": "positive-only gamma/episode/context/query equal-mass CFM lr 1e-05; one exact W2 D+ epoch partitioned into exactly 32 mass-balanced macro Adam updates; demo objective mass 0.25; alpha 0, no prox",
+      "verifier_workers": 128
+    },
+    "recipe_sha256": "b98b5ba7601a47ca0d638470118f488b25d5c29b66adb46b7e5b1a6aae22fa56",
+    "run_root": "/home/dohyun/projects/afe2_runs/low7_rbf_v3_support_giant_e63ebd8/arms/opt032_demo0250",
+    "scene_sha256": "356d6d48b3af2b017b529562b530f35285c86f9107da512a73de6ef664b03e72",
+    "selected_checkpoints": {
+      "0": {
+        "path": "/home/dohyun/projects/afe2_runs/low7_rbf_v3_support_giant_e63ebd8/arms/opt032_demo0250/ckpt_0.pt",
+        "sha256": "55ff1d31bc8fca9cca1346024ad77176c4ac767bf629309df7e91e17011e94af"
+      },
+      "1": {
+        "path": "/home/dohyun/projects/afe2_runs/low7_rbf_v3_support_giant_e63ebd8/arms/opt032_demo0250/ckpt_1.pt",
+        "sha256": "8fcb3d415b568599489e9ec0d876dd895e2380aa62fd91a70ed6698b84e5df07"
+      },
+      "10": {
+        "path": "/home/dohyun/projects/afe2_runs/low7_rbf_v3_support_giant_e63ebd8/arms/opt032_demo0250/ckpt_10.pt",
+        "sha256": "10e35c82b7350d1556516f3cb25f45c4044f693a3c4985059d73313df1dbbaf5"
+      },
+      "100": {
+        "path": "/home/dohyun/projects/afe2_runs/low7_rbf_v3_support_giant_e63ebd8/arms/opt032_demo0250/ckpt_100.pt",
+        "sha256": "5d1cd1214d719326ba7b84bdf4396c4989d69850ceda50646457e3f3e036e843"
+      },
+      "11": {
+        "path": "/home/dohyun/projects/afe2_runs/low7_rbf_v3_support_giant_e63ebd8/arms/opt032_demo0250/ckpt_11.pt",
+        "sha256": "71507facf6b504801289a73664bfb40f773be9db09faff7cc27056e8c9c59d9f"
+      },
+      "12": {
+        "path": "/home/dohyun/projects/afe2_runs/low7_rbf_v3_support_giant_e63ebd8/arms/opt032_demo0250/ckpt_12.pt",
+        "sha256": "23daad08d7e1a145c1127773b4bf17c502f7e0cab583acffbc5d97dc447b2dc7"
+      },
+      "13": {
+        "path": "/home/dohyun/projects/afe2_runs/low7_rbf_v3_support_giant_e63ebd8/arms/opt032_demo0250/ckpt_13.pt",
+        "sha256": "46a4a14a9ce4798581b19aaf98421e965589e64e359938d07a64eb7a5ed507ad"
+      },
+      "14": {
+        "path": "/home/dohyun/projects/afe2_runs/low7_rbf_v3_support_giant_e63ebd8/arms/opt032_demo0250/ckpt_14.pt",
+        "sha256": "167132d7f58ad8096c3edd1fd57b67c09a901b24451cddaa3eba4230bb4bf0cd"
+      },
+      "15": {
+        "path": "/home/dohyun/projects/afe2_runs/low7_rbf_v3_support_giant_e63ebd8/arms/opt032_demo0250/ckpt_15.pt",
+        "sha256": "126af25b5e7fd189e3d2ebcee4e782d8452d136045159b10a0d814f494e38b96"
+      },
+      "16": {
+        "path": "/home/dohyun/projects/afe2_runs/low7_rbf_v3_support_giant_e63ebd8/arms/opt032_demo0250/ckpt_16.pt",
+        "sha256": "6ea0b1004b9ebbc25011b4bdcb0444aa483984c2358a950ca268b2f6cc3d1b9a"
+      },
+      "17": {
+        "path": "/home/dohyun/projects/afe2_runs/low7_rbf_v3_support_giant_e63ebd8/arms/opt032_demo0250/ckpt_17.pt",
+        "sha256": "e868948a677df086b30094272eef77ae6962d2de5eb75e42aabfa3b94ddd1182"
+      },
+      "18": {
+        "path": "/home/dohyun/projects/afe2_runs/low7_rbf_v3_support_giant_e63ebd8/arms/opt032_demo0250/ckpt_18.pt",
+        "sha256": "4f3809ae2b8107c8a29bed1d2a17296df040aa423042b550f2b18e898c85d8d7"
+      },
+      "19": {
+        "path": "/home/dohyun/projects/afe2_runs/low7_rbf_v3_support_giant_e63ebd8/arms/opt032_demo0250/ckpt_19.pt",
+        "sha256": "97904e8a09bb93eb3279b11e84aeafd33892deb6c268fc64fda9ddf892ef3b63"
+      },
+      "2": {
+        "path": "/home/dohyun/projects/afe2_runs/low7_rbf_v3_support_giant_e63ebd8/arms/opt032_demo0250/ckpt_2.pt",
+        "sha256": "be3e21b31effbcbd3d2ad371de1d6800867b545860e62eb8d31a94605827d56a"
+      },
+      "20": {
+        "path": "/home/dohyun/projects/afe2_runs/low7_rbf_v3_support_giant_e63ebd8/arms/opt032_demo0250/ckpt_20.pt",
+        "sha256": "bc5df8b15a3d4d2a6aa5a877ccce3f2708df5a481a3fc905717f7a62ea649000"
+      },
+      "21": {
+        "path": "/home/dohyun/projects/afe2_runs/low7_rbf_v3_support_giant_e63ebd8/arms/opt032_demo0250/ckpt_21.pt",
+        "sha256": "69e9d7a35bbfa854633b0bfe3c6defcd025342d1c5a06634137199cd2f1d0046"
+      },
+      "22": {
+        "path": "/home/dohyun/projects/afe2_runs/low7_rbf_v3_support_giant_e63ebd8/arms/opt032_demo0250/ckpt_22.pt",
+        "sha256": "e1dc192b29a8ef9ae363376a3669eead4de9c0415dc327acd39030ed032de133"
+      },
+      "23": {
+        "path": "/home/dohyun/projects/afe2_runs/low7_rbf_v3_support_giant_e63ebd8/arms/opt032_demo0250/ckpt_23.pt",
+        "sha256": "35283184217c1d90d42da7a0178b73c0af45a93a73a90c32e19538d75ae0e6ea"
+      },
+      "24": {
+        "path": "/home/dohyun/projects/afe2_runs/low7_rbf_v3_support_giant_e63ebd8/arms/opt032_demo0250/ckpt_24.pt",
+        "sha256": "99ff6d649c92d050298cdb249e9b8aa5580f3e3878be84a8b3789cce1bec43d8"
+      },
+      "25": {
+        "path": "/home/dohyun/projects/afe2_runs/low7_rbf_v3_support_giant_e63ebd8/arms/opt032_demo0250/ckpt_25.pt",
+        "sha256": "ab6ce3c39671554ef114234c464f23cc18828ea751a4bbb5547beb59793c1b54"
+      },
+      "26": {
+        "path": "/home/dohyun/projects/afe2_runs/low7_rbf_v3_support_giant_e63ebd8/arms/opt032_demo0250/ckpt_26.pt",
+        "sha256": "28c8f93a343a0537c2ab1ae9f223923562047833a9d675b3b26af34958aab750"
+      },
+      "27": {
+        "path": "/home/dohyun/projects/afe2_runs/low7_rbf_v3_support_giant_e63ebd8/arms/opt032_demo0250/ckpt_27.pt",
+        "sha256": "9a6ff0858646e08938475446122ce85d4068067e85bc3a06176d977dfd8c1ce2"
+      },
+      "28": {
+        "path": "/home/dohyun/projects/afe2_runs/low7_rbf_v3_support_giant_e63ebd8/arms/opt032_demo0250/ckpt_28.pt",
+        "sha256": "1801b3e1f054d993d5e8f2b60e5496135874b31de23986a98583acb5d8183049"
+      },
+      "29": {
+        "path": "/home/dohyun/projects/afe2_runs/low7_rbf_v3_support_giant_e63ebd8/arms/opt032_demo0250/ckpt_29.pt",
+        "sha256": "06f52c44cfdf79f2cf1ed7424af4060024e832081ffed431db47686f139f09fc"
+      },
+      "3": {
+        "path": "/home/dohyun/projects/afe2_runs/low7_rbf_v3_support_giant_e63ebd8/arms/opt032_demo0250/ckpt_3.pt",
+        "sha256": "572867521f46224924ef6d84a5d10a24edae6dcb2daaa2b008cb3b3fe00023e2"
+      },
+      "30": {
+        "path": "/home/dohyun/projects/afe2_runs/low7_rbf_v3_support_giant_e63ebd8/arms/opt032_demo0250/ckpt_30.pt",
+        "sha256": "43e86157fddc6d09b65b947d6baee0a3b5ffa3d62c3436185a2c79f54a8a093c"
+      },
+      "31": {
+        "path": "/home/dohyun/projects/afe2_runs/low7_rbf_v3_support_giant_e63ebd8/arms/opt032_demo0250/ckpt_31.pt",
+        "sha256": "3398b0b10d6d799a49e8b32512ecaf6da24815997bcf0ab283665426bf175f1c"
+      },
+      "32": {
+        "path": "/home/dohyun/projects/afe2_runs/low7_rbf_v3_support_giant_e63ebd8/arms/opt032_demo0250/ckpt_32.pt",
+        "sha256": "384e78bd3c4b3b1ccd2ddb0600618e03c702413f5025e5bac68f64389169e5ae"
+      },
+      "33": {
+        "path": "/home/dohyun/projects/afe2_runs/low7_rbf_v3_support_giant_e63ebd8/arms/opt032_demo0250/ckpt_33.pt",
+        "sha256": "dced64495a7079cd5c71fe3cd2143a523a88014502806da8ba5ab3ba9d4bc09c"
+      },
+      "34": {
+        "path": "/home/dohyun/projects/afe2_runs/low7_rbf_v3_support_giant_e63ebd8/arms/opt032_demo0250/ckpt_34.pt",
+        "sha256": "6dbee8c5ae41a2df460f0e7a1fd64e84c8093a80d2a9fddd9c5293e7d18bbf2a"
+      },
+      "35": {
+        "path": "/home/dohyun/projects/afe2_runs/low7_rbf_v3_support_giant_e63ebd8/arms/opt032_demo0250/ckpt_35.pt",
+        "sha256": "6438a63b92221f8d57e503e41d325c3a9c631bc3b3d16e52bb8dded48de94567"
+      },
+      "36": {
+        "path": "/home/dohyun/projects/afe2_runs/low7_rbf_v3_support_giant_e63ebd8/arms/opt032_demo0250/ckpt_36.pt",
+        "sha256": "c6423d9f0f08bde4658324709c5b7a726f680df11074d71716286d2154292163"
+      },
+      "37": {
+        "path": "/home/dohyun/projects/afe2_runs/low7_rbf_v3_support_giant_e63ebd8/arms/opt032_demo0250/ckpt_37.pt",
+        "sha256": "723a9e31a2c9d0697fff0ffe699f928569031af327edba86e4a993d6dae52d13"
+      },
+      "38": {
+        "path": "/home/dohyun/projects/afe2_runs/low7_rbf_v3_support_giant_e63ebd8/arms/opt032_demo0250/ckpt_38.pt",
+        "sha256": "d43eaa2033afc08b91718341aa49adfc5907224a005a4a137d26b7be3d39913d"
+      },
+      "39": {
+        "path": "/home/dohyun/projects/afe2_runs/low7_rbf_v3_support_giant_e63ebd8/arms/opt032_demo0250/ckpt_39.pt",
+        "sha256": "d0ec4bd890cade248f46f054c1abeb668ec467d615af4e24566028b03056a99f"
+      },
+      "4": {
+        "path": "/home/dohyun/projects/afe2_runs/low7_rbf_v3_support_giant_e63ebd8/arms/opt032_demo0250/ckpt_4.pt",
+        "sha256": "3183627219eaf4d9f342aca887c4228a077c0ed7be1f8a1d60ccea4e176aa31c"
+      },
+      "40": {
+        "path": "/home/dohyun/projects/afe2_runs/low7_rbf_v3_support_giant_e63ebd8/arms/opt032_demo0250/ckpt_40.pt",
+        "sha256": "cc5a1f0f70004b1f6ccc54dababc35e57e2c9936d34c12d70731a8debb991d91"
+      },
+      "41": {
+        "path": "/home/dohyun/projects/afe2_runs/low7_rbf_v3_support_giant_e63ebd8/arms/opt032_demo0250/ckpt_41.pt",
+        "sha256": "bdc8b4ad8744cc444bb30bd5c3d555b1f07f9856c2f1aefd861665cf56d73d53"
+      },
+      "42": {
+        "path": "/home/dohyun/projects/afe2_runs/low7_rbf_v3_support_giant_e63ebd8/arms/opt032_demo0250/ckpt_42.pt",
+        "sha256": "48d3c2817d19af583bc2ef50207ca27c3339f06106a7c8573e7e568416ece74c"
+      },
+      "43": {
+        "path": "/home/dohyun/projects/afe2_runs/low7_rbf_v3_support_giant_e63ebd8/arms/opt032_demo0250/ckpt_43.pt",
+        "sha256": "f1b9c00081293f988cc186cec1a06f7d9deca299b9bfe1094a52e6d431efcf5c"
+      },
+      "44": {
+        "path": "/home/dohyun/projects/afe2_runs/low7_rbf_v3_support_giant_e63ebd8/arms/opt032_demo0250/ckpt_44.pt",
+        "sha256": "e2c1574a391ab640a6b3e4b7dd90f768b4d782ff20c862c869a5723d377226fa"
+      },
+      "45": {
+        "path": "/home/dohyun/projects/afe2_runs/low7_rbf_v3_support_giant_e63ebd8/arms/opt032_demo0250/ckpt_45.pt",
+        "sha256": "71ec1e9a10f7fdef534d28f8063716b75000dbc9b8c282b191a0b211d8f85810"
+      },
+      "46": {
+        "path": "/home/dohyun/projects/afe2_runs/low7_rbf_v3_support_giant_e63ebd8/arms/opt032_demo0250/ckpt_46.pt",
+        "sha256": "6032068a2e9adb0bc22b013b4eb40265857e03abb9bf1a167682c9be1737a1ff"
+      },
+      "47": {
+        "path": "/home/dohyun/projects/afe2_runs/low7_rbf_v3_support_giant_e63ebd8/arms/opt032_demo0250/ckpt_47.pt",
+        "sha256": "ca676cb13da9e1cf7328c23da90d436380ff7353d18a5e7453eed4c0b29fa695"
+      },
+      "48": {
+        "path": "/home/dohyun/projects/afe2_runs/low7_rbf_v3_support_giant_e63ebd8/arms/opt032_demo0250/ckpt_48.pt",
+        "sha256": "768f067d06edccc07dcb0ec71e3f19cadba6418faceb76b49f1311b6700f7e85"
+      },
+      "49": {
+        "path": "/home/dohyun/projects/afe2_runs/low7_rbf_v3_support_giant_e63ebd8/arms/opt032_demo0250/ckpt_49.pt",
+        "sha256": "fff73898914b884a34174512315bc9e43d4aee9c0bdb35171eaff52407a655e8"
+      },
+      "5": {
+        "path": "/home/dohyun/projects/afe2_runs/low7_rbf_v3_support_giant_e63ebd8/arms/opt032_demo0250/ckpt_5.pt",
+        "sha256": "eca6c59dbcb0ed31c26f69db5ef654ce05d5a684ea04d25cb7763c49e75e5427"
+      },
+      "50": {
+        "path": "/home/dohyun/projects/afe2_runs/low7_rbf_v3_support_giant_e63ebd8/arms/opt032_demo0250/ckpt_50.pt",
+        "sha256": "3045511421023cab3778b39793bd340ee42c3790624e15dd08f3b8a53a659748"
+      },
+      "51": {
+        "path": "/home/dohyun/projects/afe2_runs/low7_rbf_v3_support_giant_e63ebd8/arms/opt032_demo0250/ckpt_51.pt",
+        "sha256": "e3320d8659cdb1353bfded6158df456ef31798d39ada1fe3a478071e0c6f8b15"
+      },
+      "52": {
+        "path": "/home/dohyun/projects/afe2_runs/low7_rbf_v3_support_giant_e63ebd8/arms/opt032_demo0250/ckpt_52.pt",
+        "sha256": "8af4e792cfbd9705f2ebc273aae60b69c484e5e1f1f03d4d447170900d5de89f"
+      },
+      "53": {
+        "path": "/home/dohyun/projects/afe2_runs/low7_rbf_v3_support_giant_e63ebd8/arms/opt032_demo0250/ckpt_53.pt",
+        "sha256": "38523265b97aec54717c1e16fb1d07a297c83046dc1909f8d3ccbd0305a2a408"
+      },
+      "54": {
+        "path": "/home/dohyun/projects/afe2_runs/low7_rbf_v3_support_giant_e63ebd8/arms/opt032_demo0250/ckpt_54.pt",
+        "sha256": "d0a6a1ce1be48def13600fdebaadcd6bb6e49187e3a572bd53ad9baf622dd3d1"
+      },
+      "55": {
+        "path": "/home/dohyun/projects/afe2_runs/low7_rbf_v3_support_giant_e63ebd8/arms/opt032_demo0250/ckpt_55.pt",
+        "sha256": "7e2fcc13df23fc6811b2054587c8984d2525ee8e27596b360982a913b9576d02"
+      },
+      "56": {
+        "path": "/home/dohyun/projects/afe2_runs/low7_rbf_v3_support_giant_e63ebd8/arms/opt032_demo0250/ckpt_56.pt",
+        "sha256": "519cac0db1f497fd88ba91565743e091c5cd3ec4dd6b9b3373e0b74f75155177"
+      },
+      "57": {
+        "path": "/home/dohyun/projects/afe2_runs/low7_rbf_v3_support_giant_e63ebd8/arms/opt032_demo0250/ckpt_57.pt",
+        "sha256": "0b445b39507dfef6022d74822c61fa2a9b5800ec0b0f926d336c801c0e0358dd"
+      },
+      "58": {
+        "path": "/home/dohyun/projects/afe2_runs/low7_rbf_v3_support_giant_e63ebd8/arms/opt032_demo0250/ckpt_58.pt",
+        "sha256": "4c426c1e0c571985486ea4b22412413a8cfbad6b4d955001c2ec982b48b81142"
+      },
+      "59": {
+        "path": "/home/dohyun/projects/afe2_runs/low7_rbf_v3_support_giant_e63ebd8/arms/opt032_demo0250/ckpt_59.pt",
+        "sha256": "a11778b0c89ecc9dbf05aef675071e33f70a0ec9bbfea83f4d927b6e8aead2ab"
+      },
+      "6": {
+        "path": "/home/dohyun/projects/afe2_runs/low7_rbf_v3_support_giant_e63ebd8/arms/opt032_demo0250/ckpt_6.pt",
+        "sha256": "30b98964078a73b96f940fded794c27b76d779fc97caa23f6d7e3b2aac3d80cf"
+      },
+      "60": {
+        "path": "/home/dohyun/projects/afe2_runs/low7_rbf_v3_support_giant_e63ebd8/arms/opt032_demo0250/ckpt_60.pt",
+        "sha256": "1b8f63a9fe1f218324301a78a9e58d999c2601fda62c70a63afcc127ac4e34c5"
+      },
+      "61": {
+        "path": "/home/dohyun/projects/afe2_runs/low7_rbf_v3_support_giant_e63ebd8/arms/opt032_demo0250/ckpt_61.pt",
+        "sha256": "03f59dd5274e43b175a31af862d5ac9015c4b6fa732d3fe94f82cf07e642d4dd"
+      },
+      "62": {
+        "path": "/home/dohyun/projects/afe2_runs/low7_rbf_v3_support_giant_e63ebd8/arms/opt032_demo0250/ckpt_62.pt",
+        "sha256": "b24a6907012e9ae76601de02161c1999240a17f68a80bb5993add27337e8f94d"
+      },
+      "63": {
+        "path": "/home/dohyun/projects/afe2_runs/low7_rbf_v3_support_giant_e63ebd8/arms/opt032_demo0250/ckpt_63.pt",
+        "sha256": "8204328ada09e1959f4640f0347e7b50062c453dbd2fff520ee428a65bed4707"
+      },
+      "64": {
+        "path": "/home/dohyun/projects/afe2_runs/low7_rbf_v3_support_giant_e63ebd8/arms/opt032_demo0250/ckpt_64.pt",
+        "sha256": "20f886dcfa1c26203657f1050f0ed5f107beefb5ec058b2fba5734d7e23a638b"
+      },
+      "65": {
+        "path": "/home/dohyun/projects/afe2_runs/low7_rbf_v3_support_giant_e63ebd8/arms/opt032_demo0250/ckpt_65.pt",
+        "sha256": "325f60a30a8b187eeeb1bbd685669666acb8992fc07de3c67b3ce8d236ad6b1e"
+      },
+      "66": {
+        "path": "/home/dohyun/projects/afe2_runs/low7_rbf_v3_support_giant_e63ebd8/arms/opt032_demo0250/ckpt_66.pt",
+        "sha256": "f7e3ff91d29b6d7e489c4f1e834c30440e0a2413a9b4461b5ce23b2405ba8371"
+      },
+      "67": {
+        "path": "/home/dohyun/projects/afe2_runs/low7_rbf_v3_support_giant_e63ebd8/arms/opt032_demo0250/ckpt_67.pt",
+        "sha256": "735b9e9b69a71667ffbb77d8c1524ba5a16c8ff2e94163fcb2972122e09d7f8f"
+      },
+      "68": {
+        "path": "/home/dohyun/projects/afe2_runs/low7_rbf_v3_support_giant_e63ebd8/arms/opt032_demo0250/ckpt_68.pt",
+        "sha256": "35faa59f99caac583d9d26fdf9efb268e8dc782440226e9a46ea155ca78eac73"
+      },
+      "69": {
+        "path": "/home/dohyun/projects/afe2_runs/low7_rbf_v3_support_giant_e63ebd8/arms/opt032_demo0250/ckpt_69.pt",
+        "sha256": "8883e93a08a77de1416defe1f741808e77662fb2c2b5fcbe9d43ffe8e85a88ea"
+      },
+      "7": {
+        "path": "/home/dohyun/projects/afe2_runs/low7_rbf_v3_support_giant_e63ebd8/arms/opt032_demo0250/ckpt_7.pt",
+        "sha256": "fd08f3fd690c769df003e11479ef98422e0f5d02f844438276d1763b42845074"
+      },
+      "70": {
+        "path": "/home/dohyun/projects/afe2_runs/low7_rbf_v3_support_giant_e63ebd8/arms/opt032_demo0250/ckpt_70.pt",
+        "sha256": "bdd628be6d7677e0f464c2ff52accccf0ef66fb4a2f793907859dc50bec40f35"
+      },
+      "71": {
+        "path": "/home/dohyun/projects/afe2_runs/low7_rbf_v3_support_giant_e63ebd8/arms/opt032_demo0250/ckpt_71.pt",
+        "sha256": "ae3b74a0bf8f9771b3ac243553e44dcd093689d44551c3b3ed039ddc4a0076e1"
+      },
+      "72": {
+        "path": "/home/dohyun/projects/afe2_runs/low7_rbf_v3_support_giant_e63ebd8/arms/opt032_demo0250/ckpt_72.pt",
+        "sha256": "02530577d19568ddad1568e795103979c774a95dea81c65531e81e9e2150f78e"
+      },
+      "73": {
+        "path": "/home/dohyun/projects/afe2_runs/low7_rbf_v3_support_giant_e63ebd8/arms/opt032_demo0250/ckpt_73.pt",
+        "sha256": "c8118836bb86076369030f41b36e0d310a9b518c214c3b9395231085df521e72"
+      },
+      "74": {
+        "path": "/home/dohyun/projects/afe2_runs/low7_rbf_v3_support_giant_e63ebd8/arms/opt032_demo0250/ckpt_74.pt",
+        "sha256": "b41893ee8c159e12c8e55a18c9c5c987033062a219db8a3dc99f87bf5c863a24"
+      },
+      "75": {
+        "path": "/home/dohyun/projects/afe2_runs/low7_rbf_v3_support_giant_e63ebd8/arms/opt032_demo0250/ckpt_75.pt",
+        "sha256": "5ed9ce29461e0a46efe0f6ffa10e4883aec503bbbf7f9f5fe6f58099713d42a3"
+      },
+      "76": {
+        "path": "/home/dohyun/projects/afe2_runs/low7_rbf_v3_support_giant_e63ebd8/arms/opt032_demo0250/ckpt_76.pt",
+        "sha256": "6ba834050ee0b5371bfb11f8002d63bf653ae4d04bbf98b522748e1ce41f413c"
+      },
+      "77": {
+        "path": "/home/dohyun/projects/afe2_runs/low7_rbf_v3_support_giant_e63ebd8/arms/opt032_demo0250/ckpt_77.pt",
+        "sha256": "d37682af10f7a8e826e1627ae66f34dfc489fbea1595d2f5ebc1229ba4f3bab5"
+      },
+      "78": {
+        "path": "/home/dohyun/projects/afe2_runs/low7_rbf_v3_support_giant_e63ebd8/arms/opt032_demo0250/ckpt_78.pt",
+        "sha256": "007d4b84eaf63f65ee299fb06337778abbf559407c695b09598486b0fa9a37e5"
+      },
+      "79": {
+        "path": "/home/dohyun/projects/afe2_runs/low7_rbf_v3_support_giant_e63ebd8/arms/opt032_demo0250/ckpt_79.pt",
+        "sha256": "dc1e500549f3e63e16727552e939f2f8570527c706a5d0d445482aa9056b89b6"
+      },
+      "8": {
+        "path": "/home/dohyun/projects/afe2_runs/low7_rbf_v3_support_giant_e63ebd8/arms/opt032_demo0250/ckpt_8.pt",
+        "sha256": "33c26a29eecbcc0f5d37224f6f707d45b9b0e7400909d33cd581aaf3d8d5f9ec"
+      },
+      "80": {
+        "path": "/home/dohyun/projects/afe2_runs/low7_rbf_v3_support_giant_e63ebd8/arms/opt032_demo0250/ckpt_80.pt",
+        "sha256": "82741dab11910acee78b3a851cb7aebecaf4595baf0fd50a90b054180f1ff649"
+      },
+      "81": {
+        "path": "/home/dohyun/projects/afe2_runs/low7_rbf_v3_support_giant_e63ebd8/arms/opt032_demo0250/ckpt_81.pt",
+        "sha256": "959787583c3f8cf5dd40347ca13013bcc59d23599715cb47b69a3ee947a634c1"
+      },
+      "82": {
+        "path": "/home/dohyun/projects/afe2_runs/low7_rbf_v3_support_giant_e63ebd8/arms/opt032_demo0250/ckpt_82.pt",
+        "sha256": "6e32658e6bb898cdbfa20b0407575f134345c5fadd4e6be4b74025d5ddcebd34"
+      },
+      "83": {
+        "path": "/home/dohyun/projects/afe2_runs/low7_rbf_v3_support_giant_e63ebd8/arms/opt032_demo0250/ckpt_83.pt",
+        "sha256": "5b892c2fa183347af054d0d408c6e63f2ff7751f1151c66753bd21fef7a12b3e"
+      },
+      "84": {
+        "path": "/home/dohyun/projects/afe2_runs/low7_rbf_v3_support_giant_e63ebd8/arms/opt032_demo0250/ckpt_84.pt",
+        "sha256": "155ed1b38865c730d78ea6e9fe46cb9445c82c6dffb494ef42f20f6d5fcc897a"
+      },
+      "85": {
+        "path": "/home/dohyun/projects/afe2_runs/low7_rbf_v3_support_giant_e63ebd8/arms/opt032_demo0250/ckpt_85.pt",
+        "sha256": "25e323aaff626766f6631d3e66ccb7831610f1494cbe02aa571eee6dc2a395ff"
+      },
+      "86": {
+        "path": "/home/dohyun/projects/afe2_runs/low7_rbf_v3_support_giant_e63ebd8/arms/opt032_demo0250/ckpt_86.pt",
+        "sha256": "50833fb266e3d05088d09c36d28c44929d23b2fc520be8c6a5f7b9793bcd2071"
+      },
+      "87": {
+        "path": "/home/dohyun/projects/afe2_runs/low7_rbf_v3_support_giant_e63ebd8/arms/opt032_demo0250/ckpt_87.pt",
+        "sha256": "403bb3a5737f2b3732cf019bbe9f6c3183e020257062dd81c54018ef7825abbe"
+      },
+      "88": {
+        "path": "/home/dohyun/projects/afe2_runs/low7_rbf_v3_support_giant_e63ebd8/arms/opt032_demo0250/ckpt_88.pt",
+        "sha256": "6242a0318b66d84be6ad5aba2f10f7b9dc208240837d5d68ad19baf5c6ecb83f"
+      },
+      "89": {
+        "path": "/home/dohyun/projects/afe2_runs/low7_rbf_v3_support_giant_e63ebd8/arms/opt032_demo0250/ckpt_89.pt",
+        "sha256": "8e548db0238b778598697f49e5dec40e30895db6d5c7b620bfa9fcb4ea709f50"
+      },
+      "9": {
+        "path": "/home/dohyun/projects/afe2_runs/low7_rbf_v3_support_giant_e63ebd8/arms/opt032_demo0250/ckpt_9.pt",
+        "sha256": "278b31b268d12ca14ef4540635ebf2997a9d8a7d873e842aabc7188a29d3b6db"
+      },
+      "90": {
+        "path": "/home/dohyun/projects/afe2_runs/low7_rbf_v3_support_giant_e63ebd8/arms/opt032_demo0250/ckpt_90.pt",
+        "sha256": "e24f21a496970904cbaf7a475be2efb858a350887307e8ca5794c47aea2c9126"
+      },
+      "91": {
+        "path": "/home/dohyun/projects/afe2_runs/low7_rbf_v3_support_giant_e63ebd8/arms/opt032_demo0250/ckpt_91.pt",
+        "sha256": "a4c84144b9fa3ac82c51f063593aae028a0184534eaef391e268e9b720a264a4"
+      },
+      "92": {
+        "path": "/home/dohyun/projects/afe2_runs/low7_rbf_v3_support_giant_e63ebd8/arms/opt032_demo0250/ckpt_92.pt",
+        "sha256": "bb15c1ed3a76095030c96f2fb6880ac8c9eebed1911b5c5dfbdbb6c4cf5ce335"
+      },
+      "93": {
+        "path": "/home/dohyun/projects/afe2_runs/low7_rbf_v3_support_giant_e63ebd8/arms/opt032_demo0250/ckpt_93.pt",
+        "sha256": "a3208d8083601e171d2e27dd2f519f883bc7971f2db715eb6ce82975fc925f80"
+      },
+      "94": {
+        "path": "/home/dohyun/projects/afe2_runs/low7_rbf_v3_support_giant_e63ebd8/arms/opt032_demo0250/ckpt_94.pt",
+        "sha256": "9a96d874bb3083a94e32e172042cb99a02d4ef1da9fa21a4fdb0825c92fd1d9e"
+      },
+      "95": {
+        "path": "/home/dohyun/projects/afe2_runs/low7_rbf_v3_support_giant_e63ebd8/arms/opt032_demo0250/ckpt_95.pt",
+        "sha256": "6b0bd9a38360018fb8da3ea2a67f0d89e1fc738ec89cfcb9c3091eae78dfc880"
+      },
+      "96": {
+        "path": "/home/dohyun/projects/afe2_runs/low7_rbf_v3_support_giant_e63ebd8/arms/opt032_demo0250/ckpt_96.pt",
+        "sha256": "cb385998cd3d8fcd3e278f4db64958da6d8a25c12007329245d9e38e6738e1f6"
+      },
+      "97": {
+        "path": "/home/dohyun/projects/afe2_runs/low7_rbf_v3_support_giant_e63ebd8/arms/opt032_demo0250/ckpt_97.pt",
+        "sha256": "26df2acd20bab873cf5d79332a220ec8f82248662e4e089b7b407c4bf6f30b7f"
+      },
+      "98": {
+        "path": "/home/dohyun/projects/afe2_runs/low7_rbf_v3_support_giant_e63ebd8/arms/opt032_demo0250/ckpt_98.pt",
+        "sha256": "2bef20599d8b78f292eee0ab597e5a309a34e0839a29a130b0cf438f5d3e84a2"
+      },
+      "99": {
+        "path": "/home/dohyun/projects/afe2_runs/low7_rbf_v3_support_giant_e63ebd8/arms/opt032_demo0250/ckpt_99.pt",
+        "sha256": "80dd2284819150ff2b92ee628f7a3cb7b4bac2ba3cfa553221292c35fbf51890"
+      }
+    },
+    "source_checkpoint_contract_sha256": "6a37690ae0c7d599b142cd839210410a7f3ddde3da14e6cdbfb328106cb862d3",
+    "source_checkpoint_model_sha256": "070ea40dda8c94a7bec503942c48cb046f1dd7ef0bde8ccd00c3805b9a9af368",
+    "source_checkpoint_sha256": "7ae44f773b3f5fe36579c4101542e495119cf6e348f622f5edbfedaa2855a46c",
+    "source_git_commit": "e63ebd80e5fa4f712a1a7cf590ec74c116768873"
+  },
+  "scene": {
+    "dt": 0.1,
+    "goal": [
+      4.699999809265137,
+      4.699999809265137
+    ],
+    "obstacles": [
+      [
+        1.0,
+        1.0,
+        0.20000000298023224
+      ],
+      [
+        1.0,
+        2.0,
+        0.20000000298023224
+      ],
+      [
+        1.0,
+        3.0,
+        0.20000000298023224
+      ],
+      [
+        1.0,
+        4.0,
+        0.20000000298023224
+      ],
+      [
+        2.0,
+        1.0,
+        0.20000000298023224
+      ],
+      [
+        2.0,
+        4.0,
+        0.20000000298023224
+      ],
+      [
+        3.0,
+        1.0,
+        0.20000000298023224
+      ],
+      [
+        3.0,
+        4.0,
+        0.20000000298023224
+      ],
+      [
+        4.0,
+        1.0,
+        0.20000000298023224
+      ],
+      [
+        4.0,
+        2.0,
+        0.20000000298023224
+      ],
+      [
+        4.0,
+        3.0,
+        0.20000000298023224
+      ],
+      [
+        4.0,
+        4.0,
+        0.20000000298023224
+      ],
+      [
+        0.0,
+        5.199999809265137,
+        0.20000000298023224
+      ],
+      [
+        5.199999809265137,
+        0.0,
+        0.20000000298023224
+      ],
+      [
+        0.38461539149284363,
+        5.199999809265137,
+        0.20000000298023224
+      ],
+      [
+        5.199999809265137,
+        0.38461539149284363,
+        0.20000000298023224
+      ],
+      [
+        0.7692307829856873,
+        -0.20000000298023224,
+        0.20000000298023224
+      ],
+      [
+        0.7692307829856873,
+        5.199999809265137,
+        0.20000000298023224
+      ],
+      [
+        -0.20000000298023224,
+        0.7692307829856873,
+        0.20000000298023224
+      ],
+      [
+        5.199999809265137,
+        0.7692307829856873,
+        0.20000000298023224
+      ],
+      [
+        1.1538461446762085,
+        -0.20000000298023224,
+        0.20000000298023224
+      ],
+      [
+        1.1538461446762085,
+        5.199999809265137,
+        0.20000000298023224
+      ],
+      [
+        -0.20000000298023224,
+        1.1538461446762085,
+        0.20000000298023224
+      ],
+      [
+        5.199999809265137,
+        1.1538461446762085,
+        0.20000000298023224
+      ],
+      [
+        1.5384615659713745,
+        -0.20000000298023224,
+        0.20000000298023224
+      ],
+      [
+        1.5384615659713745,
+        5.199999809265137,
+        0.20000000298023224
+      ],
+      [
+        -0.20000000298023224,
+        1.5384615659713745,
+        0.20000000298023224
+      ],
+      [
+        5.199999809265137,
+        1.5384615659713745,
+        0.20000000298023224
+      ],
+      [
+        1.923076868057251,
+        -0.20000000298023224,
+        0.20000000298023224
+      ],
+      [
+        1.923076868057251,
+        5.199999809265137,
+        0.20000000298023224
+      ],
+      [
+        -0.20000000298023224,
+        1.923076868057251,
+        0.20000000298023224
+      ],
+      [
+        5.199999809265137,
+        1.923076868057251,
+        0.20000000298023224
+      ],
+      [
+        2.307692289352417,
+        -0.20000000298023224,
+        0.20000000298023224
+      ],
+      [
+        2.307692289352417,
+        5.199999809265137,
+        0.20000000298023224
+      ],
+      [
+        -0.20000000298023224,
+        2.307692289352417,
+        0.20000000298023224
+      ],
+      [
+        5.199999809265137,
+        2.307692289352417,
+        0.20000000298023224
+      ],
+      [
+        2.692307710647583,
+        -0.20000000298023224,
+        0.20000000298023224
+      ],
+      [
+        2.692307710647583,
+        5.199999809265137,
+        0.20000000298023224
+      ],
+      [
+        -0.20000000298023224,
+        2.692307710647583,
+        0.20000000298023224
+      ],
+      [
+        5.199999809265137,
+        2.692307710647583,
+        0.20000000298023224
+      ],
+      [
+        3.076923131942749,
+        -0.20000000298023224,
+        0.20000000298023224
+      ],
+      [
+        3.076923131942749,
+        5.199999809265137,
+        0.20000000298023224
+      ],
+      [
+        -0.20000000298023224,
+        3.076923131942749,
+        0.20000000298023224
+      ],
+      [
+        5.199999809265137,
+        3.076923131942749,
+        0.20000000298023224
+      ],
+      [
+        3.461538553237915,
+        -0.20000000298023224,
+        0.20000000298023224
+      ],
+      [
+        3.461538553237915,
+        5.199999809265137,
+        0.20000000298023224
+      ],
+      [
+        -0.20000000298023224,
+        3.461538553237915,
+        0.20000000298023224
+      ],
+      [
+        5.199999809265137,
+        3.461538553237915,
+        0.20000000298023224
+      ],
+      [
+        3.846153736114502,
+        -0.20000000298023224,
+        0.20000000298023224
+      ],
+      [
+        3.846153736114502,
+        5.199999809265137,
+        0.20000000298023224
+      ],
+      [
+        -0.20000000298023224,
+        3.846153736114502,
+        0.20000000298023224
+      ],
+      [
+        5.199999809265137,
+        3.846153736114502,
+        0.20000000298023224
+      ],
+      [
+        4.230769157409668,
+        -0.20000000298023224,
+        0.20000000298023224
+      ],
+      [
+        4.230769157409668,
+        5.199999809265137,
+        0.20000000298023224
+      ],
+      [
+        -0.20000000298023224,
+        4.230769157409668,
+        0.20000000298023224
+      ],
+      [
+        5.199999809265137,
+        4.230769157409668,
+        0.20000000298023224
+      ],
+      [
+        4.615384578704834,
+        -0.20000000298023224,
+        0.20000000298023224
+      ],
+      [
+        -0.20000000298023224,
+        4.615384578704834,
+        0.20000000298023224
+      ],
+      [
+        5.0,
+        -0.20000000298023224,
+        0.20000000298023224
+      ],
+      [
+        -0.20000000298023224,
+        5.0,
+        0.20000000298023224
+      ],
+      [
+        0.38461539149284363,
+        -0.20000000298023224,
+        0.20000000298023224
+      ],
+      [
+        4.615384578704834,
+        5.199999809265137,
+        0.20000000298023224
+      ],
+      [
+        -0.20000000298023224,
+        0.38461539149284363,
+        0.20000000298023224
+      ],
+      [
+        5.199999809265137,
+        4.615384578704834,
+        0.20000000298023224
+      ],
+      [
+        0.0,
+        -0.20000000298023224,
+        0.20000000298023224
+      ],
+      [
+        -0.20000000298023224,
+        0.0,
+        0.20000000298023224
+      ],
+      [
+        5.199999809265137,
+        5.0,
+        0.20000000298023224
+      ],
+      [
+        5.0,
+        5.199999809265137,
+        0.20000000298023224
+      ],
+      [
+        2.5,
+        2.5,
+        1.0
+      ]
+    ],
+    "profile": {
+      "center_replacement_radius": 1.0,
+      "description": "Endpoint-matched giant-obstacle OOD task: replace the four central radius-0.2 disks by one radius-1.0 disk at (2.5,2.5).",
+      "goal": [
+        4.7,
+        4.7
+      ],
+      "name": "low7_radius1_canonical_v1",
+      "start": [
+        0.3,
+        0.3
+      ],
+      "wall_plugs": 8
+    },
+    "robot_radius": 0.0,
+    "sha256": "356d6d48b3af2b017b529562b530f35285c86f9107da512a73de6ef664b03e72",
+    "start_state": [
+      0.30000001192092896,
+      0.30000001192092896,
+      0.0,
+      0.0
+    ],
+    "u_max": 1.0,
+    "workspace_bounds": [
+      0.0,
+      5.0,
+      0.0,
+      5.0
+    ]
+  },
+  "selected_round_fixed_before_holdout": 25,
+  "source": {
+    "commit": "e63ebd80e5fa4f712a1a7cf590ec74c116768873",
+    "parent": "329c7df2d1842f3b42fa4964eb80ebcafcddcf0a",
+    "root": "/home/dohyun/projects/safeMPPI-low7-v3-support-e63ebd8",
+    "tracked_dirty": false,
+    "untracked_runtime_sources": []
+  },
+  "verifier_workers": 128
+}

@@ -1,0 +1,41 @@
+{
+  "dependencies": {
+    "cfm_mppi.safegpc_adapter.safemppi": {
+      "module": "cfm_mppi.safegpc_adapter.safemppi",
+      "path": "/home/dohyun/projects/safeMPPI-low7-grid-8c80cf0/cfm_mppi/safegpc_adapter/safemppi.py",
+      "sha256": "4c90f62cdd80a6edabb5d7ee48c989d8fa5b1d64da43d68a2864b4f51db127d1"
+    },
+    "flow_policy": {
+      "module": "flow_policy",
+      "path": "/home/dohyun/projects/safeMPPI-low7-grid-8c80cf0/overnight_run_today/src/flow_policy.py",
+      "sha256": "66edd96eafb327854afae7d63f0b36eb062d17166feb7109042012462fac7496"
+    },
+    "grid_feats": {
+      "module": "grid_feats",
+      "path": "/home/dohyun/projects/safeMPPI-low7-grid-8c80cf0/overnight_run_07_06/grid_feats.py",
+      "sha256": "fbe34372fffefc5d9d13926bfb541126c5efe77b2f2dde44d90b1b39029c8e6c"
+    },
+    "grid_hp_expt": {
+      "module": "grid_hp_expt",
+      "path": "/home/dohyun/projects/safeMPPI-low7-grid-8c80cf0/overnight_run_07_06/rev_expansion/codex_challenging/grid_hp_expt.py",
+      "sha256": "13cb090846881b5fe5d696aea7c7773d351b0c8f660dddc69ce5bd374089185e"
+    },
+    "grid_scene": {
+      "module": "grid_scene",
+      "path": "/home/dohyun/projects/safeMPPI-low7-grid-8c80cf0/overnight_run_07_06/grid_scene.py",
+      "sha256": "b061dce6d64358b66b462f992df71049b32413cb44e6e55c9c0d84a8cc63602f"
+    },
+    "verifier_polytope": {
+      "module": "verifier_polytope",
+      "path": "/home/dohyun/projects/safeMPPI-low7-grid-8c80cf0/overnight_run_2026-07-01/verifier_polytope.py",
+      "sha256": "6ad06ef96b5678d325b7fc5fd878e4c299f7da282ae3a608fa077c8c7c56db69"
+    }
+  },
+  "experiment_root": "/home/dohyun/projects/safeMPPI-low7-grid-8c80cf0/overnight_run_07_06/rev_expansion/codex_challenging",
+  "forbidden_module_fragments": [
+    "grid_expand_hardtail",
+    "window_expand_hardtail",
+    "stage5_window_expand"
+  ],
+  "project_root": "/home/dohyun/projects/safeMPPI-low7-grid-8c80cf0"
+}

@@ -1,0 +1,201 @@
+{
+  "artifact_kind": "all_gamma_combined",
+  "config": {
+    "planner_seed0": 810000,
+    "planner_seed_paired_across_gamma": true,
+    "retries_per_pair": 3,
+    "rollout": {
+      "max_candidate_seeds_per_gamma": 3,
+      "max_debug_candidates": 0,
+      "max_proposals_per_step": 2,
+      "max_steps": 800,
+      "noise_var_mult": 3.0,
+      "quota_per_direction": 1,
+      "reach_m": 0.15,
+      "retreat_weight": 0.0,
+      "seed0": 810000,
+      "smooth_weight": 0.12
+    }
+  },
+  "contract": {
+    "allowed_training_plan_kinds": [
+      "weighted_mean",
+      "internal_best"
+    ],
+    "dataset_conditioning_key": "low7",
+    "debug_training_targets": 0,
+    "direction_labels": 0,
+    "gamma_last": true,
+    "generated_equals_verified_equals_training": true,
+    "inverse_trajectory_length_weighting": true,
+    "low7_shape": 7,
+    "only_first_action_executed": true,
+    "padding": 0,
+    "planned_horizon": 10,
+    "query_context_wire_field": "low5",
+    "synthetic_reflections": 0,
+    "trajectory_balanced_total_mass_per_path": 1.0
+  },
+  "counts": {
+    "per_gamma": {
+      "0.1": {
+        "attempts": 882,
+        "training_trajectories": 878,
+        "training_windows": 64371
+      },
+      "0.2": {
+        "attempts": 881,
+        "training_trajectories": 878,
+        "training_windows": 49496
+      },
+      "0.3": {
+        "attempts": 881,
+        "training_trajectories": 878,
+        "training_windows": 46336
+      },
+      "0.4": {
+        "attempts": 881,
+        "training_trajectories": 878,
+        "training_windows": 45526
+      },
+      "0.5": {
+        "attempts": 881,
+        "training_trajectories": 878,
+        "training_windows": 45365
+      },
+      "0.7": {
+        "attempts": 882,
+        "training_trajectories": 878,
+        "training_windows": 44854
+      },
+      "1": {
+        "attempts": 886,
+        "training_trajectories": 878,
+        "training_windows": 46020
+      }
+    },
+    "training_trajectories": 6146,
+    "training_windows": 341968,
+    "unique_training_pairs": 878
+  },
+  "created_at_utc": "2026-07-18T00:44:22.204526+00:00",
+  "dataset": "/home/dohyun/projects/afe2_runs/low7_fixed_grid_8c80cf0/combined/data/low7_randomized_all_gamma.pt",
+  "dataset_sha256": "4b8e2d9be794584fad232bcc46cf78c2c4f422efb3e0642f503c8a77fcd2e8ec",
+  "endpoint_manifest": "/home/dohyun/projects/afe2_runs/low7_fixed_grid_8c80cf0/endpoints.json",
+  "endpoint_manifest_sha256": "f73daed67250291c1e2b20ed4094d842e3bc4376cc79c78d137ee1d06f16b529",
+  "expert_generator_sha256": "a4f734861cb2e02b6c7ae2e521b1408e3b247374c4ba8993856a44f44c0f53ae",
+  "generator_sha256": "4b609f84a9f4cd19aecf0d1f30148515a655817ec705ccbd402b801703c0264f",
+  "legacy_mechanisms": {
+    "demo_frac": "absent",
+    "easy_frontier_split_or_weighting": "absent",
+    "fixed_optimizer_step_count_as_scientific_rule": false,
+    "legacy_anchor_or_recovery_replay": "absent",
+    "lwf_or_functional_data_anchor": "absent",
+    "negative_sample_alpha_objective": "absent",
+    "uncertainty_weighted_replay": "absent"
+  },
+  "pair_count": 881,
+  "recipe_contract": {
+    "all_shards_match_canonical": true,
+    "canonical_expert_recipe": {
+      "max_debug_candidates": 0,
+      "max_proposals_per_step": 2,
+      "max_steps": 800,
+      "noise_var_mult": 3.0,
+      "reach_m": 0.15,
+      "retreat_weight": 0.0,
+      "smooth_weight": 0.12
+    },
+    "scientific_changes": [
+      "low7_closest_boundary_conditioning",
+      "fixed_goal_full_grid_starts_zero_velocity_no_diagonal_exclusion"
+    ]
+  },
+  "scene": {
+    "gammas": [
+      0.1,
+      0.2,
+      0.3,
+      0.4,
+      0.5,
+      0.7,
+      1.0
+    ],
+    "geometry_sha256": "e996f0f241c3197128cd9dd5dc9afbb66260a3bc5950c26f8ff2224231fa768a",
+    "name": "ordinary_symmetric_4x4_ID_stadium"
+  },
+  "schema_version": "afe_planned_demo_v3_low7_uniform_pairs",
+  "shards": [
+    {
+      "attempts": 882,
+      "dataset": "/home/dohyun/projects/afe2_runs/low7_fixed_grid_8c80cf0/shards/gamma_0p1/data/low7_randomized_gamma_0.1.pt",
+      "dataset_sha256": "ff5f02f178fb3db6bc17c2485ca9fec0ac3dda2022e05b1f3daf02ab83d3e58a",
+      "gamma": 0.1,
+      "manifest": "/home/dohyun/projects/afe2_runs/low7_fixed_grid_8c80cf0/shards/gamma_0p1/manifest.json",
+      "manifest_sha256": "aca86d581861a42c8a6d185bf0b0762c5d83d6622c171dddd8f1369d11fbd00e",
+      "training_trajectories": 878,
+      "training_windows": 64371
+    },
+    {
+      "attempts": 881,
+      "dataset": "/home/dohyun/projects/afe2_runs/low7_fixed_grid_8c80cf0/shards/gamma_0p2/data/low7_randomized_gamma_0.2.pt",
+      "dataset_sha256": "0b9854f791958ee6b317f662001d5506878c862e76cdcc4319dd49f3491141f5",
+      "gamma": 0.2,
+      "manifest": "/home/dohyun/projects/afe2_runs/low7_fixed_grid_8c80cf0/shards/gamma_0p2/manifest.json",
+      "manifest_sha256": "04b17488545afc04faf4714008b272a25e2e3a22d5c1a36020d0688fc0931d5e",
+      "training_trajectories": 878,
+      "training_windows": 49496
+    },
+    {
+      "attempts": 881,
+      "dataset": "/home/dohyun/projects/afe2_runs/low7_fixed_grid_8c80cf0/shards/gamma_0p3/data/low7_randomized_gamma_0.3.pt",
+      "dataset_sha256": "4e5791f962dbd748b901341de14149d771adfec9eafc0c289f358978a5c376f9",
+      "gamma": 0.3,
+      "manifest": "/home/dohyun/projects/afe2_runs/low7_fixed_grid_8c80cf0/shards/gamma_0p3/manifest.json",
+      "manifest_sha256": "9f02036547bae5d9db356e610bc3febc6b9c89f0aa819dcbfc4ea3dbd5872eb6",
+      "training_trajectories": 878,
+      "training_windows": 46336
+    },
+    {
+      "attempts": 881,
+      "dataset": "/home/dohyun/projects/afe2_runs/low7_fixed_grid_8c80cf0/shards/gamma_0p4/data/low7_randomized_gamma_0.4.pt",
+      "dataset_sha256": "4713e6cda4bec546c0e546c68c332b2f26d09ae7a7a3ae29099172ec450cacbe",
+      "gamma": 0.4,
+      "manifest": "/home/dohyun/projects/afe2_runs/low7_fixed_grid_8c80cf0/shards/gamma_0p4/manifest.json",
+      "manifest_sha256": "0497347d7eb1f3c04c2af4fd8d656c4e82f5f031c25458dd15cbfae1e08909d2",
+      "training_trajectories": 878,
+      "training_windows": 45526
+    },
+    {
+      "attempts": 881,
+      "dataset": "/home/dohyun/projects/afe2_runs/low7_fixed_grid_8c80cf0/shards/gamma_0p5/data/low7_randomized_gamma_0.5.pt",
+      "dataset_sha256": "ec53bd26de794c0016d4105a0e28accc3ef84c56300181207e62ebc8c1ca2ac0",
+      "gamma": 0.5,
+      "manifest": "/home/dohyun/projects/afe2_runs/low7_fixed_grid_8c80cf0/shards/gamma_0p5/manifest.json",
+      "manifest_sha256": "ec54c1eadaca61101427bd1f01e0f97e05fffcd3c2454a84d0b39a945e0e6a13",
+      "training_trajectories": 878,
+      "training_windows": 45365
+    },
+    {
+      "attempts": 882,
+      "dataset": "/home/dohyun/projects/afe2_runs/low7_fixed_grid_8c80cf0/shards/gamma_0p7/data/low7_randomized_gamma_0.7.pt",
+      "dataset_sha256": "9be7f26e1193b8a6fd8724ea071c08a6a07a672a2902faa32f7718f01cecd86e",
+      "gamma": 0.7,
+      "manifest": "/home/dohyun/projects/afe2_runs/low7_fixed_grid_8c80cf0/shards/gamma_0p7/manifest.json",
+      "manifest_sha256": "891d04e5e15986bf35786fde81e534f5a1564c6fc3827a80f9fc4cb07491586c",
+      "training_trajectories": 878,
+      "training_windows": 44854
+    },
+    {
+      "attempts": 886,
+      "dataset": "/home/dohyun/projects/afe2_runs/low7_fixed_grid_8c80cf0/shards/gamma_1p0/data/low7_randomized_gamma_1.pt",
+      "dataset_sha256": "35027541a878cd35905169714b607593fb7df1cfd50c59db2abd695b9d015ea3",
+      "gamma": 1.0,
+      "manifest": "/home/dohyun/projects/afe2_runs/low7_fixed_grid_8c80cf0/shards/gamma_1p0/manifest.json",
+      "manifest_sha256": "a29d2f8a6886cf1d969de42d1d9908290649929cee144341e7bbcfea5855d8db",
+      "training_trajectories": 878,
+      "training_windows": 46020
+    }
+  ],
+  "status": "LOW7_RANDOMIZED_ALL_GAMMA_COMPLETE"
+}

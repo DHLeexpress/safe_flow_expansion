@@ -1,0 +1,8 @@
+{
+  "dataset": "low7_randomized_all_gamma.pt",
+  "canonical_helios_path": "/home/dohyun/projects/afe2_runs/low7_fixed_grid_8c80cf0/combined/data/low7_randomized_all_gamma.pt",
+  "bytes": 4383117492,
+  "sha256": "4b8e2d9be794584fad232bcc46cf78c2c4f422efb3e0642f503c8a77fcd2e8ec",
+  "tracked_in_git": false,
+  "reason": "The authenticated tensor is 4.38 GB; manifests, split, checkpoints, hashes, and visual evidence are tracked, while Helios uses a verified local symlink."
+}

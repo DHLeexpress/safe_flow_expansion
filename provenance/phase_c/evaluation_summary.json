@@ -1,0 +1,40 @@
+{
+  "M_per_gamma": 50,
+  "metrics": "/home/dohyun/projects/afe2_runs/low7_rbf_v3_support_giant_e63ebd8/confirmation/metrics.jsonl",
+  "mode": "holdout",
+  "presentation": [
+    "/home/dohyun/projects/afe2_runs/low7_rbf_v3_support_giant_e63ebd8/confirmation/report.png",
+    "/home/dohyun/projects/afe2_runs/low7_rbf_v3_support_giant_e63ebd8/confirmation/report.pdf",
+    "/home/dohyun/projects/afe2_runs/low7_rbf_v3_support_giant_e63ebd8/confirmation/selected_raw_m50_gallery.png",
+    "/home/dohyun/projects/afe2_runs/low7_rbf_v3_support_giant_e63ebd8/confirmation/selected_raw_m50_gallery.pdf"
+  ],
+  "rounds": [
+    0,
+    25,
+    100
+  ],
+  "selection": {
+    "rounds": [
+      0,
+      25,
+      100
+    ],
+    "selected_round": 25,
+    "selection_source": "fixed Stage A result; M50 did not select or change checkpoint"
+  },
+  "status": "AFE_RBF_V3_SUPPORT_HOLDOUT_COMPLETE",
+  "timings": [
+    {
+      "elapsed_seconds": 77.29436400905252,
+      "round": 0
+    },
+    {
+      "elapsed_seconds": 102.06699651759118,
+      "round": 25
+    },
+    {
+      "elapsed_seconds": 109.7136766994372,
+      "round": 100
+    }
+  ]
+}

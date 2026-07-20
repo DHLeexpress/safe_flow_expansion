@@ -1,0 +1,128 @@
+{
+  "acquisition_statistic": "normalized GP posterior variance conditioned on the GP buffer and only the already-selected pending locations in a B-step acquisition",
+  "base_lengthscale": 0.2256188330740796,
+  "beta": 0.026713714502178975,
+  "beta_context_cap_per_gamma": 64,
+  "beta_context_count": 224,
+  "beta_context_gamma_counts": {
+    "0.1": 32,
+    "0.2": 32,
+    "0.3": 32,
+    "0.4": 32,
+    "0.5": 32,
+    "0.7": 32,
+    "1.0": 32
+  },
+  "beta_context_queries": 896,
+  "beta_context_selected_count": 224,
+  "beta_context_status_counts": {
+    "collision": 0,
+    "nvp": 2,
+    "oob": 0,
+    "reached": 0,
+    "timeout": 54
+  },
+  "beta_context_timing": {
+    "bookkeeping": 0.4246279066428542,
+    "nvp_audit_verifier_wall": 0.0,
+    "sampling": 0.5835451306775212,
+    "verifier_wall": 0.324656467884779
+  },
+  "beta_solution": {
+    "achieved": {
+      "ess_med": 0.500038444556541,
+      "ess_p10": 0.09563607711115073,
+      "ess_p90": 0.8695143299768253
+    },
+    "beta": 0.026713714502178975,
+    "bisection_steps": 9,
+    "bracket": [
+      0.02664148211641632,
+      0.026786142729806964
+    ],
+    "bracket_steps": 2,
+    "flat_pool_fraction": 0.0,
+    "n_score_vectors": 896,
+    "score_vector_lengths": [
+      16,
+      15,
+      14,
+      13
+    ],
+    "sigma_span_med": 0.06909945560619235,
+    "sigma_span_p10": 0.030737792141735554,
+    "sigma_span_p90": 0.18988663516938686,
+    "target": 0.5,
+    "tolerance": 0.0001
+  },
+  "calibration_budget": {
+    "disjoint_context_archive": {
+      "positives": 866,
+      "queries": 896,
+      "socp_errors": 0,
+      "socp_solves": 896,
+      "verifier_cpu_seconds": 5.369969859719276
+    },
+    "enters_round1_GP": "exactly the declared operational_gp_size seed positives",
+    "enters_training_Dplus": false,
+    "score_vector_seconds": 0.5264826705679297,
+    "seed_archive": {
+      "positives": 868,
+      "queries": 896,
+      "socp_errors": 0,
+      "socp_solves": 896,
+      "verifier_cpu_seconds": 2.5051193768158555
+    },
+    "total_positives": 1734,
+    "total_queries": 1792,
+    "total_socp_errors": 0,
+    "total_socp_solves": 1792,
+    "total_wall_seconds": 6.433904545381665
+  },
+  "calibration_control_steps": 4,
+  "calibration_replicas": 8,
+  "checkpoint_sha256": "7ae44f773b3f5fe36579c4101542e495119cf6e348f622f5edbfedaa2855a46c",
+  "ess_target": 0.5,
+  "gp_buffer_label": "full-H verifier positive only",
+  "kernel": "RBF on L2-normalized phi_s",
+  "lengthscale": 0.2256188330740796,
+  "lengthscale_multiplier": 1.0,
+  "lengthscale_rule": "declared multiplier times the mean pairwise embedding distance of exactly 50 samples from the pretrained model",
+  "lengthscale_samples": 50,
+  "lengthscale_seed_route_intervention": false,
+  "lengthscale_seed_route_modes": {
+    "ambiguous_count": 34,
+    "ambiguous_fraction": 0.68,
+    "balance": 0.875,
+    "binary_entropy": 0.9886994082884974,
+    "coverage_weighted_balance": 0.28,
+    "r_count": 9,
+    "r_fraction": 0.5625,
+    "resolved_count": 16,
+    "resolved_fraction": 0.32,
+    "total_count": 50,
+    "u_count": 7,
+    "u_fraction": 0.4375
+  },
+  "offline_sweep": null,
+  "operational_gp_size": 512,
+  "operational_seed_positives": 868,
+  "operational_seed_queries": 896,
+  "operational_seed_status_counts": {
+    "collision": 0,
+    "nvp": 0,
+    "oob": 0,
+    "reached": 0,
+    "timeout": 56
+  },
+  "operational_seed_timing": {
+    "bookkeeping": 0.4879500512033701,
+    "nvp_audit_verifier_wall": 0.0,
+    "sampling": 0.5495130810886621,
+    "verifier_wall": 2.1665918612852693
+  },
+  "scene_sha256": "356d6d48b3af2b017b529562b530f35285c86f9107da512a73de6ef664b03e72",
+  "score_vector_sha256": "009cd3eb7adbc3003c092cd6e700afece7ab114ca1839e73e92a24aa380989f7",
+  "source_git_commit": "e63ebd80e5fa4f712a1a7cf590ec74c116768873",
+  "status": "CALIBRATED_AFE_RBF_SEQUENTIAL_OPERATIONAL_V3"
+}

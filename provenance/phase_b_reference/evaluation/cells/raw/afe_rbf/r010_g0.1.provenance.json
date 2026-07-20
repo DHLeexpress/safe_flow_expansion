@@ -1,0 +1,54 @@
+{
+  "M": 10,
+  "T": 300,
+  "algorithm": "afe_rbf_low7_v2_lineage_mass_smoke_v1",
+  "archive": "/home/dohyun/projects/afe2_runs/low7_rbf_v2_lineage_mass_giant_dad39e6/evaluation/cells/raw/afe_rbf/r010_g0.1.npz",
+  "archive_sha256": "a2bba22294b58f2bf1478738a42af30d7515d1818342518856697b226f429d2c",
+  "caption": "stored checkpoints re-evaluated on the same raw M=10/gamma seed bank",
+  "checkpoint": {
+    "path": "/home/dohyun/projects/afe2_runs/low7_rbf_v2_lineage_mass_giant_dad39e6/run/ckpt_10.pt",
+    "sha256": "1c550028e6029efea892364359a53de3e3d0dbda0dc3c4ce046427cb4319cab5"
+  },
+  "checkpoint_model_state_sha256": "e2a31df295ded8933ff46d8e19e904e5aa735903438d793c1b1db4b299c001a8",
+  "controller": "raw untilted policy; no GP/RBF acquisition or verifier selection",
+  "evaluation_profile": "v2_smoke_m10_every_round",
+  "gamma": 0.1,
+  "metric_version": "afe_rbf_raw_sweep_m10_every_round_v1",
+  "mode": "raw",
+  "nfe": 8,
+  "noise_bank": {
+    "cross_profile_pairing": "first 10 rollouts per gamma from the canonical M=50 bank",
+    "dtype": "float32",
+    "evaluation_profile": "v2_smoke_m10_every_round",
+    "independence": "scene-keyed; independent of RBF arm and checkpoint round",
+    "indexing": "[gamma_index, rollout_index, control_time, latent_dimension]",
+    "seed": 910748408648085943,
+    "sha256": "01a7d8f796e26794641f4001911f9d42483e5b1993d7cb0eba16c8b2635c1816",
+    "shape": [
+      7,
+      10,
+      300,
+      20
+    ]
+  },
+  "paired_seed_rule": "one scene-keyed raw noise bank indexed by gamma, rollout, control time, and latent dimension; independent of arm and checkpoint round",
+  "reach": 0.15,
+  "rollout_pairing_keys": [
+    6397556526974790224,
+    5313739193838183523,
+    7512017841708321036,
+    824067871378743362,
+    4408411767002744343,
+    8584997384048181141,
+    5128536393515962738,
+    4919124897866116697,
+    2183248497794423026,
+    947392910505536328
+  ],
+  "round": 10,
+  "scene_sha256": "356d6d48b3af2b017b529562b530f35285c86f9107da512a73de6ef664b03e72",
+  "temp": 1.0,
+  "trainer_complete_sha256": "05e5f6e356902070d181a351ea115abba05408191bc7771420b88807598306b9",
+  "trainer_recipe_sha256": "38c036c81e3f7b57c39abdc2f2296cc1ec6763a844cde53b57f1c30316da3ecd",
+  "trainer_source_git_commit": "dad39e64eb2f5b036a9acade527cccd8a76e174c"
+}

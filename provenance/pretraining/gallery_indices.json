@@ -1,0 +1,30 @@
+{
+  "M": 20,
+  "gammas": [
+    0.1,
+    0.2,
+    0.3,
+    0.4,
+    0.5,
+    0.7,
+    1.0
+  ],
+  "indices": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9
+  ],
+  "scenes": [
+    "low7_id_canonical_v1",
+    "low7_radius1_canonical_v1",
+    "low7_radius03_canonical_v1"
+  ],
+  "selection_rule": "first fixed archive indices; no outcome inspection"
+}

@@ -1,0 +1,45 @@
+{
+  "metrics": {
+    "mode": 4,
+    "cg": 0.2,
+    "smooth": 0.25,
+    "worst_minacc": 0,
+    "succ": 89,
+    "col": 11
+  },
+  "config": {
+    "horizon": 10,
+    "dt": 0.1,
+    "num_samples": 512,
+    "noise_sigma": [
+      0.5,
+      0.5
+    ],
+    "u_min": [
+      -2.0,
+      -2.0
+    ],
+    "u_max": [
+      2.0,
+      2.0
+    ],
+    "safety_margin": 0.0,
+    "temperature": 0.1,
+    "dynamics_type": "doubleintegrator",
+    "barrier_activation_radius": 3.0,
+    "use_polytope_barrier": true,
+    "use_goal_nominal": false,
+    "warm_start": true,
+    "centroid_gain": 0.2,
+    "centroid_smooth": 0.25,
+    "centroid_eps": 0.15,
+    "sigma_volume_gain": 0.0,
+    "sigma_aniso": 2.5,
+    "random_backup_frac": 0.0,
+    "predict_gain": 0.0,
+    "polytope_nbase": 16,
+    "polytope_area_sampling": true,
+    "urgency_size_diff": true,
+    "urgency_floor": 0.02
+  }
+}

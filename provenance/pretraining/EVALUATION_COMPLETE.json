@@ -1,0 +1,25 @@
+{
+  "M_per_gamma": 20,
+  "artifact_sha256": {
+    "SHA256SUMS": "af4c2c8cf059aeddc25a8152e049f60930630ada89536d55b3c500ab7fd42532",
+    "episodes.jsonl": "febbb2590684455c6f1f4b210646d59af7122b093932d87c6776489436595a1b",
+    "gallery_indices.json": "c5b0405097bde4a478c4c4fa779935bc108a9e835e151ff90aa3111877bd7699",
+    "low7_pretrained_fixed_index_gallery.pdf": "1b9368701d734fd2e5e91d8744797fef270251025b22827d7fa1f9a1201bec4b",
+    "low7_pretrained_fixed_index_gallery.png": "4ef58bd088ab34e1250a180cf4db2ed34396afea84b8336501d1529234e78277",
+    "low7_pretrained_metrics.pdf": "3a2bc29c68a6288cdaee50b23a54d24f20ca086dc0cb147d292d0ba16727a87c",
+    "low7_pretrained_metrics.png": "adeedfa5483fb7bbe3c9caefc7f3d52ea576a9b5a619633c279b9fd9b100f9f2",
+    "metrics.jsonl": "7b6aea75d1d3095e68e8c12884e2c53948f4506511276a92b8ae992ef61f5fb5",
+    "provenance.json": "5ce175974a083b34350b78b13f8bc57b034c3719e6a810fc672c70186a5e2cf6",
+    "raw_rollouts.npz": "d0ffc3bc454e20977f63012948f78d10199dd72dcbc84c30a3570d8aea9f00d5",
+    "raw_sampled_plans.npz": "cdffb593df967f0e93e42a28646cbbf9ca174ab94002c4f59fc369aaf619fb82"
+  },
+  "checkpoint_file_sha256": "7ae44f773b3f5fe36579c4101542e495119cf6e348f622f5edbfedaa2855a46c",
+  "checkpoint_model_state_sha256": "070ea40dda8c94a7bec503942c48cb046f1dd7ef0bde8ccd00c3805b9a9af368",
+  "episode_count": 420,
+  "finished_at_utc": "2026-07-18T01:17:46.285053+00:00",
+  "metric_row_count": 24,
+  "sampled_plan_count": 39609,
+  "schema_version": "low7_pretrained_raw_v1",
+  "status": "LOW7_PRETRAINED_EVALUATION_COMPLETE",
+  "wall_seconds": 115.3452824074775
+}

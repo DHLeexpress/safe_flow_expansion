@@ -1,0 +1,16 @@
+{
+  "attempts": 6174,
+  "diagonal_band": false,
+  "endpoint_manifest_sha256": "f73daed67250291c1e2b20ed4094d842e3bc4376cc79c78d137ee1d06f16b529",
+  "fixed_goal_grid": true,
+  "includes_actual_executed_paths": true,
+  "includes_failed_retries": true,
+  "output": "/home/dohyun/projects/afe2_runs/low7_fixed_grid_8c80cf0/combined/viz/full_space_all_gamma_trajectory_overlay.png",
+  "output_sha256": "72efff229f6a0997d7fe91747f2a08a58c6e5a2865fd65741f88e10d433461ef",
+  "pair_count": 881,
+  "schema_version": "afe_low7_randomized_overlay_v1",
+  "source_manifest": "/home/dohyun/projects/afe2_runs/low7_fixed_grid_8c80cf0/combined/manifest.json",
+  "source_manifest_sha256": "01551774e64192854f57edcd408d50a1d952544040ac2730ecd741276b89370a",
+  "status": "COMPLETE",
+  "successes": 6167
+}

@@ -1,0 +1,20 @@
+{
+  "diagonal_constraint": false,
+  "endpoint_manifest": "/home/dohyun/projects/afe2_runs/low7_fixed_grid_8c80cf0/endpoints.json",
+  "endpoint_manifest_sha256": "f73daed67250291c1e2b20ed4094d842e3bc4376cc79c78d137ee1d06f16b529",
+  "goal": [
+    4.699999809265137,
+    4.699999809265137
+  ],
+  "initial_velocity": [
+    0.0,
+    0.0
+  ],
+  "median_obstacle_clearance_m": 0.2503091271832025,
+  "minimum_obstacle_clearance_m": 0.050752136565720696,
+  "output": "/home/dohyun/projects/afe2_runs/low7_fixed_grid_8c80cf0/viz/fixed_goal_full_grid_starts.png",
+  "output_sha256": "d7ab2b30cd138eec45d5b1cc9ccba51cedf5f319fc76840888920adae87bc4f3",
+  "schema_version": "afe_low7_endpoint_start_map_v1",
+  "start_count": 881,
+  "status": "COMPLETE"
+}

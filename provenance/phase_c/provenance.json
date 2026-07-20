@@ -1,0 +1,98 @@
+{
+  "checkpoint_and_scene": {
+    "checkpoint": "/home/dohyun/projects/afe2_runs/low7_fixed_grid_8c80cf0/pretrain/data/checkpoint_candidate.pt",
+    "checkpoint_model_sha256": "070ea40dda8c94a7bec503942c48cb046f1dd7ef0bde8ccd00c3805b9a9af368",
+    "checkpoint_sha256": "7ae44f773b3f5fe36579c4101542e495119cf6e348f622f5edbfedaa2855a46c",
+    "reviewed_recipe": "/home/dohyun/projects/afe2_runs/low7_rbf_v2_lineage_mass_giant_dad39e6/run/recipe.json",
+    "reviewed_recipe_sha256": "38c036c81e3f7b57c39abdc2f2296cc1ec6763a844cde53b57f1c30316da3ecd",
+    "scene_sha256": "356d6d48b3af2b017b529562b530f35285c86f9107da512a73de6ef664b03e72"
+  },
+  "gpu_queues": {
+    "1": [
+      {
+        "arm_id": "opt016_demo000",
+        "demo_frac_objective_mass": 0.0,
+        "optimizer_steps_per_round": 16,
+        "rollout_replicas": 8
+      },
+      {
+        "arm_id": "opt016_demo0250",
+        "demo_frac_objective_mass": 0.25,
+        "optimizer_steps_per_round": 16,
+        "rollout_replicas": 8
+      },
+      {
+        "arm_id": "opt032_demo0125",
+        "demo_frac_objective_mass": 0.125,
+        "optimizer_steps_per_round": 32,
+        "rollout_replicas": 8
+      }
+    ],
+    "3": [
+      {
+        "arm_id": "opt016_demo0125",
+        "demo_frac_objective_mass": 0.125,
+        "optimizer_steps_per_round": 16,
+        "rollout_replicas": 8
+      },
+      {
+        "arm_id": "opt032_demo000",
+        "demo_frac_objective_mass": 0.0,
+        "optimizer_steps_per_round": 32,
+        "rollout_replicas": 8
+      },
+      {
+        "arm_id": "opt032_demo0250",
+        "demo_frac_objective_mass": 0.25,
+        "optimizer_steps_per_round": 32,
+        "rollout_replicas": 8
+      }
+    ]
+  },
+  "gpus": {
+    "1": {
+      "active_compute_pids": [],
+      "driver_version": "550.144.03",
+      "memory_total_mib": 95830,
+      "memory_used_mib": 15,
+      "name": "NVIDIA H100 NVL",
+      "physical_index": 1,
+      "process_device": "cuda:0",
+      "utilization_percent": 0,
+      "uuid": "GPU-50fb5dae-52a8-5843-bc81-b869586dccde"
+    },
+    "3": {
+      "active_compute_pids": [],
+      "driver_version": "550.144.03",
+      "memory_total_mib": 95830,
+      "memory_used_mib": 16,
+      "name": "NVIDIA H100 NVL",
+      "physical_index": 3,
+      "process_device": "cuda:0",
+      "utilization_percent": 0,
+      "uuid": "GPU-b5993142-760d-a6fe-9430-3d0e65203b6d"
+    }
+  },
+  "host_cpu_count": 256,
+  "source": {
+    "git_commit": "e63ebd80e5fa4f712a1a7cf590ec74c116768873",
+    "repository": "/home/dohyun/projects/safeMPPI-low7-v3-support-e63ebd8",
+    "runtime_source_sha256": {
+      "overnight_run_07_06/rev_expansion/codex_overnight/afe_context.py": "fa8578f43372a34c62674736606a82aa9d67a692d0635eb71b9747214227daba",
+      "overnight_run_07_06/rev_expansion/codex_overnight/afe_core.py": "93661edab29b9ca1d286c2628aec506e48f52a90dd7606cb8c0ae1c9c847c130",
+      "overnight_run_07_06/rev_expansion/codex_overnight/afe_demo_support.py": "6ed631b19fb65e98cdf29ecc17ddd79f796f36cf646839560191014ac0a86a37",
+      "overnight_run_07_06/rev_expansion/codex_overnight/afe_execution.py": "269d882f6ebbe5254ac6bcb4624c57a257cdc42ee356cd8526b5183765cf5d8f",
+      "overnight_run_07_06/rev_expansion/codex_overnight/afe_rbf_core.py": "203848ab63516b865a182c94ca1208f6a0ceb84c2f8055cc8e0842174c9de262",
+      "overnight_run_07_06/rev_expansion/codex_overnight/analysis/afe_rbf_sweep_diagnostics.py": "84e9c8197fa567ddc67204c9ee0064f69ae5bd4d7a906c518d8dfd93654e8bfa",
+      "overnight_run_07_06/rev_expansion/codex_overnight/analysis/low7_rbf_v3_support_sweep_driver.py": "ce035af3c32e88b927b52854776ef49196eaa5a4ab67c39544d65d1b78f13249",
+      "overnight_run_07_06/rev_expansion/codex_overnight/grid_expand_afe2.py": "5219bae66d795c37fa6f135840fa33d36bb9cf70c1e0eaae7a525bbd711961bd",
+      "overnight_run_07_06/rev_expansion/codex_overnight/grid_expand_afe_rbf.py": "ece770dc775c6ed010737be87a821c9c4f2929612238628fbb6cbc0346d6e9ce",
+      "overnight_run_07_06/rev_expansion/codex_overnight/paper_results/low7_support_sweep_eval.py": "c7754a4145f8daa9cefe316bc76c9fe9d4314a5d08942d54ea626597d8101144",
+      "overnight_run_07_06/rev_expansion/codex_overnight/run_low7_rbf_v3_support_sweep.sh": "c5ba419e67787059faaf6c747f844eba50089e64eb9c87f5388f29f939765792",
+      "overnight_run_07_06/rev_expansion/codex_overnight/video_afe2.py": "7913a71a788ca4f3d99ff0cf70d024d0fa46919d6d8bb93b906c31a08f573ae7"
+    },
+    "tracked_dirty": false,
+    "untracked_runtime_sources": []
+  },
+  "verifier_workers_per_pipeline": 128
+}
