@@ -774,11 +774,16 @@ def main() -> int:
     parser.add_argument("--kazuki-m", type=int, default=10)
     parser.add_argument("--frame-stride", type=int, default=2)
     parser.add_argument("--fps", type=int, default=6)
+    parser.add_argument("--torch-threads", type=int, default=4)
     args = parser.parse_args()
     if args.outdir.exists():
         raise FileExistsError(f"fresh output directory required: {args.outdir}")
     if shutil.which("ffmpeg") is None or shutil.which("ffprobe") is None:
         raise RuntimeError("ffmpeg and ffprobe are required")
+    if args.torch_threads < 1:
+        raise ValueError("torch thread count must be positive")
+    torch.set_num_threads(args.torch_threads)
+    torch.set_num_interop_threads(1)
     args.outdir.mkdir(parents=True)
     matplotlib.rcParams.update(
         {
@@ -874,6 +879,11 @@ def main() -> int:
             "verifier_green": "offline candidate-specific full-H verifier audit; never selected the raw action",
             "kazuki": "no polytope overlay",
             "frame_index": "large LaTeX/Computer-Modern frame and control-step index; numbered PNGs retained",
+        },
+        "runtime": {
+            "torch_threads": args.torch_threads,
+            "gpu_exclusivity_required": False,
+            "timing_used_as_scientific_evidence": False,
         },
         "scene": {
             "id": scene_snapshot(id_env, id_profile),
