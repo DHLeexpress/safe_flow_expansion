@@ -370,6 +370,11 @@ def run_raw_failure_trace(
                 ).min()
             ) < 0.0:
                 episode["status"] = "collision"
+        # The other 349 episodes exist only to reproduce the target's exact
+        # batched GPU arithmetic.  Once the target terminates, continuing them
+        # cannot change its authenticated path or any retained trace record.
+        if target["status"] is not None:
+            break
     path_array = np.asarray(path, dtype=np.float32)
     archive = confirmation_cells / f"r019_g{RAW_GAMMA:.1f}.npz"
     with np.load(archive, allow_pickle=True) as stored:
