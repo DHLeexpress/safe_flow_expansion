@@ -33,8 +33,8 @@ def main() -> int:
     expected_rounds = parse_rounds(args.rounds)
     contracts = [json.loads(path.read_text()) for path in args.contract]
     reference_fields = (
-        "M_per_gamma", "NFE", "bank_sha256", "bank_split", "bank_version",
-        "gammas", "raw_policy", "temperature_map", "trajectories_persisted",
+        "M_per_gamma", "NFE", "bank_split", "bank_version", "raw_policy",
+        "temperature_map", "trajectories_persisted",
     )
     for field in reference_fields:
         values = [contract[field] for contract in contracts]
@@ -43,14 +43,23 @@ def main() -> int:
 
     rows: dict[tuple[int, float], dict] = {}
     checkpoint_hashes: dict[str, str] = {}
+    bank_hashes: dict[str, str] = {}
     source_records = []
     for contract_path, contract in zip(args.contract, contracts):
+        gamma_key = ",".join(f"{float(gamma):g}" for gamma in contract["gammas"])
+        prior_bank_hash = bank_hashes.get(gamma_key)
+        if prior_bank_hash is not None and prior_bank_hash != contract["bank_sha256"]:
+            raise RuntimeError(
+                f"gamma group {gamma_key} uses multiple banks: "
+                f"{prior_bank_hash}, {contract['bank_sha256']}"
+            )
+        bank_hashes[gamma_key] = contract["bank_sha256"]
         metrics_path = Path(contract["metrics"])
         if sha256(metrics_path) != contract["metrics_sha256"]:
             raise RuntimeError(f"metrics hash mismatch: {metrics_path}")
         for key, digest in contract["checkpoint_sha256"].items():
-            if key in checkpoint_hashes:
-                raise RuntimeError(f"checkpoint round {key} occurs in multiple shards")
+            if key in checkpoint_hashes and checkpoint_hashes[key] != digest:
+                raise RuntimeError(f"checkpoint round {key} has conflicting hashes")
             checkpoint_hashes[key] = digest
         for line in metrics_path.read_text().splitlines():
             if not line:
@@ -66,6 +75,8 @@ def main() -> int:
             "metrics": str(metrics_path.resolve()),
             "metrics_sha256": contract["metrics_sha256"],
             "rounds": contract["rounds"],
+            "gammas": contract["gammas"],
+            "bank_sha256": contract["bank_sha256"],
         })
 
     expected = {(round_i, gamma) for round_i in expected_rounds for gamma in GAMMAS}
@@ -90,8 +101,9 @@ def main() -> int:
         "cell_count": len(rows),
         "M_per_gamma": contracts[0]["M_per_gamma"],
         "NFE": contracts[0]["NFE"],
-        "bank_sha256": contracts[0]["bank_sha256"],
+        "bank_sha256_by_gamma_group": bank_hashes,
         "bank_split": contracts[0]["bank_split"],
+        "bank_version": contracts[0]["bank_version"],
         "temperature_map": contracts[0]["temperature_map"],
         "raw_policy": contracts[0]["raw_policy"],
         "trajectories_persisted": contracts[0]["trajectories_persisted"],
