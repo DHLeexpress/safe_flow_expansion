@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Render the four requested B1 margin-law M=50 trends for one or more arms."""
+"""Render four B1 margin-law evaluation trends for one or more arms."""
 from __future__ import annotations
 
 import argparse
@@ -144,9 +144,20 @@ def main() -> int:
             table[(rounds[0], GAMMAS[0])]["m"]
             for _, _, table, rounds in arms
         }),
+        "sampling_temperature_by_arm_gamma": {
+            label: {
+                f"{gamma:g}": sorted({
+                    float(table[(round_i, gamma)].get("temp", 1.0))
+                    for round_i in rounds
+                })
+                for gamma in GAMMAS
+            }
+            for label, _, table, rounds in arms
+        },
         "claim": (
-            "curves are raw temperature-1 metrics-only evaluation; star highlights "
-            "are separately calibrated and confirmed metrics; no trajectory archives"
+            "curves are bare-policy metrics-only evaluation using each input row's "
+            "declared sampling temperature and a round-independent CRN bank; no GP, "
+            "acquisition tilt, verifier, fallback, or trajectory archive"
         ),
         "outputs": [str(path) for path in outputs],
     }
