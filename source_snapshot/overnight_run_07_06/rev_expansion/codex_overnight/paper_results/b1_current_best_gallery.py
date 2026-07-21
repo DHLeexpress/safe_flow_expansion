@@ -235,8 +235,15 @@ def run_kazuki(policy: Any, env: Any, safe_coef: float, gamma: float, m: int,
             conditioning_schema="low7_closest_boundary_tie_mean",
         )
         path = np.asarray(output["path"], dtype=np.float32)
+        outcome = classify_path(path, env, reach)
         paths.append(path)
-        outcomes.append(classify_path(path, env, reach))
+        outcomes.append(outcome)
+        print(
+            f"[kazuki-native] ws={safe_coef:g} gamma={gamma:g} "
+            f"episode={rollout_index + 1}/{m} outcome={outcome} "
+            f"steps={len(path) - 1}",
+            flush=True,
+        )
     return paths, outcomes
 
 
