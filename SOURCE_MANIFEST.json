@@ -21,9 +21,14 @@
       "sha256": "9bf8329803d12b6f85c726e9c773c475b8292cdfa178f854759b0b9376de9537"
     },
     {
-      "bytes": 38822,
+      "bytes": 8275,
+      "path": "KAZUKI_FAITHFUL.md",
+      "sha256": "2c64c0f216a4d72205e5ef48c89bba035e9e459db751938a80ef8c782e51d107"
+    },
+    {
+      "bytes": 40039,
       "path": "README.md",
-      "sha256": "bbaebaefff7e112d4d67ee33cf4f50caa9ac5bab1dd332dd4588644730c5aafd"
+      "sha256": "65a4fc21f43068238db1efc6a245d65e146a535b28c2e2ff6b93c0503f776e82"
     },
     {
       "bytes": 314842,
@@ -79,6 +84,16 @@
       "bytes": 2159224,
       "path": "assets/paper/b1_mode_gallery_m50.png",
       "sha256": "207c69c0024a0c7a2db7aaf238454414dfd34ce1f2b9e9bdb0e2bf600ae36955"
+    },
+    {
+      "bytes": 433569,
+      "path": "assets/paper/kazuki_faithful_comparison.pdf",
+      "sha256": "77fd2aec2d8eee616acc5c3c134f34698063577603e803ea1e2f5c9c60258bb8"
+    },
+    {
+      "bytes": 1956750,
+      "path": "assets/paper/kazuki_faithful_comparison.png",
+      "sha256": "5570f78d1fe669c45a6452391a91a2dcdb6ac06350be11876a2fc21c0e39fd4f"
     },
     {
       "bytes": 1501969,
@@ -564,6 +579,51 @@
       "bytes": 7712,
       "path": "provenance/data/stage_summary.json",
       "sha256": "01551774e64192854f57edcd408d50a1d952544040ac2730ecd741276b89370a"
+    },
+    {
+      "bytes": 16542,
+      "path": "provenance/kazuki_faithful/fullh_trace_ep0.npz",
+      "sha256": "971631b3f3ef69cb39bfaa36302a978f708c19d669b223af0dc2c207b2e278ab"
+    },
+    {
+      "bytes": 103688,
+      "path": "provenance/kazuki_faithful/kazuki_faithful_m50.npz",
+      "sha256": "b711d15699c3485f1000fed56e9fe2062356b470292d248e60d13db82ad3554c"
+    },
+    {
+      "bytes": 26651,
+      "path": "provenance/kazuki_faithful/kazuki_fullh_bounds_m15.npz",
+      "sha256": "f4e1adbd2bb1e6e10adc22d65b47d987b2c2822b58ad57a3a90365badf5b4ddd"
+    },
+    {
+      "bytes": 17410,
+      "path": "provenance/kazuki_faithful/kazuki_fullh_m25.npz",
+      "sha256": "fdd257d09f850a941ddd0531f42381b78e932add6a4a5de8738b08a4761bf3da"
+    },
+    {
+      "bytes": 105000,
+      "path": "provenance/kazuki_faithful/kazuki_zero_m50.npz",
+      "sha256": "278de1d4444d3181151160f5359ffe9eac559fb55f3eecfb63b39e3fe448654b"
+    },
+    {
+      "bytes": 38331,
+      "path": "provenance/kazuki_faithful/kazuki_zero_nocost_m50.npz",
+      "sha256": "13b2d5c891637deffeaae02be951d722a25dfb11b5b40b96daa027883dc261ec"
+    },
+    {
+      "bytes": 930,
+      "path": "provenance/kazuki_faithful/summary.json",
+      "sha256": "dac129a68e557cdbdc1b100502e9002898cf01fdc4765caaa51afc843d2a4115"
+    },
+    {
+      "bytes": 438,
+      "path": "provenance/kazuki_faithful/summary_fullh.json",
+      "sha256": "7b010b45b4f58ad6049fc90fcdfaccda1c732d9b4c78e4bb37d1455fb8983e9c"
+    },
+    {
+      "bytes": 488,
+      "path": "provenance/kazuki_faithful/summary_fullh_bounds.json",
+      "sha256": "1d6d9ae4d3251323c8bd5af7500596e1da9bd5dfe62bb7c4150dcb4e648d078b"
     },
     {
       "bytes": 20028,
@@ -1564,6 +1624,21 @@
       "bytes": 9655,
       "path": "scripts/paper_b1_mode_gallery.py",
       "sha256": "9433fd2cdf0981c490b909a40fffd519656c12dc07cf7ef4d68e75c9c1b1ff3a"
+    },
+    {
+      "bytes": 7679,
+      "path": "scripts/paper_kazuki_comparison.py",
+      "sha256": "08c200aebc66e9ac204ffeea01673f7c0a410ec4a0764857a22b7dc90b2cbe78"
+    },
+    {
+      "bytes": 7224,
+      "path": "scripts/run_kazuki_faithful_m50.py",
+      "sha256": "f4520bbaf8dc228c859973e3e89c4c65ecf451e4695837d99319a3e89d50e058"
+    },
+    {
+      "bytes": 13631,
+      "path": "scripts/run_kazuki_fullhorizon.py",
+      "sha256": "6b846fd0135524c6e966d86b5cdc38d1016b875177324d20ccd57a82c7b96b0b"
     },
     {
       "bytes": 5124,
