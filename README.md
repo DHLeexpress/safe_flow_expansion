@@ -34,6 +34,18 @@ constitute a global homotopy or safety guarantee.
 
 ![B1_current_best: expert, pretrained, expanded, and Kazuki diagnostics](assets/results/b1_current_best/b1_current_best_5x3_gallery.png)
 
+## Paper figure index (2026-07-21)
+
+| Figure | Files | Data | What it shows |
+|---|---|---|---|
+| Execution-rule rows (MAIN) | `assets/paper/b1_exec_rows.{png,pdf}` | M=200/gamma per round, `provenance/exec_rows_m200/` | 2x4: B1 cost arm (row 1) vs SOCP-gated max-progress arm (row 2); CR / V_safe / clearance / time; 1-sigma bands; adaptive-gamma green; ungated baseline dashed; declared temperature schedule (see [`EXECUTION_ROWS_STUDY.md`](EXECUTION_ROWS_STUDY.md)) |
+| Ungated baseline | `assets/paper/b1_exec_baseline.{png,pdf}` | M=100/gamma | `legacy_max_horizon_progress` arm alone: V_safe plateau, inverted clearance trend |
+| Evolution grid (full 8 metrics) | `assets/paper/b1_evolution_grid.{png,pdf}` | M10 screen + M50 stars | rounds 0-20, all metrics, confirmation stars (pre-restyle reference version) |
+| Evolution compact | `assets/paper/b1_evolution_compact.{png,pdf}` | M10 screen + M50 stars | J-vs-round and SR-vs-J trajectory |
+| Lane-mode gallery | `assets/paper/b1_mode_gallery_m50.{png,pdf}` | all 50 M50-cell rollouts per (round, gamma) | four route lanes (inner/outer per U/R side), r0 vs r19, offset histograms |
+| Kazuki comparison | `assets/paper/kazuki_faithful_comparison.{png,pdf}` | M50/M25/M15 arms, `provenance/kazuki_faithful/` | collapse test + faithful transplants + full-horizon mechanism trace |
+| B1 5x3 gallery (canonical) | `assets/results/b1_current_best/b1_current_best_5x3_gallery.{png,pdf}` | fixed M50 indices 0-9 | expert / pretrained / B1 / Kazuki rows at three gammas |
+
 ## What is in this folder
 
 ```text
