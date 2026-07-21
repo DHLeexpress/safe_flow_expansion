@@ -1,0 +1,15 @@
+{
+  "M_per_gamma": [
+    50
+  ],
+  "claim": "metrics-only evaluation; no trajectory archives or temperature selection",
+  "inputs": {
+    "cap512_ess025_alpha0010_margin": "/home/dohyun/projects/afe2_runs/b1_margin50_giant_39fb3e6/metrics_m50/raw_temp1_m50.jsonl",
+    "cap768_ess050_alpha0010_margin": "/home/dohyun/projects/afe2_runs/b1_margin50_giant_cap768_ess050_alpha0010_39fb3e6/metrics_m50/raw_temp1_m50.jsonl"
+  },
+  "outputs": [
+    "/home/dohyun/projects/afe2_runs/b1_margin50_final_summary_4718b59/raw_temp1_m50_trends_r0_r30.png",
+    "/home/dohyun/projects/afe2_runs/b1_margin50_final_summary_4718b59/raw_temp1_m50_trends_r0_r30.pdf"
+  ],
+  "status": "B1_MARGIN50_METRIC_TRENDS_COMPLETE"
+}
