@@ -1,0 +1,133 @@
+{
+  "M_per_gamma": 200,
+  "NFE": 8,
+  "bank_split": "b1_margin_fixedtemp_m200_v1",
+  "bank_version": "b1_round_eval_m_v1",
+  "base": {
+    "contract": "/home/dohyun/projects/afe2_runs/b1_margin_fixedtemp_m200_parallel12_04019fd/merged/fixedtemp_m200_merged.contract.json",
+    "contract_sha256": "76a7e85dc15db7f58fb270ee5a05ab88359c0acc9f91547d54236e452e41dfcb",
+    "metrics": "/home/dohyun/projects/afe2_runs/b1_margin_fixedtemp_m200_parallel12_04019fd/merged/fixedtemp_m200_merged.jsonl",
+    "metrics_sha256": "99859f576bceb6d6c88445e0d954e73c669d120aa4c7ec3a0072eb7bf7b68dbc"
+  },
+  "cell_count": 112,
+  "checkpoint_sha256": {
+    "0": "09a423ebd22c8be23dee69f46275c2c0a64ee013d2c21d6a44f3f02b9e157c5b",
+    "1": "58277b6f28661873b2e1bad5af9bec62415d94b92e1c660668bfa4585a3c2fa3",
+    "10": "8a631709e19677dc9e53e0cac82e46f0fa940cee54cf269d5d46c9801d40f68f",
+    "11": "26285145c419570022f651d3818e101687fb272afd87d579c7072cb7a00c1662",
+    "12": "cd29c18f597bd9537f63ec09da409fd1f2ae8d8ac9ce45f1af81114db1472240",
+    "13": "9572082483e624d21e2c64043032fda747cc6ae62ca6809c3a28a3ddbcdb48a5",
+    "14": "db1feaa67a637e0de184fc8598a18d0e6d483eb81c39e2197df42a14361e5040",
+    "15": "604f8fe657254c1ec644dce16dbea28a36d6e3308aa9ee712adbac3ec68ca672",
+    "2": "8bc57238822c4db898a62d4fb42ad5d409468d0c42de4e1fb99c15e5918ed075",
+    "3": "d7eab0ca06806d548aeb5f949c3e5ea3cb485cfdf042f454a84c33318fbf2a95",
+    "4": "72a30124c00341cf5872c8142e45d6af4989c8e9df96d7c141a3cf72f55f3073",
+    "5": "3999ba4467992b7e627a3b8355c880e39bb979cf7a73508026f1f0d60c110daa",
+    "6": "2def00d608c4eeaccf3ec00301c17a1adbf4b19b137cca70ed0d0d3fe555ef1f",
+    "7": "d1e92b3a5fa12575c0fde57a360a6ef9f941984ac09184388de18920c0844976",
+    "8": "c6740aa7df90917df130ab5a31ac533057ed50cdebab88f25fefa799e8ecbfe3",
+    "9": "45d76d5fee1a761ee0b3a0ea44ff4bf321d3cedb8efdadd5b54f5776df9dd26c"
+  },
+  "gammas": [
+    0.1,
+    0.2,
+    0.3,
+    0.4,
+    0.5,
+    0.7,
+    1.0
+  ],
+  "metrics": "/data3/research1/b1_margin_fixedtemp_retest_gpu1_78322eb/merged/fixedtemp_m200_revised.jsonl",
+  "metrics_sha256": "fc4b05bbe07213ee223695cdaab59724995028a0addf596d8b34707d83df1589",
+  "raw_policy": "bare receding-horizon flow; no GP, tilt, verifier, or fallback",
+  "replacements": [
+    {
+      "bank_sha256": "6922069519d0e6cfefed52248b8b95549d5d1b0cf44a0d5c8447478937a3a9c4",
+      "contract": "/data3/research1/b1_margin_fixedtemp_retest_gpu1_78322eb/raw_evaluations/g01_t05/fixedtemp_m200.contract.json",
+      "contract_sha256": "674e6e5701d261533f098d7b6ac9feda267be54627fe88b010d778f559ab659c",
+      "gamma": 0.1,
+      "metrics": "/home/dohyun/projects/afe2_runs/b1_margin_fixedtemp_retest_gpu1_78322eb/g01_t05/fixedtemp_m200.jsonl",
+      "metrics_sha256": "8ad0fba5e060d3230c2862d72e42c6fe17e45ea5963e397453afa47e313e0681"
+    },
+    {
+      "bank_sha256": "2b4dbfa2ff88327aed5fe4b97553f1c153b7144a2610507b18bad51e3978e9b5",
+      "contract": "/data3/research1/b1_margin_fixedtemp_retest_gpu1_78322eb/raw_evaluations/g07_t1/fixedtemp_m200.contract.json",
+      "contract_sha256": "e1de7ec6a64d12bed4855148a4b34e113157c307f318d4b3111ba628d5b9d293",
+      "gamma": 0.7,
+      "metrics": "/home/dohyun/projects/afe2_runs/b1_margin_fixedtemp_retest_gpu1_78322eb/g07_t1/fixedtemp_m200.jsonl",
+      "metrics_sha256": "3a992b0221bf90309fa04fcd8582a684368a2fc127f8e1551a84446abd6f2378"
+    },
+    {
+      "bank_sha256": "a20e357b01505608103128cf6b87b5427bb539657382dc6a894e77184ed9b39b",
+      "contract": "/data3/research1/b1_margin_fixedtemp_retest_gpu1_78322eb/raw_evaluations/g1_t1/fixedtemp_m200.contract.json",
+      "contract_sha256": "5450173c4fe2f7b3ab60d0f2e4a7291264a7a9399ca96f3dbc8ab4a555fdb3b1",
+      "gamma": 1.0,
+      "metrics": "/home/dohyun/projects/afe2_runs/b1_margin_fixedtemp_retest_gpu1_78322eb/g1_t1/fixedtemp_m200.jsonl",
+      "metrics_sha256": "fa4ddb972228ea5303ba1f0032708881e4deb2640a36e2bf2bf174e89d2e8674"
+    }
+  ],
+  "rounds": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15
+  ],
+  "status": "B1_METRIC_CELLS_REPLACED",
+  "temperature_map": {
+    "0.1": [
+      [
+        0,
+        0.5
+      ]
+    ],
+    "0.2": [
+      [
+        0,
+        1.0
+      ]
+    ],
+    "0.3": [
+      [
+        0,
+        0.3
+      ]
+    ],
+    "0.4": [
+      [
+        0,
+        0.3
+      ]
+    ],
+    "0.5": [
+      [
+        0,
+        0.75
+      ]
+    ],
+    "0.7": [
+      [
+        0,
+        1.0
+      ]
+    ],
+    "1": [
+      [
+        0,
+        1.0
+      ]
+    ]
+  },
+  "trajectories_persisted": false
+}

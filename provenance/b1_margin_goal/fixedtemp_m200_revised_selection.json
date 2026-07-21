@@ -1,0 +1,53 @@
+{
+  "candidates": {
+    "g01_t05": {
+      "late_clearance_min": 0.06587415899320537,
+      "late_clearance_r15": 0.06587415899320537,
+      "r10_to_r15_clearance": [
+        0.08955810546601714,
+        0.0867888757148999,
+        0.08352516852662285,
+        0.08153549630543504,
+        0.07509189337868773,
+        0.06587415899320537
+      ],
+      "r10_to_r15_v_safe": [
+        0.54,
+        0.67,
+        0.735,
+        0.695,
+        0.775,
+        0.765
+      ],
+      "temperature": 0.5,
+      "v_safe_violation_rounds": []
+    },
+    "g01_t07": {
+      "late_clearance_min": 0.0617660388323225,
+      "late_clearance_r15": 0.0617660388323225,
+      "r10_to_r15_clearance": [
+        0.08274929462430956,
+        0.07994832738474035,
+        0.07742648171153198,
+        0.07671000356679275,
+        0.07036178315116616,
+        0.0617660388323225
+      ],
+      "r10_to_r15_v_safe": [
+        0.33,
+        0.445,
+        0.505,
+        0.485,
+        0.535,
+        0.58
+      ],
+      "temperature": 0.7,
+      "v_safe_violation_rounds": []
+    }
+  },
+  "caveat": "Neither candidate removes the late-round clearance decline; tau=0.5 wins the declared late-minimum criterion.",
+  "criterion": "Require V_safe(gamma=0.1) <= V_safe(gamma=0.3) at every r0-r15; among eligible candidates maximize min clearance over r10-r15.",
+  "selected": "g01_t05",
+  "selected_temperature": 0.5,
+  "status": "B1_GAMMA01_TEMPERATURE_SELECTED"
+}
