@@ -1,0 +1,56 @@
+{
+  "source": {
+    "base_config": "source_snapshot/overnight_run_2026-06-28/best_area_mode4.json",
+    "override": "source_snapshot/overnight_run_07_06/grid_scene.py::mode1_config",
+    "collector": "source_snapshot/overnight_run_07_06/rev_expansion/codex_challenging/afe_restart/stage2_low7_randomized.py"
+  },
+  "scene": {
+    "workspace_m": [5.0, 5.0],
+    "obstacle_motion": "static",
+    "interior_obstacle_radius_m": 0.2,
+    "robot_radius_m": 0.0,
+    "planning_margin_m": 0.0
+  },
+  "planner": {
+    "horizon": 10,
+    "dt": 0.1,
+    "num_samples": 512,
+    "temperature": 0.1,
+    "u_min": [-1.0, -1.0],
+    "u_max": [1.0, 1.0],
+    "noise_sigma": [0.8660254037844386, 0.8660254037844386],
+    "barrier_activation_radius": 2.0,
+    "use_polytope_barrier": true,
+    "use_goal_nominal": false,
+    "warm_start": true,
+    "centroid_gain": 0.2,
+    "centroid_smooth": 0.25,
+    "centroid_eps": 0.15,
+    "sigma_aniso": 2.5,
+    "urgency_floor": 0.02,
+    "polytope_area_sampling": false,
+    "urgency_size_diff": false,
+    "smooth_weight": 0.12,
+    "safety_margin": 0.0,
+    "barrier_extra_margin": 0.0
+  },
+  "semantics": {
+    "centroid_active_for_static_obstacles": true,
+    "centroid_smooth_meaning": "temporal low-pass on the Mode-B mixture probability across replans",
+    "centroid_eps_meaning": "denominator floor in (range - polytope_size) / (polytope_size + epsilon)",
+    "obstacle_velocity_used": false,
+    "effective_obstacle_inflation_m": 0.0
+  },
+  "data_collection": {
+    "max_steps": 800,
+    "reach_m": 0.15,
+    "retreat_weight": 0.0,
+    "max_debug_candidates": 0,
+    "max_proposals_per_step": 2,
+    "retries_per_start_gamma": 3,
+    "execute_first_action_only": true,
+    "possible_selected_plan_kinds": ["verified weighted_mean", "verified internal_best"],
+    "targets_per_executed_state": 1,
+    "selection_within_verified_cost_selected_plans": "maximum full-window progress"
+  }
+}
