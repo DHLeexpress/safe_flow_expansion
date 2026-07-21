@@ -39,6 +39,15 @@ def test_low_high_are_nonperfect_gamma_sensitive_endpoints():
     assert MODULE.choose_low_high(summaries) == (0.03, 0.9)
 
 
+def test_outcome_effect_takes_priority_over_route_only_effect():
+    summaries = {
+        0.1: _summary([0.0, 0.0, 0.0]),
+        0.7: _summary([0.1, 0.0, 0.0]),
+        0.9: _summary([0.2, 0.0, 0.0]),
+    }
+    assert MODULE.choose_low_high(summaries) == (0.7, 0.9)
+
+
 def test_route_summary_counts_both_modes():
     up = np.asarray([[0.3, 0.3], [2.0, 2.4], [4.7, 4.7]])
     right = np.asarray([[0.3, 0.3], [2.4, 2.0], [4.7, 4.7]])

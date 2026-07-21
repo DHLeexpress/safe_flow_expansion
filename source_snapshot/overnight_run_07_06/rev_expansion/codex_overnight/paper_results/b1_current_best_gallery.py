@@ -103,7 +103,8 @@ def route_summary(paths: list[np.ndarray], ambiguity: float = 0.05) -> dict[str,
 
 
 def choose_low_high(summaries: dict[float, dict[str, Any]]) -> tuple[float, float]:
-    eligible = []
+    outcome_eligible = []
+    route_eligible = []
     for coefficient, summary in summaries.items():
         if coefficient <= 0.0:
             continue
@@ -118,8 +119,11 @@ def choose_low_high(summaries: dict[float, dict[str, Any]]) -> tuple[float, floa
             max(float(cell["route_value_mean"]) for cell in cells)
             - min(float(cell["route_value_mean"]) for cell in cells)
         ) > 0.05
-        if pooled_sr < 1.0 and (outcome_effect or route_effect):
-            eligible.append(coefficient)
+        if pooled_sr < 1.0 and outcome_effect:
+            outcome_eligible.append(coefficient)
+        if pooled_sr < 1.0 and route_effect:
+            route_eligible.append(coefficient)
+    eligible = outcome_eligible if len(outcome_eligible) >= 2 else route_eligible
     if len(eligible) < 2:
         raise RuntimeError(
             "safe-coef sweep did not produce two non-perfect, gamma-sensitive rows"
@@ -416,8 +420,10 @@ def main() -> int:
             "selected_low": low_coef,
             "selected_high": high_coef,
             "selection_rule": (
-                "minimum and maximum positive coefficient with pooled SR below one and "
-                "a per-gamma outcome or closest-route-mean difference"
+                "among positive coefficients with pooled SR below one, prefer those with "
+                "a per-gamma outcome difference and take their endpoints; use a "
+                "closest-route-mean difference only if fewer than two outcome-sensitive "
+                "coefficients exist"
             ),
             "refinement_cost": "b1_safemppi at proposal ranking, perturbation weighting, and refined-mode selection",
             "important_control_note": (
