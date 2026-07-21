@@ -34,6 +34,8 @@ constitute a global homotopy or safety guarantee.
 
 ![B1_current_best: expert, pretrained, expanded, and Kazuki diagnostics](assets/results/b1_current_best/b1_current_best_5x3_gallery.png)
 
+![B1 max-margin raw trends and calibrated r15 holdout](assets/paper/b1_margin_raw_and_calibrated_trends_r0_r30.png)
+
 ## What is in this folder
 
 ```text

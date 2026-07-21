@@ -144,6 +144,12 @@ Exact recipe and metrics:
 [`configs/b1_margin_goal_recipe.json`](configs/b1_margin_goal_recipe.json) and
 [`provenance/b1_margin_goal/final_m50.jsonl`](provenance/b1_margin_goal/final_m50.jsonl).
 
+![B1 max-margin raw trends and calibrated r15 holdout](assets/paper/b1_margin_raw_and_calibrated_trends_r0_r30.png)
+
+The thin colored curves and black pooled curve are raw temperature-1 M50
+evaluations. Stars show only the separately calibrated, disjoint r15 M50
+holdout. They are intentionally not connected into the raw curves.
+
 ![B1 current-best comparison](assets/results/b1_current_best/b1_current_best_5x3_gallery.png)
 
 The 5x3 gallery uses only gamma 0.1, 0.5, and 1.0. Raw rows are fixed
