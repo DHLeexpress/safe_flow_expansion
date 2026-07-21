@@ -185,16 +185,18 @@ and
 
 The 5x3 gallery uses only gamma 0.1, 0.5, and 1.0. Raw rows are fixed
 non-curated M50 indices 0--9. A red X marks the terminal position of every
-non-successful trajectory and has no text label. The Kazuki rows use
-`goal_coef=0` and the predeclared original safety-grid endpoints
-`safe_coef=0.1` and `0.9`; both timed out in all ten diagnostic episodes. Their
-closest-obstacle route-value standard deviations were respectively 0.700 and
-0.057, so the high-safety setting visibly concentrates much more strongly. The
-zero-safety diagnostic is preserved in the gallery provenance, but it is not a
-raw-pretrained control because FlowMPPI refinement remains active.
+non-successful trajectory and has no text label. The two Kazuki-style rows use
+`goal_coef=0`, match the conditioning gamma to the displayed column, and use
+`safe_coef=0.7` and `0.9`. Generated-mode ranking, MPPI perturbation weighting,
+and refined-mode selection all call the same frozen B1 SafeMPPI plan-cost
+scorer. These coefficients were selected because their M10 outcomes—not only
+their route shapes—vary across gamma while pooled SR remains non-perfect:
+gamma 0.1 has SR 10% and 20%, whereas gamma 0.5 and 1.0 have SR 0% in both
+rows. Thus the rows deliberately expose a gamma effect; they are a diagnostic
+hybrid rather than a competitive or faithful external-method baseline.
 
 - [Vector PDF](assets/results/b1_current_best/b1_current_best_5x3_gallery.pdf)
-- [Gallery manifest and fixed rollout archives](provenance/b1_current_best/gallery/gallery_manifest.json)
+- [Native-cost gallery manifest and fixed rollout archives](provenance/b1_current_best/gallery_native_cost_v2/gallery_manifest.json)
 
 ## Paper-ready figures (2026-07-20)
 
@@ -265,8 +267,8 @@ the matching files are copied under `source_snapshot/` here.
 | `afe_signed_update.py` | NVP negative-gradient combination | task-specific terminal negative population |
 | `afe_context.py` | tie-mean closest-boundary low7 context | compresses multi-obstacle geometry into one 2-vector |
 | `paper_results/low7_raw_m50_eval.py` | raw temperature-1 holdout and metrics | legacy clearance average includes failures |
-| `paper_results/b1_current_best_gallery.py` | fixed 5x3 expert/raw/Kazuki comparison and red-X rendering | Kazuki rows are diagnostic M10 timeouts, not a competitive success baseline |
-| `kazuki_baseline.py` | faithful CFM-MPPI baseline plus an additive low7 context adapter | zero guidance still leaves MPPI refinement active |
+| `paper_results/b1_current_best_gallery.py` | fixed 5x3 expert/raw/native-cost-Kazuki comparison, coefficient sweep, and red-X rendering | Kazuki rows are diagnostic M10 results, not a competitive success baseline |
+| `kazuki_baseline.py` | CFM-MPPI baseline, low7 context adapter, and exact B1-cost refinement option | the native-cost gallery is a diagnostic hybrid; zero guidance still leaves refinement active |
 | `analysis/finalize_low7_b1_balanced_sweep.py` | no-science recovery and artifact validation | cannot restore the original exclusivity contract |
 
 ## Handoff rule
