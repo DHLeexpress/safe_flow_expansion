@@ -47,11 +47,21 @@ def series(table, rounds, gamma, metric):
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--arm", action="append", required=True, help="LABEL=JSONL")
+    parser.add_argument(
+        "--highlight", action="append", default=[],
+        help="TARGET_ARM_LABEL=JSONL; overlay separately confirmed cells as stars",
+    )
     parser.add_argument("--outdir", type=Path, required=True)
     parser.add_argument("--stem", default="b1_margin50_metric_trends")
     args = parser.parse_args()
 
     arms = [load_arm(spec) for spec in args.arm]
+    highlights = {label: (path, table, rounds) for label, path, table, rounds in (
+        load_arm(spec) for spec in args.highlight
+    )}
+    unknown = set(highlights) - {label for label, _, _, _ in arms}
+    if unknown:
+        raise ValueError(f"highlight targets are not declared arms: {sorted(unknown)}")
     args.outdir.mkdir(parents=True, exist_ok=True)
     colors = {
         gamma: plt.get_cmap("plasma")(0.08 + 0.84 * i / (len(GAMMAS) - 1))
@@ -85,6 +95,17 @@ def main() -> int:
                 rounds, pooled - pooled_se, pooled + pooled_se,
                 color="black", alpha=0.10, linewidth=0,
             )
+            if label in highlights:
+                _, highlight_table, highlight_rounds = highlights[label]
+                for gamma in GAMMAS:
+                    values, _ = series(
+                        highlight_table, highlight_rounds, gamma, metric
+                    )
+                    axis.scatter(
+                        highlight_rounds, values, marker="*", s=145,
+                        facecolor=colors[gamma], edgecolor="black", linewidth=0.7,
+                        zorder=8,
+                    )
             axis.set_title(title)
             axis.grid(alpha=0.25)
             axis.set_xlim(rounds[0] - 0.4, rounds[-1] + 0.4)
@@ -99,6 +120,12 @@ def main() -> int:
         for gamma in GAMMAS
     ]
     handles.append(plt.Line2D([0], [0], color="black", lw=3.0, label="pooled"))
+    if highlights:
+        handles.append(plt.Line2D(
+            [0], [0], marker="*", linestyle="none", markersize=12,
+            markerfacecolor="white", markeredgecolor="black",
+            label="calibrated holdout",
+        ))
     fig.legend(handles=handles, ncol=8, loc="upper center", frameon=False)
     fig.tight_layout(rect=(0, 0, 1, 0.95))
     outputs = []
@@ -110,11 +137,17 @@ def main() -> int:
     provenance = {
         "status": "B1_MARGIN50_METRIC_TRENDS_COMPLETE",
         "inputs": {label: str(path) for label, path, _, _ in arms},
+        "highlight_inputs": {
+            label: str(path) for label, (path, _, _) in highlights.items()
+        },
         "M_per_gamma": sorted({
             table[(rounds[0], GAMMAS[0])]["m"]
             for _, _, table, rounds in arms
         }),
-        "claim": "metrics-only evaluation; no trajectory archives or temperature selection",
+        "claim": (
+            "curves are raw temperature-1 metrics-only evaluation; star highlights "
+            "are separately calibrated and confirmed metrics; no trajectory archives"
+        ),
         "outputs": [str(path) for path in outputs],
     }
     sidecar = args.outdir / f"{args.stem}.json"
