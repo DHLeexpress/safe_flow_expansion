@@ -256,74 +256,120 @@ def run_raw_failure_trace(
         profile=SUPPORT.B1_HOLDOUT_PROFILE,
         study="b1",
     )
-    gamma_index = RAW.GAMMAS.index(RAW_GAMMA)
-    state = env.x0.detach().cpu().numpy().astype(np.float32).copy()
+    target_gamma_index = RAW.GAMMAS.index(RAW_GAMMA)
+    start = env.x0.detach().cpu().numpy().astype(np.float32).copy()
     goal = env.goal.detach().cpu().numpy()
     obstacles = env.obstacles.detach().cpu().numpy()
-    history: list[np.ndarray] = []
-    path = [state[:2].copy()]
+    episodes = []
+    for gamma_index, gamma in enumerate(RAW.GAMMAS):
+        for rollout_index in range(SUPPORT.B1_HOLDOUT_PROFILE.m):
+            episodes.append(
+                {
+                    "gamma_index": gamma_index,
+                    "rollout_index": rollout_index,
+                    "gamma": float(gamma),
+                    "state": start.copy(),
+                    "history": [],
+                    "status": None,
+                }
+            )
+    target = next(
+        episode
+        for episode in episodes
+        if episode["gamma_index"] == target_gamma_index
+        and episode["rollout_index"] == RAW_FAILURE_INDEX
+    )
+    path = [start[:2].copy()]
     trace: list[dict[str, Any]] = []
     for control_t in range(T):
-        record = CX.build_context(
-            state, goal, RAW_GAMMA, history, env, SCHEMA
+        active = [episode for episode in episodes if episode["status"] is None]
+        if not active:
+            break
+        grids, conditions, histories, noises = [], [], [], []
+        for episode in active:
+            record = CX.build_context(
+                episode["state"],
+                goal,
+                episode["gamma"],
+                episode["history"],
+                env,
+                SCHEMA,
+            )
+            grids.append(record.grid)
+            conditions.append(record.low5)
+            histories.append(record.hist)
+            noises.append(
+                noise[
+                    episode["gamma_index"],
+                    episode["rollout_index"],
+                    control_t,
+                ]
+            )
+        grid = torch.as_tensor(np.asarray(grids, np.float32), device=device)
+        condition = torch.as_tensor(
+            np.asarray(conditions, np.float32), device=device
         )
-        grid = torch.as_tensor(record.grid[None], device=device)
-        condition = torch.as_tensor(record.low5[None], device=device)
-        hist = torch.as_tensor(record.hist[None], device=device)
+        hist = torch.as_tensor(np.asarray(histories, np.float32), device=device)
         context = policy.ctx_from(grid, condition, hist)
-        controls = policy.sample(
-            1,
+        windows = policy.sample(
+            len(active),
             context,
             nfe=NFE,
             temp=1.0,
-            initial_noise=torch.as_tensor(
-                noise[gamma_index, RAW_FAILURE_INDEX, control_t][None],
-                device=device,
-            ),
-        )[0].detach().cpu().numpy().astype(np.float32)
-        plan = _plan_states(state, controls, float(env.dt))
-        verifier = AC.verify_plan(
-            state, controls, env, RAW_GAMMA, goal, n_theta=180
-        )
-        ok, faces, _, effective_radius = VP.certify_window(
-            plan,
-            obstacles,
-            float(env.r_robot),
-            RAW_GAMMA,
-            R=2.5,
-            n_theta=180,
-        )
-        if bool(ok) != bool(verifier["y"]):
-            raise RuntimeError("offline verifier face replay changed the full-H label")
-        trace.append(
-            {
-                "step": control_t,
-                "state": state.copy(),
-                "action": controls[0].copy(),
-                "plan": plan,
-                "verifier_positive": bool(verifier["y"]),
-                "verifier_reason": str(verifier["reason"]),
-                "verifier_faces": _serialize_faces(faces),
-                "effective_radius": float(effective_radius),
-            }
-        )
-        action = controls[0]
-        state = di_step(state, action, dt=env.dt)
-        history.append(action.copy())
-        path.append(state[:2].copy())
-        point = state[:2]
-        if np.linalg.norm(point - goal) < REACH:
-            break
-        if not GM.in_taskspace(point[None]):
-            break
-        if obstacles.size and float(
-            (
-                np.linalg.norm(point[None] - obstacles[:, :2], axis=1)
-                - obstacles[:, 2]
-                - float(env.r_robot)
-            ).min()
-        ) < 0.0:
-            break
+            initial_noise=torch.as_tensor(np.asarray(noises), device=device),
+        ).detach().cpu().numpy()
+        for episode, controls in zip(active, windows):
+            before = episode["state"].copy()
+            controls = np.asarray(controls, dtype=np.float32)
+            if episode is target:
+                plan = _plan_states(before, controls, float(env.dt))
+                verifier = AC.verify_plan(
+                    before, controls, env, RAW_GAMMA, goal, n_theta=180
+                )
+                ok, faces, _, effective_radius = VP.certify_window(
+                    plan,
+                    obstacles,
+                    float(env.r_robot),
+                    RAW_GAMMA,
+                    R=2.5,
+                    n_theta=180,
+                )
+                if bool(ok) != bool(verifier["y"]):
+                    raise RuntimeError(
+                        "offline verifier face replay changed the full-H label"
+                    )
+                trace.append(
+                    {
+                        "step": control_t,
+                        "state": before,
+                        "action": controls[0].copy(),
+                        "plan": plan,
+                        "verifier_positive": bool(verifier["y"]),
+                        "verifier_reason": str(verifier["reason"]),
+                        "verifier_faces": _serialize_faces(faces),
+                        "effective_radius": float(effective_radius),
+                    }
+                )
+            action = controls[0]
+            episode["state"] = di_step(before, action, dt=env.dt)
+            episode["history"].append(action.copy())
+            point = episode["state"][:2]
+            if episode is target:
+                path.append(point.copy())
+            if np.linalg.norm(point - goal) < REACH:
+                episode["status"] = "reached"
+            elif (point < -GM.EPS_TASK).any() or (
+                point > GM.GRID_M + GM.EPS_TASK
+            ).any():
+                episode["status"] = "oob"
+            elif obstacles.size and float(
+                (
+                    np.linalg.norm(point[None] - obstacles[:, :2], axis=1)
+                    - obstacles[:, 2]
+                    - float(env.r_robot)
+                ).min()
+            ) < 0.0:
+                episode["status"] = "collision"
     path_array = np.asarray(path, dtype=np.float32)
     archive = confirmation_cells / f"r019_g{RAW_GAMMA:.1f}.npz"
     with np.load(archive, allow_pickle=True) as stored:
