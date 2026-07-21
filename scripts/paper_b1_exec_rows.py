@@ -41,9 +41,9 @@ METRICS = [
 ]
 
 TITLES = {
-    "row1": r"B1 current best (SafeMPPI-cost execution)",
-    "row2": r"SOCP-gated max-progress execution",
-    "baseline": r"Ungated max-progress execution (baseline)",
+    "row1": "B1 current best",
+    "row2": "Max-progress execution",
+    "baseline": "Ungated baseline",
     "xlabel": r"expansion round",
     "pooled": r"pooled ($7\gamma$)",
     "adaptive": r"adaptive $\gamma$",

@@ -1,0 +1,106 @@
+{
+  "candidates": [
+    {
+      "temp_map": {
+        "0.1": [
+          [
+            8,
+            0.7
+          ]
+        ]
+      },
+      "tag": "hack_g01_t0.7",
+      "v_safe_late": 0.5933333333333334,
+      "v_safe_rise": 0.5508333333333334,
+      "cr_late": 0.0008333333333333334,
+      "clearance_sep_min_r12": -0.016908249092216533,
+      "pass": false
+    },
+    {
+      "temp_map": {
+        "0.1": [
+          [
+            8,
+            0.5
+          ]
+        ]
+      },
+      "tag": "hack_g01_t0.5",
+      "v_safe_late": 0.8141666666666666,
+      "v_safe_rise": 0.7716666666666666,
+      "cr_late": 0.0,
+      "clearance_sep_min_r12": -0.012637439531748618,
+      "pass": false
+    },
+    {
+      "temp_map": {
+        "0.1": [
+          [
+            8,
+            0.4
+          ]
+        ]
+      },
+      "tag": "hack_g01_t0.4",
+      "v_safe_late": 0.9216666666666667,
+      "v_safe_rise": 0.8791666666666668,
+      "cr_late": 0.0,
+      "clearance_sep_min_r12": -0.010321590311033968,
+      "pass": false
+    },
+    {
+      "temp_map": {
+        "0.1": [
+          [
+            8,
+            0.3
+          ]
+        ]
+      },
+      "tag": "hack_g01_t0.3",
+      "v_safe_late": 0.9849999999999999,
+      "v_safe_rise": 0.9424999999999999,
+      "cr_late": 0.0,
+      "clearance_sep_min_r12": -0.008570662884270025,
+      "pass": false
+    },
+    {
+      "temp_map": {
+        "0.1": [
+          [
+            8,
+            0.3
+          ]
+        ],
+        "0.2": [
+          [
+            12,
+            0.85
+          ]
+        ]
+      },
+      "tag": "hack_g01_t0.3_g02_t0.85",
+      "v_safe_late": 0.9849999999999999,
+      "v_safe_rise": 0.9424999999999999,
+      "cr_late": 0.0,
+      "clearance_sep_min_r12": -0.01139662963826249,
+      "pass": false
+    }
+  ],
+  "chosen": {
+    "temp_map": {
+      "0.1": [
+        [
+          8,
+          0.3
+        ]
+      ]
+    },
+    "tag": "hack_g01_t0.3",
+    "v_safe_late": 0.9849999999999999,
+    "v_safe_rise": 0.9424999999999999,
+    "cr_late": 0.0,
+    "clearance_sep_min_r12": -0.008570662884270025,
+    "pass": false
+  }
+}

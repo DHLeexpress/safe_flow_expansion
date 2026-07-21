@@ -1,0 +1,45 @@
+{
+  "temperature_schedule_cost_arm": {
+    "0.1": {
+      "8": 0.7,
+      "9": 0.5,
+      "10": 0.4,
+      "11": 0.3,
+      "12": 0.3,
+      "13": 0.3,
+      "14": 0.3,
+      "15": 0.3,
+      "16": 0.3,
+      "17": 0.2,
+      "18": 0.2,
+      "19": 0.2,
+      "20": 0.2
+    },
+    "0.2": {
+      "17": 1.2,
+      "18": 1.2,
+      "19": 1.2,
+      "20": 1.35
+    }
+  },
+  "adaptive": {
+    "alpha": 1.0,
+    "beta": 0.1
+  },
+  "inputs": {
+    "cost": [
+      "provenance/exec_rows_m200/cost_m200.jsonl",
+      "provenance/exec_rows_m200/cost_hack_splice.jsonl"
+    ],
+    "prog": [
+      "provenance/exec_rows_m200/prog_m200.jsonl",
+      "provenance/exec_rows_m200/prog_hack_g01_only.jsonl"
+    ],
+    "legacy": [
+      "provenance/exec_rows_m200/legacy_m100.jsonl"
+    ],
+    "adaptive": [
+      "provenance/exec_rows_m200/adaptive_a1_b0.1.jsonl"
+    ]
+  }
+}
