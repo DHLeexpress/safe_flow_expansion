@@ -150,6 +150,29 @@ The thin colored curves and black pooled curve are raw temperature-1 M50
 evaluations. Stars show only the separately calibrated, disjoint r15 M50
 holdout. They are intentionally not connected into the raw curves.
 
+### Fixed-temperature M200 evolution (r0--r15)
+
+The frozen temperature map above was subsequently applied unchanged to every
+checkpoint r0--r15 using one round-independent `M=200/gamma` CRN bank. This is
+bare-policy sampling: no RBF acquisition, verifier, or fallback is active.
+The r15 endpoint has 1,396/1,400 successes, 4/1,400 collisions, and 1,376/1,400
+safe trajectories. Pooled metrics move from `SR/CR/V_safe =
+0.826/0.174/0.335` at r0 to `0.997/0.0029/0.983` at r15; mean minimum clearance
+moves from 0.0288 m to 0.0620 m and successful time-to-goal from 13.26 s to
+15.64 s. Thus the M50 perfect-success endpoint becomes a 99.7% M200 estimate,
+while the requested four trends remain intact.
+
+![B1 fixed-temperature M200 trends](assets/paper/b1_margin_fixedtemp_m200_r0_r15.png)
+
+Each colored line uses the fixed `(gamma, temperature)` pair printed in the
+legend; shading is one standard error within each 200-rollout cell (time uses
+successful rollouts only). The black line is the equal-gamma pooled mean. There are no provenance
+stars because the same declared sampler is evaluated throughout the curve.
+Exact cells and the merge contract are
+[`fixedtemp_m200_r0_r15.jsonl`](provenance/b1_margin_goal/fixedtemp_m200_r0_r15.jsonl)
+and
+[`fixedtemp_m200_r0_r15.contract.json`](provenance/b1_margin_goal/fixedtemp_m200_r0_r15.contract.json).
+
 ![B1 current-best comparison](assets/results/b1_current_best/b1_current_best_5x3_gallery.png)
 
 The 5x3 gallery uses only gamma 0.1, 0.5, and 1.0. Raw rows are fixed
