@@ -20,6 +20,7 @@ SPECS = (
     ("clearance", "Min. clearance [m]", None),
     ("time", "Time-to-goal [s]", None),
 )
+Z95 = 1.959963984540054
 
 
 def load_arm(spec: str):
@@ -42,6 +43,18 @@ def series(table, rounds, gamma, metric):
     ], dtype=float)
     se = np.asarray([entry["se"] for entry in entries], dtype=float)
     return mean, se
+
+
+def interval(mean, se, metric, n):
+    if metric in {"CR", "v_safe"}:
+        denominator = 1.0 + Z95**2 / n
+        center = (mean + Z95**2 / (2.0 * n)) / denominator
+        radius = (
+            Z95 * np.sqrt(mean * (1.0 - mean) / n + Z95**2 / (4.0 * n**2))
+            / denominator
+        )
+        return center - radius, center + radius
+    return mean - Z95 * se, mean + Z95 * se
 
 
 def main() -> int:
@@ -84,16 +97,27 @@ def main() -> int:
                 gamma_means.append(mean)
                 gamma_ses.append(se)
                 axis.plot(rounds, mean, color=colors[gamma], lw=1.35, alpha=0.75)
+                lower, upper = interval(
+                    mean, se, metric,
+                    np.asarray([table[(round_i, gamma)]["m"] for round_i in rounds]),
+                )
                 axis.fill_between(
-                    rounds, mean - se, mean + se, color=colors[gamma], alpha=0.10,
+                    rounds, lower, upper, color=colors[gamma], alpha=0.18,
                     linewidth=0,
                 )
             pooled = np.nanmean(np.stack(gamma_means), axis=0)
-            pooled_se = np.sqrt(np.nanmean(np.square(np.stack(gamma_ses)), axis=0))
+            pooled_se = np.sqrt(np.nansum(np.square(np.stack(gamma_ses)), axis=0)) / len(GAMMAS)
             axis.plot(rounds, pooled, color="black", lw=3.0)
+            pooled_lower, pooled_upper = interval(
+                pooled, pooled_se, metric,
+                np.asarray([
+                    sum(table[(round_i, gamma)]["m"] for gamma in GAMMAS)
+                    for round_i in rounds
+                ]),
+            )
             axis.fill_between(
-                rounds, pooled - pooled_se, pooled + pooled_se,
-                color="black", alpha=0.10, linewidth=0,
+                rounds, pooled_lower, pooled_upper,
+                color="black", alpha=0.14, linewidth=0,
             )
             if label in highlights:
                 _, highlight_table, highlight_rounds = highlights[label]
@@ -115,21 +139,8 @@ def main() -> int:
                 axis.set_xlabel("expansion round")
         axes[row_i, 0].set_ylabel(label, fontsize=17, labelpad=12)
 
-    fixed_temps = {}
-    for gamma in GAMMAS:
-        values = {
-            float(table[(round_i, gamma)].get("temp", 1.0))
-            for _, _, table, rounds in arms for round_i in rounds
-        }
-        fixed_temps[gamma] = next(iter(values)) if len(values) == 1 else None
     handles = [
-        plt.Line2D(
-            [0], [0], color=colors[gamma], lw=2.2,
-            label=(
-                rf"$\gamma={gamma:g},\;\tau={fixed_temps[gamma]:g}$"
-                if fixed_temps[gamma] is not None else rf"$\gamma={gamma:g}$"
-            ),
-        )
+        plt.Line2D([0], [0], color=colors[gamma], lw=2.2, label=rf"$\gamma={gamma:g}$")
         for gamma in GAMMAS
     ]
     handles.append(plt.Line2D([0], [0], color="black", lw=3.0, label="pooled"))
@@ -171,6 +182,10 @@ def main() -> int:
             "curves are bare-policy metrics-only evaluation using each input row's "
             "declared sampling temperature and a round-independent CRN bank; no GP, "
             "acquisition tilt, verifier, fallback, or trajectory archive"
+        ),
+        "confidence_bands": (
+            "95% Wilson intervals for CR and V_safe; mean +/- 1.96 standard errors "
+            "for clearance and successful time-to-goal"
         ),
         "outputs": [str(path) for path in outputs],
     }
