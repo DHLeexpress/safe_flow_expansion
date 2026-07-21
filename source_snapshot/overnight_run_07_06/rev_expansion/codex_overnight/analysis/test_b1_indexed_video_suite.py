@@ -11,13 +11,13 @@ def test_markup_bank_contains_control_moderate_and_paper_horizon_equivalent():
     assert 1.05 ** 9 == pytest.approx(1.551328, rel=1.0e-6)
 
 
-def test_markup_selection_uses_lowest_mixed_success_candidate():
+def test_markup_selection_uses_best_nonperfect_success_rate():
     rows = [
         {"markup": 1.01, "sr": 0.0},
         {"markup": 1.05, "sr": 0.2},
         {"markup": 1.09, "sr": 0.4},
     ]
-    assert V.select_kazuki_markup(rows)["markup"] == pytest.approx(1.05)
+    assert V.select_kazuki_markup(rows)["markup"] == pytest.approx(1.09)
 
 
 def test_halfspace_clipping_returns_expected_square():

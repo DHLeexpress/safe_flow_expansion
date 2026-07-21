@@ -463,11 +463,11 @@ def run_kazuki_bank(
 
 
 def select_kazuki_markup(results: list[dict[str, Any]]) -> dict[str, Any]:
-    """Choose the lowest declared markup with both success and failure."""
+    """Choose the best non-perfect fixed-bank SR, preferring lower markup on ties."""
 
     mixed = [row for row in results if 0.0 < row["sr"] < 1.0]
     if mixed:
-        return min(mixed, key=lambda row: row["markup"])
+        return max(mixed, key=lambda row: (row["sr"], -row["markup"]))
     nonperfect = [row for row in results if row["sr"] < 1.0]
     if not nonperfect:
         raise RuntimeError("Kazuki markup bank produced no failure for the requested video")
@@ -687,14 +687,16 @@ def render_video(spec: VideoSpec, output_root: Path, *, stride: int, fps: int) -
             y=0.988,
         )
         axis.set_title(
-            rf"{spec.method_title}\quad $\gamma={spec.episode['gamma']:g}$"
-            rf"\quad $\mathrm{{outcome}}={outcome}$",
+            spec.method_title
+            + "\n"
+            + rf"$\gamma={spec.episode['gamma']:g}\qquad"
+            + rf"\mathrm{{outcome}}={outcome}$",
             fontsize=21,
             pad=12,
         )
         handles = [
             Line2D([], [], color="#54278f", lw=3, label="executed prefix"),
-            Line2D([], [], color="black", lw=1.8, ls="--", label="current H=10 plan"),
+            Line2D([], [], color="black", lw=1.8, ls="--", label=r"current $H=10$ plan"),
         ]
         if spec.overlay == "nominal":
             handles.append(Line2D([], [], color=BLUE, lw=2, label=r"nominal $H_P$ levels"))
@@ -916,7 +918,7 @@ def main() -> int:
                 for row in markup_results
             ],
             "selected": float(selection["markup"]),
-            "selection_rule": "lowest declared markup with at least one success and one failure; otherwise highest non-perfect SR",
+            "selection_rule": "highest non-perfect fixed-bank SR; prefer lower markup on ties",
             "refinement_cost": "exact native B1 SafeMPPI cost at all three refinement stages",
         },
         "rendered": rendered,
