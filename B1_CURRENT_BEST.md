@@ -124,6 +124,39 @@ raw-pretrained control because FlowMPPI refinement remains active.
 - [Vector PDF](assets/results/b1_current_best/b1_current_best_5x3_gallery.pdf)
 - [Gallery manifest and fixed rollout archives](provenance/b1_current_best/gallery/gallery_manifest.json)
 
+## Paper-ready figures (2026-07-20)
+
+Two scripts under `scripts/` render the camera-ready evolution and mode
+figures with serif/Computer-Modern mathtext (no TeX install required; set
+`USE_TEX=True` in the config block if LaTeX is available) into
+`assets/paper/` as PNG (300 dpi) plus vector PDF. Subplot titles, labels, and
+font sizes are collected in the `TITLES`/`FONT` dictionaries at the top of
+each script.
+
+- `scripts/paper_b1_evolution_curves.py` →
+  `b1_evolution_grid.{png,pdf}` (SR / CR / V_safe / V_full / clearance /
+  time-to-goal / U/R balance / J over rounds 0–20) and
+  `b1_evolution_compact.{png,pdf}` (J-vs-round + SR-vs-J trajectory).
+  Thin curves are the per-γ raw temperature-1 **M10 screening** of every
+  round checkpoint (`provenance/b1_current_best/screening_m10_metrics.jsonl`,
+  copied verbatim from the sweep output; provenance JSON alongside); the
+  black pooled curve carries Wilson/bootstrap bands, and the orange stars are
+  the disjoint **M50 confirmation** at r0/r19/r20 — only the stars are the
+  scientific result.
+- `scripts/paper_b1_mode_gallery.py` →
+  `b1_mode_gallery_m50.{png,pdf}`. Renders **all 50** retained raw
+  temperature-1 M50 confirmation rollouts per (round, γ) cell from
+  `provenance/b1_current_best/cells/` — the exact evaluation rollout
+  strategy, no re-rolling and no curation. Successes are classified into
+  four lanes by the signed perpendicular offset to the start–goal diagonal
+  at the closest pass to the giant obstacle (the same signed quantity behind
+  the official U/R metric), split inner/outer at |offset| = 0.7; a histogram
+  strip under each panel shows the lane clusters. At r19 all four lanes are
+  populated at every rendered γ (sharp clusters); at r0 the γ=0.5 outer
+  lanes are nearly empty (RO 2 / UO 3, 30 failures) and offsets are smeared.
+  The lane split is a declared visualization heuristic, not a homotopy
+  classification.
+
 ## Clearance definition and the apparent low-gamma discrepancy
 
 The legacy `minimum_clearance.mean` is computed in two stages:
