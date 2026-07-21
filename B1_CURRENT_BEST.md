@@ -109,6 +109,41 @@ r20 is not retroactively promoted: r19 was fixed before the disjoint holdout.
 The selected checkpoint preserves both successful route modes in this seed bank,
 unlike Phase C.
 
+## B1 max-margin metric goal (2026-07-21)
+
+An additive experiment changed only the expansion execution law to
+nominal-Hp-gated single-step maximum margin and selected the strongest declared
+B1 arm: RBF cap 768, adaptive ESS target 0.5, and signed NVP-gradient
+`alpha=0.01`. The model was trained for 50 rounds, but the pre-confirmation
+calibration selected round 15. The separate raw temperature-1 curves remain the
+intrinsic-generator audit; the result below is a **calibrated sampling policy**,
+not a temperature-1 claim.
+
+The per-gamma initial-noise temperatures were calibrated on separate M10 banks
+and then frozen before a new disjoint M50/gamma confirmation. Evaluation uses
+the bare receding-horizon flow only: no RBF acquisition, verifier, fallback, or
+expert is active at execution time.
+
+| gamma | temperature | SR | CR | V_safe | clearance [m] | time [s] |
+|---:|---:|---:|---:|---:|---:|---:|
+| 0.1 | 0.30 | 1.00 | 0.00 | 0.98 | 0.0683 | 18.86 |
+| 0.2 | 1.00 | 1.00 | 0.00 | 0.96 | 0.0678 | 16.17 |
+| 0.3 | 0.30 | 1.00 | 0.00 | 1.00 | 0.0655 | 15.34 |
+| 0.4 | 0.30 | 1.00 | 0.00 | 1.00 | 0.0657 | 15.04 |
+| 0.5 | 0.75 | 1.00 | 0.00 | 1.00 | 0.0597 | 14.89 |
+| 0.7 | 0.75 | 1.00 | 0.00 | 0.98 | 0.0526 | 14.87 |
+| 1.0 | 0.45 | 1.00 | 0.00 | 1.00 | 0.0501 | 14.50 |
+
+Thus all 350 confirmation episodes succeed without collision, `V_safe` is
+96--100%, lower gamma has higher clearance overall, and higher gamma reaches
+the goal faster. The 0.00015 m clearance inversion between gamma 0.3 and 0.4
+is much smaller than either cell's standard error and is not treated as a
+meaningful ordering violation.
+
+Exact recipe and metrics:
+[`configs/b1_margin_goal_recipe.json`](configs/b1_margin_goal_recipe.json) and
+[`provenance/b1_margin_goal/final_m50.jsonl`](provenance/b1_margin_goal/final_m50.jsonl).
+
 ![B1 current-best comparison](assets/results/b1_current_best/b1_current_best_5x3_gallery.png)
 
 The 5x3 gallery uses only gamma 0.1, 0.5, and 1.0. Raw rows are fixed

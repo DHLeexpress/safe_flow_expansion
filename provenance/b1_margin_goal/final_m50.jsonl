@@ -1,0 +1,7 @@
+{"round":15,"gamma":0.1,"temperature":0.3,"M":50,"SR":1.0,"CR":0.0,"V_safe":0.98,"minimum_clearance":0.06834498097751579,"successful_time_to_goal":18.864}
+{"round":15,"gamma":0.2,"temperature":1.0,"M":50,"SR":1.0,"CR":0.0,"V_safe":0.96,"minimum_clearance":0.06783711166015341,"successful_time_to_goal":16.174}
+{"round":15,"gamma":0.3,"temperature":0.3,"M":50,"SR":1.0,"CR":0.0,"V_safe":1.0,"minimum_clearance":0.06550958026019195,"successful_time_to_goal":15.336000000000002}
+{"round":15,"gamma":0.4,"temperature":0.3,"M":50,"SR":1.0,"CR":0.0,"V_safe":1.0,"minimum_clearance":0.06565616996257367,"successful_time_to_goal":15.036}
+{"round":15,"gamma":0.5,"temperature":0.75,"M":50,"SR":1.0,"CR":0.0,"V_safe":1.0,"minimum_clearance":0.05970409269385913,"successful_time_to_goal":14.893999999999998}
+{"round":15,"gamma":0.7,"temperature":0.75,"M":50,"SR":1.0,"CR":0.0,"V_safe":0.98,"minimum_clearance":0.05261276541725337,"successful_time_to_goal":14.87}
+{"round":15,"gamma":1.0,"temperature":0.45,"M":50,"SR":1.0,"CR":0.0,"V_safe":1.0,"minimum_clearance":0.05013087676001612,"successful_time_to_goal":14.498000000000001}
