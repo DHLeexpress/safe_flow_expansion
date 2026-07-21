@@ -30,7 +30,7 @@ _HERE = Path(__file__).resolve().parent
 _ROOT = _HERE.parent
 _REV = _ROOT.parent
 _WORK = _REV.parent
-for _path in (_WORK, _REV, _ROOT):
+for _path in (_WORK, _REV, _ROOT, _HERE):
     if str(_path) not in sys.path:
         sys.path.insert(0, str(_path))
 
