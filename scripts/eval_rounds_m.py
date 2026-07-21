@@ -73,9 +73,22 @@ def sha_seed(*parts) -> int:
     return int.from_bytes(hashlib.sha256(text.encode()).digest()[:4], "big")
 
 
-def make_bank(n_gamma: int, m: int, d: int) -> np.ndarray:
-    rng = np.random.default_rng(sha_seed(BANK_VERSION, SCENE, n_gamma, m, d))
+def make_bank(n_gamma: int, m: int, d: int, split: str = "legacy") -> np.ndarray:
+    seed_parts = (
+        (BANK_VERSION, SCENE, n_gamma, m, d)
+        if split == "legacy"
+        else (BANK_VERSION, split, SCENE, n_gamma, m, d)
+    )
+    rng = np.random.default_rng(sha_seed(*seed_parts))
     return rng.standard_normal((n_gamma, m, T, d), dtype=np.float32)
+
+
+def sha256_file(path: Path) -> str:
+    digest = hashlib.sha256()
+    with path.open("rb") as stream:
+        for chunk in iter(lambda: stream.read(1 << 20), b""):
+            digest.update(chunk)
+    return digest.hexdigest()
 
 
 # ---------------------------------------------------------------------------
@@ -312,6 +325,12 @@ def run_adaptive(policy, env, device, bank, m, alpha, beta, executor=None):
 def aggregate(rows, key_bool=("cr", "v_safe")):
     n = len(rows)
     out = {"n": n}
+    successes = sum(1 for row in rows if row["success"])
+    success_rate = successes / n
+    out["SR"] = {
+        "mean": success_rate,
+        "se": float(np.sqrt(success_rate * (1 - success_rate) / n)),
+    }
     for key in key_bool:
         k = sum(1 for r in rows if r[key])
         p = k / n
@@ -344,6 +363,14 @@ def main() -> int:
     parser.add_argument("--device", default="cuda")
     parser.add_argument("--outdir", type=Path, required=True)
     parser.add_argument("--tag", default="eval")
+    parser.add_argument(
+        "--bank-split", default="legacy",
+        help="declared CRN split name; use different names for calibration and evaluation",
+    )
+    parser.add_argument(
+        "--fail-closed", action="store_true",
+        help="require absent metric/contract outputs and write them exactly once",
+    )
     args = parser.parse_args()
 
     import torch  # noqa: F401  (after CUDA_VISIBLE_DEVICES is set by caller)
@@ -363,23 +390,31 @@ def main() -> int:
     env = build_scene(get_scene_profile(SCENE))
     args.outdir.mkdir(parents=True, exist_ok=True)
     out_path = args.outdir / f"{args.tag}.jsonl"
+    contract_path = args.outdir / f"{args.tag}.contract.json"
+    if args.fail_closed and (out_path.exists() or contract_path.exists()):
+        raise FileExistsError(f"refusing stale evaluation output: {out_path}")
     probe_policy, _ = HP.load_hp(str(args.arm_dir / f"ckpt_{rounds[0]}.pt"), device="cpu")
     d = int(probe_policy.d)
     if adaptive:
-        bank = make_bank(1, args.m, d)
+        bank = make_bank(1, args.m, d, args.bank_split)
     else:
         # Always generate the full 7-gamma bank and slice canonical slots so a
         # single-gamma re-evaluation (temperature overrides) reuses exactly the
         # same noise as the full run -- no seed discontinuity when splicing.
-        full = make_bank(len(GAMMAS), args.m, d)
+        full = make_bank(len(GAMMAS), args.m, d, args.bank_split)
         bank = full[[GAMMAS.index(g) for g in gammas]]
+
+    checkpoint_hashes = {
+        str(round_i): sha256_file(args.arm_dir / f"ckpt_{round_i}.pt")
+        for round_i in rounds
+    }
 
     context = mp.get_context("spawn")
     t0 = time.time()
     with ProcessPoolExecutor(
         max_workers=args.workers, mp_context=context,
         initializer=M20._worker_init, initargs=(SCENE, REACH, N_THETA),
-    ) as executor, out_path.open("a") as stream:
+    ) as executor, out_path.open("x" if args.fail_closed else "a") as stream:
         for round_i in rounds:
             policy, _ = HP.load_hp(str(args.arm_dir / f"ckpt_{round_i}.pt"), device="cpu")
             policy = policy.to(args.device).eval()
@@ -445,6 +480,29 @@ def main() -> int:
                       f"clr {record['clearance']['mean']:.4f} time {record['time']['mean']} "
                       f"gamma_mean {record['gamma_mean']:.3f}", flush=True)
             print(f"[{args.tag}] r{round_i:02d} done at {time.time()-t0:.0f}s", flush=True)
+    contract = {
+        "status": "B1_METRICS_ONLY_EVALUATION_COMPLETE",
+        "raw_policy": "bare receding-horizon flow; no GP, tilt, verifier, or fallback",
+        "arm_dir": str(args.arm_dir.resolve()),
+        "rounds": rounds,
+        "gammas": list(gammas),
+        "M_per_gamma": args.m,
+        "NFE": NFE,
+        "temperature_map": temp_map,
+        "adaptive": adaptive,
+        "bank_version": BANK_VERSION,
+        "bank_split": args.bank_split,
+        "bank_sha256": hashlib.sha256(bank.tobytes(order="C")).hexdigest(),
+        "checkpoint_sha256": checkpoint_hashes,
+        "metrics": str(out_path.resolve()),
+        "metrics_sha256": sha256_file(out_path),
+        "elapsed_seconds": time.time() - t0,
+        "trajectories_persisted": False,
+    }
+    mode = "x" if args.fail_closed else "w"
+    with contract_path.open(mode) as stream:
+        json.dump(contract, stream, indent=2, sort_keys=True)
+        stream.write("\n")
     return 0
 
 
