@@ -11,8 +11,8 @@ NO flow expansion. Faithful to external_data/kazuki_cfm_mppi (file:line refs bel
     - r_safe = sum_t min{0, hdot + a_cbf*h},  h = ||p-p_o||^2 - r^2, a_cbf=1.0; K=5 worst obstacles by cbf
       value, weighted [5,4,3,2,1]; r_goal = -||p_T - goal|| (terminal).
   select + refine (FlowMPPI)  mppi/flowmppi.py:144-314
-    - stage cost = 0.1*goal_dist + 100*(1+0.99^t)*sum_obs clamp(exp(-20*(d - r)),max=1) (utils.py:69-98)
-      + terminal 0.1*||p_T-goal|| + 0.1*||u - prev||^2 warm-start consistency
+    - proposal ranking, perturbation weighting, and refined-mode selection all
+      use our frozen B1 SafeMPPI cost (afe_execution.safemppi_plan_costs)
     - top-10 elite -> 200 Gaussian perturbations each (sigma scaled to our u_max: 0.4/2*1=0.2), clamp [-1,1],
       per-mode softmax (lambda=0.1) -> refit; execute argmin refined mode's first action.
   dilution / warm-start   eval_cfm_mppi_*.py:187-201
@@ -40,6 +40,7 @@ import grid_feats as GF
 import grid_hp_expt as HP
 import sr_cr_eval as SR
 import grid_metrics as GM
+import afe_execution as EX
 
 NFE = 8                              # OUR linear ODE schedule (user caveat 2): knots i/8, i=0..8
 ODE_TIMES_FULL = [i / NFE for i in range(NFE + 1)]
@@ -58,6 +59,7 @@ MPPI_LAMBDA = 0.1
 MPPI_SIGMA = 0.2                     # their DI sigma 0.4 with u_max 2 -> scaled to our u_max 1
 MARKUP = 1.01
 R_MARGIN = 0.05
+REFINEMENT_COST = "b1_safemppi"
 
 
 def obstacle_collision_radii(obs, robot_radius, margin, *, device, dtype=torch.float32):
@@ -113,6 +115,14 @@ def stage_cost_batch(pos, U, goal_t, obs_xy, r_col, prev_U=None):
     return cost
 
 
+def refinement_cost_batch(state, U, pos, env):
+    """Exact frozen B1 SafeMPPI cost used at every refinement ranking stage."""
+    if REFINEMENT_COST != "b1_safemppi":
+        raise ValueError(f"unsupported refinement cost: {REFINEMENT_COST}")
+    costs = EX.safemppi_plan_costs(state, U, pos, env)
+    return torch.as_tensor(costs, dtype=U.dtype, device=U.device)
+
+
 def guided_generate(policy, ctx, state, goal_t, obs_xy, r_col, dt, z_init, taus, safe_coef, device,
                     ret_guidance=False):
     """run_CFM:17-81 on our FM. z [N,d] flow var (=U/u_max flat); taus = knots list starting at current tau."""
@@ -145,11 +155,12 @@ def guided_generate(policy, ctx, state, goal_t, obs_xy, r_col, dt, z_init, taus,
     return z                                                                    # ~x1 in flow space
 
 
-def flow_mppi_refine(policy, state, goal_t, obs_xy, r_col, dt, U_gen, prev_U, device, ret_viz=False):
+def flow_mppi_refine(policy, state, goal_t, obs_xy, r_col, dt, U_gen, prev_U,
+                     env, device, ret_viz=False):
     """flowmppi.py:144-314: elite select -> perturb -> per-mode softmax -> best refined."""
     with torch.no_grad():
         pos, _ = di_rollout_t(state, U_gen, dt)
-        costs = stage_cost_batch(pos, U_gen, goal_t, obs_xy, r_col, prev_U)
+        costs = refinement_cost_batch(state, U_gen, pos, env)
         _, top = torch.topk(costs, k=min(N_ELITE, U_gen.shape[0]), largest=False)
         elites = U_gen[top]                                                    # [E,H,2]
         E = elites.shape[0]
@@ -157,12 +168,12 @@ def flow_mppi_refine(policy, state, goal_t, obs_xy, r_col, dt, U_gen, prev_U, de
         pert = pert + MPPI_SIGMA * torch.randn_like(pert)
         pert = torch.clamp(pert, -policy.u_max, policy.u_max)
         posP, _ = di_rollout_t(state, pert, dt)
-        cP = stage_cost_batch(posP, pert, goal_t, obs_xy, r_col, prev_U).reshape(E, N_COPY)
+        cP = refinement_cost_batch(state, pert, posP, env).reshape(E, N_COPY)
         b, _ = cP.min(dim=1, keepdim=True)
         w = torch.softmax(-(cP - b) / MPPI_LAMBDA, dim=1)                      # [E,C]
         refined = (w[:, :, None, None] * pert.reshape(E, N_COPY, *pert.shape[1:])).sum(1)   # [E,H,2]
         posR, _ = di_rollout_t(state, refined, dt)
-        cR = stage_cost_batch(posR, refined, goal_t, obs_xy, r_col, prev_U)
+        cR = refinement_cost_batch(state, refined, posR, env)
         best = int(torch.argmin(cR))
     if ret_viz:                                                               # windows as PLANNED POSITIONS
         gen_pos, _ = di_rollout_t(state, U_gen, dt)
@@ -228,10 +239,16 @@ def kazuki_deploy(policy, env, safe_coefs, gamma_ctx=0.5, T=250, reach=0.1,
             z1 = guided_generate(policy, ctx, st, goal_t, obs_xy, r_col, env.dt, z, taus, sc, device)
         U_gen = torch.clamp(z1.reshape(N_SAMPLE, H, 2) * policy.u_max, -policy.u_max, policy.u_max)
         if rec is not None:
-            U_best, vz = flow_mppi_refine(policy, st, goal_t, obs_xy, r_col, env.dt, U_gen, prev_U, device, ret_viz=True)
+            U_best, vz = flow_mppi_refine(
+                policy, st, goal_t, obs_xy, r_col, env.dt, U_gen, prev_U,
+                env, device, ret_viz=True,
+            )
             rec.append(dict(state=st.copy(), guidance=guide[:, 0].cpu().numpy(), **vz))
         else:
-            U_best = flow_mppi_refine(policy, st, goal_t, obs_xy, r_col, env.dt, U_gen, prev_U, device)
+            U_best = flow_mppi_refine(
+                policy, st, goal_t, obs_xy, r_col, env.dt, U_gen, prev_U,
+                env, device,
+            )
         a = U_best[0].detach().cpu().numpy()
         # execute first action (di_step)
         st = np.array([st[0] + env.dt * st[2] + 0.5 * env.dt ** 2 * a[0],
@@ -314,7 +331,8 @@ def main():
         torch.save(dict(rec=rec, path=out["path"], reached=out["reached"], collided=out["collided"],
                         gamma_ctx=args.gamma_ctx, w_safe=coefs, coll_w=COLL_W, goal_w=GOAL_W,
                         goal_coef=GOAL_COEF, beta_mppi=BETA_MPPI, mppi_lambda=MPPI_LAMBDA,
-                        mppi_sigma=MPPI_SIGMA, r_margin=R_MARGIN), args.viz_out)
+                        mppi_sigma=MPPI_SIGMA, r_margin=R_MARGIN,
+                        refinement_cost=REFINEMENT_COST), args.viz_out)
         print(f"[viz] {len(rec)} steps recorded -> {args.viz_out} (reached={out['reached']} coll={out['collided']})", flush=True)
         return
     n_reach = n_coll = 0; steps = []; paths = []
@@ -329,7 +347,8 @@ def main():
               f"({(time.time()-t0)/(m+1):.1f}s/ep)", flush=True)
     config = dict(w_safe=coefs, gamma_ctx=args.gamma_ctx, coll_w=COLL_W, goal_w=GOAL_W,
                   goal_coef=GOAL_COEF, beta_mppi=BETA_MPPI, mppi_lambda=MPPI_LAMBDA,
-                  mppi_sigma=MPPI_SIGMA, r_margin=R_MARGIN, n_sample=N_SAMPLE,
+                  mppi_sigma=MPPI_SIGMA, r_margin=R_MARGIN,
+                  refinement_cost=REFINEMENT_COST, n_sample=N_SAMPLE,
                   n_elite=N_ELITE, n_copy=N_COPY)
     res = dict(tag=args.tag, **config, M=args.M,
                SR=n_reach / args.M, CR=n_coll / args.M, mean_steps=float(np.mean(steps)),

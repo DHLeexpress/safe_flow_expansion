@@ -36,7 +36,7 @@ from afe2_scene_profiles import build_scene, get_scene_profile, scene_snapshot
 
 GAMMAS = (0.1, 0.5, 1.0)
 FIXED_INDICES = tuple(range(10))
-METRIC_VERSION = "b1_current_best_gallery_v1"
+METRIC_VERSION = "b1_current_best_gallery_native_cost_v2"
 STATE_DOT_STRIDE = 8
 
 
@@ -97,15 +97,34 @@ def route_summary(paths: list[np.ndarray], ambiguity: float = 0.05) -> dict[str,
         "r_count": r_count,
         "ambiguous_count": int(len(values) - resolved),
         "balance": float(balance),
+        "route_value_mean": float(values.mean()),
         "route_value_std": float(values.std()),
     }
 
 
-def choose_low_high(summaries: dict[float, dict[str, float | int]]) -> tuple[float, float]:
-    positive = sorted(coef for coef in summaries if coef > 0.0)
-    if len(positive) < 2:
-        raise ValueError("at least two positive safety coefficients are required")
-    return positive[0], positive[-1]
+def choose_low_high(summaries: dict[float, dict[str, Any]]) -> tuple[float, float]:
+    eligible = []
+    for coefficient, summary in summaries.items():
+        if coefficient <= 0.0:
+            continue
+        pooled_sr = float(summary["pooled"]["sr"])
+        cells = list(summary["per_gamma"].values())
+        outcome_effect = any(
+            max(float(cell[key]) for cell in cells)
+            > min(float(cell[key]) for cell in cells)
+            for key in ("sr", "cr", "timeout")
+        )
+        route_effect = (
+            max(float(cell["route_value_mean"]) for cell in cells)
+            - min(float(cell["route_value_mean"]) for cell in cells)
+        ) > 0.05
+        if pooled_sr < 1.0 and (outcome_effect or route_effect):
+            eligible.append(coefficient)
+    if len(eligible) < 2:
+        raise RuntimeError(
+            "safe-coef sweep did not produce two non-perfect, gamma-sensitive rows"
+        )
+    return min(eligible), max(eligible)
 
 
 def raw_cell(confirmation: Path, round_i: int, gamma: float) -> tuple[list[np.ndarray], list[str]]:
@@ -132,13 +151,19 @@ def load_reused_expert(root: Path) -> dict[float, tuple[list[np.ndarray], list[s
     return cells
 
 
-def load_reused_kazuki(root: Path, coefficient: float) -> tuple[list[np.ndarray], list[str]]:
+def load_reused_kazuki(
+    root: Path, coefficient: float,
+) -> dict[float, tuple[list[np.ndarray], list[str]]]:
     path = root / f"kazuki_ws_{coefficient:g}.npz"
+    cells = {}
     with np.load(path, allow_pickle=True) as archive:
-        return (
-            [np.asarray(value, dtype=np.float32) for value in archive["paths"]],
-            [str(value) for value in archive["outcomes"]],
-        )
+        for gamma in GAMMAS:
+            suffix = f"g{gamma:g}"
+            cells[gamma] = (
+                [np.asarray(value, dtype=np.float32) for value in archive[f"paths_{suffix}"]],
+                [str(value) for value in archive[f"outcomes_{suffix}"]],
+            )
+    return cells
 
 
 def run_expert(env: Any, gamma: float, m: int, t_cap: int, reach: float) -> tuple[list[np.ndarray], list[str]]:
@@ -196,16 +221,16 @@ def configure_kazuki() -> Any:
     return baseline
 
 
-def run_kazuki(policy: Any, env: Any, safe_coef: float, m: int, t_cap: int,
-               reach: float, device: str) -> tuple[list[np.ndarray], list[str]]:
+def run_kazuki(policy: Any, env: Any, safe_coef: float, gamma: float, m: int,
+               t_cap: int, reach: float, device: str) -> tuple[list[np.ndarray], list[str]]:
     baseline = configure_kazuki()
     paths: list[np.ndarray] = []
     outcomes: list[str] = []
     for rollout_index in range(m):
-        seed = named_seed(METRIC_VERSION, "kazuki", rollout_index)
+        seed = named_seed(METRIC_VERSION, "kazuki", gamma, rollout_index)
         seed_all(seed)
         output = baseline.kazuki_deploy(
-            policy, env, [safe_coef], gamma_ctx=0.5, T=t_cap, reach=reach,
+            policy, env, [safe_coef], gamma_ctx=gamma, T=t_cap, reach=reach,
             device=device, seed=seed,
             conditioning_schema="low7_closest_boundary_tie_mean",
         )
@@ -256,8 +281,12 @@ def main() -> int:
         help="reuse an authenticated diagnostic directory; render only, no new expert/Kazuki rollout",
     )
     parser.add_argument(
+        "--reuse-expert", type=Path, default=None,
+        help="reuse only expert.npz while regenerating the gamma-conditioned Kazuki sweep",
+    )
+    parser.add_argument(
         "--safe-coef-candidates", type=float, nargs="+",
-        default=[0.0, 0.1, 0.9],
+        default=[0.0, 0.1, 0.3, 0.5, 0.7, 0.9],
     )
     args = parser.parse_args()
     if args.m != len(FIXED_INDICES):
@@ -272,30 +301,48 @@ def main() -> int:
     policy, _ = load_hp(str(args.pretrained_ckpt), device="cpu")
     policy = policy.to(args.device).eval()
 
-    if args.reuse_rollouts is None:
+    if args.reuse_rollouts is None and args.reuse_expert is None:
         expert: dict[float, tuple[list[np.ndarray], list[str]]] = {}
         for gamma in GAMMAS:
             expert[gamma] = run_expert(env, gamma, args.m, args.T, args.reach)
     else:
-        expert = load_reused_expert(args.reuse_rollouts)
+        expert = load_reused_expert(
+            args.reuse_rollouts if args.reuse_rollouts is not None else args.reuse_expert
+        )
 
-    kazuki: dict[float, tuple[list[np.ndarray], list[str]]] = {}
-    summaries: dict[float, dict[str, float | int]] = {}
+    kazuki: dict[float, dict[float, tuple[list[np.ndarray], list[str]]]] = {}
+    summaries: dict[float, dict[str, Any]] = {}
     for coefficient in args.safe_coef_candidates:
-        if args.reuse_rollouts is None:
-            paths, outcomes = run_kazuki(
-                policy, env, coefficient, args.m, args.T, args.reach, args.device,
-            )
+        if args.reuse_rollouts is not None:
+            cells = load_reused_kazuki(args.reuse_rollouts, coefficient)
         else:
-            paths, outcomes = load_reused_kazuki(args.reuse_rollouts, coefficient)
-        kazuki[coefficient] = (paths, outcomes)
-        summary = route_summary(paths)
-        summary.update({
-            "sr": int(sum(outcome == "SR" for outcome in outcomes)) / args.m,
-            "cr": int(sum(outcome == "CR" for outcome in outcomes)) / args.m,
-            "timeout": int(sum(outcome == "TO" for outcome in outcomes)) / args.m,
+            cells = {
+                gamma: run_kazuki(
+                    policy, env, coefficient, gamma, args.m, args.T,
+                    args.reach, args.device,
+                )
+                for gamma in GAMMAS
+            }
+        kazuki[coefficient] = cells
+        per_gamma = {}
+        pooled_paths, pooled_outcomes = [], []
+        for gamma, (paths, outcomes) in cells.items():
+            pooled_paths.extend(paths)
+            pooled_outcomes.extend(outcomes)
+            cell_summary = route_summary(paths)
+            cell_summary.update({
+                "sr": sum(outcome == "SR" for outcome in outcomes) / args.m,
+                "cr": sum(outcome == "CR" for outcome in outcomes) / args.m,
+                "timeout": sum(outcome == "TO" for outcome in outcomes) / args.m,
+            })
+            per_gamma[f"{gamma:g}"] = cell_summary
+        pooled = route_summary(pooled_paths)
+        pooled.update({
+            "sr": sum(outcome == "SR" for outcome in pooled_outcomes) / len(pooled_outcomes),
+            "cr": sum(outcome == "CR" for outcome in pooled_outcomes) / len(pooled_outcomes),
+            "timeout": sum(outcome == "TO" for outcome in pooled_outcomes) / len(pooled_outcomes),
         })
-        summaries[coefficient] = summary
+        summaries[coefficient] = {"per_gamma": per_gamma, "pooled": pooled}
     low_coef, high_coef = choose_low_high(summaries)
 
     raw0 = {gamma: raw_cell(args.confirmation, 0, gamma) for gamma in GAMMAS}
@@ -304,8 +351,8 @@ def main() -> int:
         (r"SafeMPPI expert", expert),
         (r"Pretrained", raw0),
         (r"B1 current best", raw19),
-        (rf"CFM--MPPI$^*$, $w_s={low_coef:g}$", {g: kazuki[low_coef] for g in GAMMAS}),
-        (rf"CFM--MPPI$^*$, $w_s={high_coef:g}$", {g: kazuki[high_coef] for g in GAMMAS}),
+        (rf"CFM--MPPI$^*$, $w_s={low_coef:g}$", kazuki[low_coef]),
+        (rf"CFM--MPPI$^*$, $w_s={high_coef:g}$", kazuki[high_coef]),
     ]
     fig, axes = plt.subplots(5, 3, figsize=(15.0, 23.0), squeeze=False)
     for row_index, (label, cells) in enumerate(rows):
@@ -333,12 +380,16 @@ def main() -> int:
             payload[f"outcomes_g{gamma:g}"] = np.asarray(outcomes)
         np.savez_compressed(args.outdir / f"{label}.npz", **payload)
     for coefficient in args.safe_coef_candidates:
-        paths, outcomes = kazuki[coefficient]
-        object_paths = np.empty(len(paths), dtype=object)
-        object_paths[:] = paths
+        payload = {}
+        for gamma, (paths, outcomes) in kazuki[coefficient].items():
+            object_paths = np.empty(len(paths), dtype=object)
+            object_paths[:] = paths
+            suffix = f"g{gamma:g}"
+            payload[f"paths_{suffix}"] = object_paths
+            payload[f"outcomes_{suffix}"] = np.asarray(outcomes)
         np.savez_compressed(
             args.outdir / f"kazuki_ws_{coefficient:g}.npz",
-            paths=object_paths, outcomes=np.asarray(outcomes),
+            **payload,
         )
 
     manifest = {
@@ -351,19 +402,20 @@ def main() -> int:
         "raw_rule": "first ten fixed indices from each authenticated disjoint M50 cell; no outcome curation",
         "failure_marker": "red X at terminal position for CR or timeout; no text label",
         "kazuki_definition": {
-            "gamma_ctx": 0.5,
+            "gamma_ctx": "matched to each displayed gamma",
             "conditioning_schema": "low7_closest_boundary_tie_mean",
             "goal_coef": 0.0,
             "safe_coef_candidates": args.safe_coef_candidates,
             "selected_low": low_coef,
             "selected_high": high_coef,
             "selection_rule": (
-                "predeclared original Kazuki safety-grid endpoints: minimum and maximum "
-                "positive candidate; summaries are diagnostic and never select the rows"
+                "minimum and maximum positive coefficient with pooled SR below one and "
+                "a per-gamma outcome or closest-route-mean difference"
             ),
+            "refinement_cost": "b1_safemppi at proposal ranking, perturbation weighting, and refined-mode selection",
             "important_control_note": (
-                "goal_coef=safe_coef=0 is not raw pretrained: FlowMPPI elite selection, "
-                "perturbation, collision/goal costs, and warm start remain active"
+                "goal_coef=safe_coef=0 is not raw pretrained: B1-SafeMPPI-cost elite "
+                "selection, perturbation, and warm start remain active"
             ),
             "summaries": {str(key): value for key, value in summaries.items()},
         },
@@ -371,11 +423,17 @@ def main() -> int:
         "pretrained_checkpoint_sha256": sha256_file(args.pretrained_ckpt),
         "confirmation": str(args.confirmation),
         "rollout_source": (
-            "new named fixed seeds" if args.reuse_rollouts is None
-            else f"reused without regeneration from {args.reuse_rollouts}"
+            f"reused all rollouts without regeneration from {args.reuse_rollouts}"
+            if args.reuse_rollouts is not None
+            else (
+                f"expert reused from {args.reuse_expert}; Kazuki regenerated with named fixed seeds"
+                if args.reuse_expert is not None else "new named fixed seeds"
+            )
         ),
         "reused_rollout_sha256": (
-            None if args.reuse_rollouts is None else {
+            ({"expert.npz": sha256_file(args.reuse_expert / "expert.npz")}
+             if args.reuse_rollouts is None and args.reuse_expert is not None else
+             None if args.reuse_rollouts is None else {
                 "expert.npz": sha256_file(args.reuse_rollouts / "expert.npz"),
                 **{
                     f"kazuki_ws_{coefficient:g}.npz": sha256_file(
@@ -383,7 +441,7 @@ def main() -> int:
                     )
                     for coefficient in args.safe_coef_candidates
                 },
-            }
+            })
         ),
         "outputs": outputs,
     }
