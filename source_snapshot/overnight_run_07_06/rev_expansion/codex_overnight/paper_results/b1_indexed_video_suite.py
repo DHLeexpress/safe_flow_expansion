@@ -768,7 +768,12 @@ def main() -> int:
     parser.add_argument("--confirmation-cells", type=Path, required=True)
     parser.add_argument("--outdir", type=Path, required=True)
     parser.add_argument("--device", default="cuda")
-    parser.add_argument("--expert-ood-gamma", type=float, choices=(0.5, 1.0), default=0.5)
+    parser.add_argument(
+        "--expert-ood-gamma",
+        type=float,
+        choices=(0.2, 0.3, 0.4, 0.5, 0.7, 1.0),
+        default=0.5,
+    )
     parser.add_argument("--expert-ood-failure-index", type=int, default=None)
     parser.add_argument("--expert-search-size", type=int, default=100)
     parser.add_argument("--kazuki-m", type=int, default=10)
