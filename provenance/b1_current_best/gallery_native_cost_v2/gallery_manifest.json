@@ -1,0 +1,350 @@
+{
+  "confirmation": "/home/dohyun/projects/afe2_runs/low7_b1_balanced_sweep_63ebefa/confirmation",
+  "failure_marker": "red X at terminal position for CR or timeout; no text label",
+  "fixed_indices": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9
+  ],
+  "gammas": [
+    0.1,
+    0.5,
+    1.0
+  ],
+  "kazuki_definition": {
+    "conditioning_schema": "low7_closest_boundary_tie_mean",
+    "gamma_ctx": "matched to each displayed gamma",
+    "goal_coef": 0.0,
+    "important_control_note": "goal_coef=safe_coef=0 is not raw pretrained: B1-SafeMPPI-cost elite selection, perturbation, and warm start remain active",
+    "refinement_cost": "b1_safemppi at proposal ranking, perturbation weighting, and refined-mode selection",
+    "safe_coef_candidates": [
+      0.0,
+      0.1,
+      0.3,
+      0.5,
+      0.7,
+      0.9
+    ],
+    "selected_high": 0.9,
+    "selected_low": 0.7,
+    "selection_rule": "among positive coefficients with pooled SR below one, prefer those with a per-gamma outcome difference and take their endpoints; use a closest-route-mean difference only if fewer than two outcome-sensitive coefficients exist",
+    "summaries": {
+      "0.0": {
+        "per_gamma": {
+          "0.1": {
+            "ambiguous_count": 2,
+            "balance": 0.5,
+            "cr": 1.0,
+            "r_count": 2,
+            "route_value_mean": 0.0964837908744812,
+            "route_value_std": 0.1496723939670574,
+            "sr": 0.0,
+            "timeout": 0.0,
+            "u_count": 6
+          },
+          "0.5": {
+            "ambiguous_count": 5,
+            "balance": 0.8,
+            "cr": 1.0,
+            "r_count": 3,
+            "route_value_mean": -0.014698362350463868,
+            "route_value_std": 0.10358116667736698,
+            "sr": 0.0,
+            "timeout": 0.0,
+            "u_count": 2
+          },
+          "1": {
+            "ambiguous_count": 1,
+            "balance": 0.6666666666666666,
+            "cr": 1.0,
+            "r_count": 3,
+            "route_value_mean": 0.05200288891792297,
+            "route_value_std": 0.3479989802386193,
+            "sr": 0.0,
+            "timeout": 0.0,
+            "u_count": 6
+          }
+        },
+        "pooled": {
+          "ambiguous_count": 8,
+          "balance": 0.7272727272727273,
+          "cr": 1.0,
+          "r_count": 8,
+          "route_value_mean": 0.0445961058139801,
+          "route_value_std": 0.23129865261531773,
+          "sr": 0.0,
+          "timeout": 0.0,
+          "u_count": 14
+        }
+      },
+      "0.1": {
+        "per_gamma": {
+          "0.1": {
+            "ambiguous_count": 2,
+            "balance": 0.75,
+            "cr": 1.0,
+            "r_count": 3,
+            "route_value_mean": 0.10843133330345153,
+            "route_value_std": 0.2899586996206006,
+            "sr": 0.0,
+            "timeout": 0.0,
+            "u_count": 5
+          },
+          "0.5": {
+            "ambiguous_count": 0,
+            "balance": 1.0,
+            "cr": 1.0,
+            "r_count": 5,
+            "route_value_mean": -0.020048689842224122,
+            "route_value_std": 0.26713897741531245,
+            "sr": 0.0,
+            "timeout": 0.0,
+            "u_count": 5
+          },
+          "1": {
+            "ambiguous_count": 2,
+            "balance": 0.5,
+            "cr": 1.0,
+            "r_count": 2,
+            "route_value_mean": 0.09823279976844787,
+            "route_value_std": 0.2446138084534383,
+            "sr": 0.0,
+            "timeout": 0.0,
+            "u_count": 6
+          }
+        },
+        "pooled": {
+          "ambiguous_count": 4,
+          "balance": 0.7692307692307693,
+          "cr": 1.0,
+          "r_count": 10,
+          "route_value_mean": 0.062205147743225095,
+          "route_value_std": 0.2741506530879791,
+          "sr": 0.0,
+          "timeout": 0.0,
+          "u_count": 16
+        }
+      },
+      "0.3": {
+        "per_gamma": {
+          "0.1": {
+            "ambiguous_count": 1,
+            "balance": 0.2222222222222222,
+            "cr": 1.0,
+            "r_count": 1,
+            "route_value_mean": 0.12255933284759521,
+            "route_value_std": 0.11844866444064607,
+            "sr": 0.0,
+            "timeout": 0.0,
+            "u_count": 8
+          },
+          "0.5": {
+            "ambiguous_count": 4,
+            "balance": 1.0,
+            "cr": 1.0,
+            "r_count": 3,
+            "route_value_mean": -0.05006959438323975,
+            "route_value_std": 0.18912785905037258,
+            "sr": 0.0,
+            "timeout": 0.0,
+            "u_count": 3
+          },
+          "1": {
+            "ambiguous_count": 3,
+            "balance": 0.2857142857142857,
+            "cr": 1.0,
+            "r_count": 1,
+            "route_value_mean": 0.1445818603038788,
+            "route_value_std": 0.3050382964929882,
+            "sr": 0.0,
+            "timeout": 0.0,
+            "u_count": 6
+          }
+        },
+        "pooled": {
+          "ambiguous_count": 8,
+          "balance": 0.45454545454545453,
+          "cr": 1.0,
+          "r_count": 5,
+          "route_value_mean": 0.07235719958941142,
+          "route_value_std": 0.23492748610688996,
+          "sr": 0.0,
+          "timeout": 0.0,
+          "u_count": 17
+        }
+      },
+      "0.5": {
+        "per_gamma": {
+          "0.1": {
+            "ambiguous_count": 0,
+            "balance": 0.6,
+            "cr": 1.0,
+            "r_count": 3,
+            "route_value_mean": 0.11391194462776184,
+            "route_value_std": 0.3258793728419563,
+            "sr": 0.0,
+            "timeout": 0.0,
+            "u_count": 7
+          },
+          "0.5": {
+            "ambiguous_count": 0,
+            "balance": 0.8,
+            "cr": 1.0,
+            "r_count": 4,
+            "route_value_mean": 0.11524925231933594,
+            "route_value_std": 0.31655306518534027,
+            "sr": 0.0,
+            "timeout": 0.0,
+            "u_count": 6
+          },
+          "1": {
+            "ambiguous_count": 1,
+            "balance": 0.8888888888888888,
+            "cr": 1.0,
+            "r_count": 4,
+            "route_value_mean": -0.018683624267578126,
+            "route_value_std": 0.21805796420487822,
+            "sr": 0.0,
+            "timeout": 0.0,
+            "u_count": 5
+          }
+        },
+        "pooled": {
+          "ambiguous_count": 1,
+          "balance": 0.7586206896551724,
+          "cr": 1.0,
+          "r_count": 11,
+          "route_value_mean": 0.07015919089317321,
+          "route_value_std": 0.297653572339691,
+          "sr": 0.0,
+          "timeout": 0.0,
+          "u_count": 18
+        }
+      },
+      "0.7": {
+        "per_gamma": {
+          "0.1": {
+            "ambiguous_count": 0,
+            "balance": 0.6,
+            "cr": 0.9,
+            "r_count": 3,
+            "route_value_mean": 0.16944547295570372,
+            "route_value_std": 0.6707702003326614,
+            "sr": 0.1,
+            "timeout": 0.0,
+            "u_count": 7
+          },
+          "0.5": {
+            "ambiguous_count": 1,
+            "balance": 0.8888888888888888,
+            "cr": 1.0,
+            "r_count": 4,
+            "route_value_mean": -0.046359896659851074,
+            "route_value_std": 0.3212120885429821,
+            "sr": 0.0,
+            "timeout": 0.0,
+            "u_count": 5
+          },
+          "1": {
+            "ambiguous_count": 1,
+            "balance": 0.6666666666666666,
+            "cr": 1.0,
+            "r_count": 3,
+            "route_value_mean": -0.022755855321884157,
+            "route_value_std": 0.5352652640473028,
+            "sr": 0.0,
+            "timeout": 0.0,
+            "u_count": 6
+          }
+        },
+        "pooled": {
+          "ambiguous_count": 2,
+          "balance": 0.7142857142857143,
+          "cr": 0.9666666666666667,
+          "r_count": 10,
+          "route_value_mean": 0.03344324032465617,
+          "route_value_std": 0.5377862824210558,
+          "sr": 0.03333333333333333,
+          "timeout": 0.0,
+          "u_count": 18
+        }
+      },
+      "0.9": {
+        "per_gamma": {
+          "0.1": {
+            "ambiguous_count": 0,
+            "balance": 1.0,
+            "cr": 0.8,
+            "r_count": 5,
+            "route_value_mean": -0.039729976654052736,
+            "route_value_std": 0.8052015007616303,
+            "sr": 0.2,
+            "timeout": 0.0,
+            "u_count": 5
+          },
+          "0.5": {
+            "ambiguous_count": 1,
+            "balance": 0.8888888888888888,
+            "cr": 1.0,
+            "r_count": 4,
+            "route_value_mean": 0.07614729404449463,
+            "route_value_std": 0.308423586339311,
+            "sr": 0.0,
+            "timeout": 0.0,
+            "u_count": 5
+          },
+          "1": {
+            "ambiguous_count": 1,
+            "balance": 0.8888888888888888,
+            "cr": 1.0,
+            "r_count": 5,
+            "route_value_mean": 0.030103689432144164,
+            "route_value_std": 0.5043523272434254,
+            "sr": 0.0,
+            "timeout": 0.0,
+            "u_count": 4
+          }
+        },
+        "pooled": {
+          "ambiguous_count": 2,
+          "balance": 1.0,
+          "cr": 0.9333333333333333,
+          "r_count": 14,
+          "route_value_mean": 0.02217366894086202,
+          "route_value_std": 0.5786921847881953,
+          "sr": 0.06666666666666667,
+          "timeout": 0.0,
+          "u_count": 14
+        }
+      }
+    }
+  },
+  "metric_version": "b1_current_best_gallery_native_cost_v2",
+  "outputs": {
+    "b1_current_best_5x3_gallery.pdf": "73633d012154474cf441dfbf2716b1cb3e06614bf54b0804e176d4655808cbb0",
+    "b1_current_best_5x3_gallery.png": "d9336b358e9890fb44a2f96b60332249bcf47a04493e83b47654a3f1de9386f0"
+  },
+  "pretrained_checkpoint": "/home/dohyun/projects/afe2_runs/low7_groupavg_tiemean_r0_pair_0f0c128/seed_20260718_eq_0_ga_1/pretrain/data/checkpoint_candidate.pt",
+  "pretrained_checkpoint_sha256": "524c9c0a4fd071221ac509b9d8e6fbbfb85fdf1811aa04160317f2a9e2d3ef90",
+  "raw_rule": "first ten fixed indices from each authenticated disjoint M50 cell; no outcome curation",
+  "reused_rollout_sha256": {
+    "expert.npz": "4547bac9c2e60777d82cf8876d5e9805428892d1c8572d77be27b20c83121230",
+    "kazuki_ws_0.1.npz": "e81b3b890feb0e9244b5564bbf6c383265f0a0e56c4665c32964c89848258411",
+    "kazuki_ws_0.3.npz": "f421d1876403b4448d7e494d31d14464bb1f81e37a56433157d6ab5c36fb65ad",
+    "kazuki_ws_0.5.npz": "e7e5471455ef7565b6b58d70fe4eda258ea20b0d0941cc794aabd96bf2ac74a3",
+    "kazuki_ws_0.7.npz": "2d09a81632e2f5005b4f02d03adc94cd8557cb34214a2d882134849c51ce83b3",
+    "kazuki_ws_0.9.npz": "7f1588260c81d1892d114e3b90f6b5062f3f903502025e4d2fab8f83a824dd47",
+    "kazuki_ws_0.npz": "c020309edb05099ce691dc1629f12ea81dee5efab8e3bc4332cab80e283323f0"
+  },
+  "rollout_source": "reused all rollouts without regeneration from /data3/research1/b1_kazuki_native_cost_gallery_v2_899f6da/gallery",
+  "scene_profile": "low7_radius1_canonical_v1",
+  "scene_sha256": "356d6d48b3af2b017b529562b530f35285c86f9107da512a73de6ef664b03e72",
+  "status": "B1_CURRENT_BEST_GALLERY_COMPLETE"
+}

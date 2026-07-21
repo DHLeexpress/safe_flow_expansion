@@ -1,0 +1,316 @@
+{
+  "M_per_gamma": 200,
+  "NFE": 8,
+  "bank_sha256_by_gamma_group": {
+    "0.1,0.2": "563ebe886f734604c03bf63b8835ad59e60033127a2e1ef0dda85cc93d0bbb83",
+    "0.3,0.4": "fee2d37cc01f44b9d81463f49b9e420a6bb95ac0dc186b75ab35cf570b90f470",
+    "0.5,0.7,1": "4d9bc16e869c5f88613fedf15e87dd7452d6545ac5babd38b5124597dcfed265"
+  },
+  "bank_split": "b1_margin_fixedtemp_m200_v1",
+  "bank_version": "b1_round_eval_m_v1",
+  "cell_count": 112,
+  "checkpoint_sha256": {
+    "0": "09a423ebd22c8be23dee69f46275c2c0a64ee013d2c21d6a44f3f02b9e157c5b",
+    "1": "58277b6f28661873b2e1bad5af9bec62415d94b92e1c660668bfa4585a3c2fa3",
+    "10": "8a631709e19677dc9e53e0cac82e46f0fa940cee54cf269d5d46c9801d40f68f",
+    "11": "26285145c419570022f651d3818e101687fb272afd87d579c7072cb7a00c1662",
+    "12": "cd29c18f597bd9537f63ec09da409fd1f2ae8d8ac9ce45f1af81114db1472240",
+    "13": "9572082483e624d21e2c64043032fda747cc6ae62ca6809c3a28a3ddbcdb48a5",
+    "14": "db1feaa67a637e0de184fc8598a18d0e6d483eb81c39e2197df42a14361e5040",
+    "15": "604f8fe657254c1ec644dce16dbea28a36d6e3308aa9ee712adbac3ec68ca672",
+    "2": "8bc57238822c4db898a62d4fb42ad5d409468d0c42de4e1fb99c15e5918ed075",
+    "3": "d7eab0ca06806d548aeb5f949c3e5ea3cb485cfdf042f454a84c33318fbf2a95",
+    "4": "72a30124c00341cf5872c8142e45d6af4989c8e9df96d7c141a3cf72f55f3073",
+    "5": "3999ba4467992b7e627a3b8355c880e39bb979cf7a73508026f1f0d60c110daa",
+    "6": "2def00d608c4eeaccf3ec00301c17a1adbf4b19b137cca70ed0d0d3fe555ef1f",
+    "7": "d1e92b3a5fa12575c0fde57a360a6ef9f941984ac09184388de18920c0844976",
+    "8": "c6740aa7df90917df130ab5a31ac533057ed50cdebab88f25fefa799e8ecbfe3",
+    "9": "45d76d5fee1a761ee0b3a0ea44ff4bf321d3cedb8efdadd5b54f5776df9dd26c"
+  },
+  "gammas": [
+    0.1,
+    0.2,
+    0.3,
+    0.4,
+    0.5,
+    0.7,
+    1.0
+  ],
+  "metrics": "/home/dohyun/projects/afe2_runs/b1_margin_fixedtemp_m200_parallel12_04019fd/merged/fixedtemp_m200_merged.jsonl",
+  "metrics_sha256": "99859f576bceb6d6c88445e0d954e73c669d120aa4c7ec3a0072eb7bf7b68dbc",
+  "raw_policy": "bare receding-horizon flow; no GP, tilt, verifier, or fallback",
+  "rounds": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15
+  ],
+  "sources": [
+    {
+      "bank_sha256": "563ebe886f734604c03bf63b8835ad59e60033127a2e1ef0dda85cc93d0bbb83",
+      "contract": "/home/dohyun/projects/afe2_runs/b1_margin_fixedtemp_m200_parallel12_04019fd/b0a_rerun/fixedtemp_m200.contract.json",
+      "contract_sha256": "6d23cfb496254a7b54143d73772fe57d2017b635a174cc10c344dace178bfc76",
+      "gammas": [
+        0.1,
+        0.2
+      ],
+      "metrics": "/home/dohyun/projects/afe2_runs/b1_margin_fixedtemp_m200_parallel12_04019fd/b0a_rerun/fixedtemp_m200.jsonl",
+      "metrics_sha256": "366b6ee44fff51968a884b2239c122c70f7e99a3da0db51500f71c0f740225ea",
+      "rounds": [
+        0,
+        1,
+        2,
+        3
+      ]
+    },
+    {
+      "bank_sha256": "fee2d37cc01f44b9d81463f49b9e420a6bb95ac0dc186b75ab35cf570b90f470",
+      "contract": "/home/dohyun/projects/afe2_runs/b1_margin_fixedtemp_m200_parallel12_04019fd/b0b/fixedtemp_m200.contract.json",
+      "contract_sha256": "d89e4a5997a29b21769779134ef370dee826688149033b0652541c9fe5266953",
+      "gammas": [
+        0.3,
+        0.4
+      ],
+      "metrics": "/home/dohyun/projects/afe2_runs/b1_margin_fixedtemp_m200_parallel12_04019fd/b0b/fixedtemp_m200.jsonl",
+      "metrics_sha256": "6a0ed19f80d6c739dee4b9362c3e8b5c49ea2609c6eff09e10761734a64d0fc1",
+      "rounds": [
+        0,
+        1,
+        2,
+        3
+      ]
+    },
+    {
+      "bank_sha256": "4d9bc16e869c5f88613fedf15e87dd7452d6545ac5babd38b5124597dcfed265",
+      "contract": "/home/dohyun/projects/afe2_runs/b1_margin_fixedtemp_m200_parallel12_04019fd/b0c/fixedtemp_m200.contract.json",
+      "contract_sha256": "6950bbaa5bdcf41cf57fb6f7de73e8b5a1a57c55094b34be767e729223f45b62",
+      "gammas": [
+        0.5,
+        0.7,
+        1.0
+      ],
+      "metrics": "/home/dohyun/projects/afe2_runs/b1_margin_fixedtemp_m200_parallel12_04019fd/b0c/fixedtemp_m200.jsonl",
+      "metrics_sha256": "839477136d8b4564641d3f9b146689fbfe806774c1b221da90288f1b78189160",
+      "rounds": [
+        0,
+        1,
+        2,
+        3
+      ]
+    },
+    {
+      "bank_sha256": "563ebe886f734604c03bf63b8835ad59e60033127a2e1ef0dda85cc93d0bbb83",
+      "contract": "/home/dohyun/projects/afe2_runs/b1_margin_fixedtemp_m200_parallel12_04019fd/b1a/fixedtemp_m200.contract.json",
+      "contract_sha256": "80186d3ecd0d000860f9891e70710b26f522baaba93ce2c3d4de53bb2782a061",
+      "gammas": [
+        0.1,
+        0.2
+      ],
+      "metrics": "/home/dohyun/projects/afe2_runs/b1_margin_fixedtemp_m200_parallel12_04019fd/b1a/fixedtemp_m200.jsonl",
+      "metrics_sha256": "d35d57dce4f9f45d6a060921c4f31311939ccef526d9ff0b8cd8878becaa4ef5",
+      "rounds": [
+        4,
+        5,
+        6,
+        7
+      ]
+    },
+    {
+      "bank_sha256": "fee2d37cc01f44b9d81463f49b9e420a6bb95ac0dc186b75ab35cf570b90f470",
+      "contract": "/home/dohyun/projects/afe2_runs/b1_margin_fixedtemp_m200_parallel12_04019fd/b1b/fixedtemp_m200.contract.json",
+      "contract_sha256": "938415121557a5ece8011183b82d45863434f8e2053ac70ef3181124e4f25b5b",
+      "gammas": [
+        0.3,
+        0.4
+      ],
+      "metrics": "/home/dohyun/projects/afe2_runs/b1_margin_fixedtemp_m200_parallel12_04019fd/b1b/fixedtemp_m200.jsonl",
+      "metrics_sha256": "97b43c37d9f289ef7c020cc14f341fd0d01c54991f02ad164e4903e252fc6975",
+      "rounds": [
+        4,
+        5,
+        6,
+        7
+      ]
+    },
+    {
+      "bank_sha256": "4d9bc16e869c5f88613fedf15e87dd7452d6545ac5babd38b5124597dcfed265",
+      "contract": "/home/dohyun/projects/afe2_runs/b1_margin_fixedtemp_m200_parallel12_04019fd/b1c_rerun/fixedtemp_m200.contract.json",
+      "contract_sha256": "d7eaf6ea66dd5bc0aeb9b6262236f3a3ea21746fb4dd40c89c638725b2cbe0c7",
+      "gammas": [
+        0.5,
+        0.7,
+        1.0
+      ],
+      "metrics": "/home/dohyun/projects/afe2_runs/b1_margin_fixedtemp_m200_parallel12_04019fd/b1c_rerun/fixedtemp_m200.jsonl",
+      "metrics_sha256": "01c7af043a874504ccfba234633068a6a0b785dde1ac6105e81142b29be045c3",
+      "rounds": [
+        4,
+        5,
+        6,
+        7
+      ]
+    },
+    {
+      "bank_sha256": "563ebe886f734604c03bf63b8835ad59e60033127a2e1ef0dda85cc93d0bbb83",
+      "contract": "/home/dohyun/projects/afe2_runs/b1_margin_fixedtemp_m200_parallel12_04019fd/b2a/fixedtemp_m200.contract.json",
+      "contract_sha256": "2593d98637b02453fafc2d9e330ab9419e5f5405dafb15695978053521ba4037",
+      "gammas": [
+        0.1,
+        0.2
+      ],
+      "metrics": "/home/dohyun/projects/afe2_runs/b1_margin_fixedtemp_m200_parallel12_04019fd/b2a/fixedtemp_m200.jsonl",
+      "metrics_sha256": "051d2911a61dbf4c9831f4c5f122b615cc7b116605fb4f9aaddb2ab13139748e",
+      "rounds": [
+        8,
+        9,
+        10,
+        11
+      ]
+    },
+    {
+      "bank_sha256": "fee2d37cc01f44b9d81463f49b9e420a6bb95ac0dc186b75ab35cf570b90f470",
+      "contract": "/home/dohyun/projects/afe2_runs/b1_margin_fixedtemp_m200_parallel12_04019fd/b2b_rerun/fixedtemp_m200.contract.json",
+      "contract_sha256": "638cb0fd73eb566acc061a7971c27249c6a94fea305b01dcbc6a2f48a4a79090",
+      "gammas": [
+        0.3,
+        0.4
+      ],
+      "metrics": "/home/dohyun/projects/afe2_runs/b1_margin_fixedtemp_m200_parallel12_04019fd/b2b_rerun/fixedtemp_m200.jsonl",
+      "metrics_sha256": "cd1adebbea73b2eb94cc11651a7cea4a8b9669698ebae194b89a07351b4bbc5c",
+      "rounds": [
+        8,
+        9,
+        10,
+        11
+      ]
+    },
+    {
+      "bank_sha256": "4d9bc16e869c5f88613fedf15e87dd7452d6545ac5babd38b5124597dcfed265",
+      "contract": "/home/dohyun/projects/afe2_runs/b1_margin_fixedtemp_m200_parallel12_04019fd/b2c/fixedtemp_m200.contract.json",
+      "contract_sha256": "40fa258a2f6d82778349271d2f6612ea0859cc0e5e84bfb6b0ec15bb81e0abf2",
+      "gammas": [
+        0.5,
+        0.7,
+        1.0
+      ],
+      "metrics": "/home/dohyun/projects/afe2_runs/b1_margin_fixedtemp_m200_parallel12_04019fd/b2c/fixedtemp_m200.jsonl",
+      "metrics_sha256": "ad134731b46644e9d98d09eb70bfc53a12126d0f0c7d7af9e0a7c2dada2f3345",
+      "rounds": [
+        8,
+        9,
+        10,
+        11
+      ]
+    },
+    {
+      "bank_sha256": "563ebe886f734604c03bf63b8835ad59e60033127a2e1ef0dda85cc93d0bbb83",
+      "contract": "/home/dohyun/projects/afe2_runs/b1_margin_fixedtemp_m200_parallel12_04019fd/b3a_rerun/fixedtemp_m200.contract.json",
+      "contract_sha256": "c2ede0acdacba4824b3b70d5205d147996b03b3960e7378f5273d094245cfc94",
+      "gammas": [
+        0.1,
+        0.2
+      ],
+      "metrics": "/home/dohyun/projects/afe2_runs/b1_margin_fixedtemp_m200_parallel12_04019fd/b3a_rerun/fixedtemp_m200.jsonl",
+      "metrics_sha256": "7afb755ffb6205bad8dc692441e8e5f408c9f280526c926ff5ed21cee46eab10",
+      "rounds": [
+        12,
+        13,
+        14,
+        15
+      ]
+    },
+    {
+      "bank_sha256": "fee2d37cc01f44b9d81463f49b9e420a6bb95ac0dc186b75ab35cf570b90f470",
+      "contract": "/home/dohyun/projects/afe2_runs/b1_margin_fixedtemp_m200_parallel12_04019fd/b3b/fixedtemp_m200.contract.json",
+      "contract_sha256": "a96a07a746aad0e01dd3efc60a81f821d887ae119464e19103f4218a10bd302d",
+      "gammas": [
+        0.3,
+        0.4
+      ],
+      "metrics": "/home/dohyun/projects/afe2_runs/b1_margin_fixedtemp_m200_parallel12_04019fd/b3b/fixedtemp_m200.jsonl",
+      "metrics_sha256": "bf3ffc386f4f86529fa24771679b965a28601a9bd111728dab17d4fbb5d39db6",
+      "rounds": [
+        12,
+        13,
+        14,
+        15
+      ]
+    },
+    {
+      "bank_sha256": "4d9bc16e869c5f88613fedf15e87dd7452d6545ac5babd38b5124597dcfed265",
+      "contract": "/home/dohyun/projects/afe2_runs/b1_margin_fixedtemp_m200_parallel12_04019fd/b3c/fixedtemp_m200.contract.json",
+      "contract_sha256": "001a4ac544612da16d98d5ad988ad10167914696568de634f9c723935292c672",
+      "gammas": [
+        0.5,
+        0.7,
+        1.0
+      ],
+      "metrics": "/home/dohyun/projects/afe2_runs/b1_margin_fixedtemp_m200_parallel12_04019fd/b3c/fixedtemp_m200.jsonl",
+      "metrics_sha256": "91fc7d6d62093d7f0f7c0e5f6e1b00f77c485265a1c5a1f7ea21cb6095775ba6",
+      "rounds": [
+        12,
+        13,
+        14,
+        15
+      ]
+    }
+  ],
+  "status": "B1_METRICS_SHARDS_MERGED",
+  "temperature_map": {
+    "0.1": [
+      [
+        0,
+        0.3
+      ]
+    ],
+    "0.2": [
+      [
+        0,
+        1.0
+      ]
+    ],
+    "0.3": [
+      [
+        0,
+        0.3
+      ]
+    ],
+    "0.4": [
+      [
+        0,
+        0.3
+      ]
+    ],
+    "0.5": [
+      [
+        0,
+        0.75
+      ]
+    ],
+    "0.7": [
+      [
+        0,
+        0.75
+      ]
+    ],
+    "1": [
+      [
+        0,
+        0.45
+      ]
+    ]
+  },
+  "trajectories_persisted": false
+}

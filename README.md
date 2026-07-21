@@ -25,6 +25,34 @@ exclusivity gate after training and evaluation had completed.
 
 ![B1 current best](assets/results/b1_current_best/b1_current_best_5x3_gallery.png)
 
+![B1 revised fixed-temperature M200 trends](assets/paper/b1_margin_fixedtemp_m200_revised_r0_r15.png)
+
+[Vector PDF](assets/paper/b1_margin_fixedtemp_m200_revised_r0_r15.pdf)
+
+### Indexed controller replay suite
+
+All four videos retain the numbered PNG frames under the full Helios artifact
+root `/data3/research1/b1_indexed_video_suite_f93a3ed`. Blue contours are the
+actual nominal $H_P$ levels returned by SafeMPPI. Green contours are an offline,
+candidate-specific full-$H$ verifier audit; they never select the raw B1 action.
+Kazuki has no polytope overlay.
+
+| replay | fixed episode | evidence | video |
+|---|---|---|---|
+| SafeMPPI, in distribution | $\gamma=0.5$, SR | native nominal $H_P$ (blue) | [MP4](assets/results/b1_current_best/indexed_controller_videos/01_safemppi_id_nominal.mp4) |
+| SafeMPPI, giant-obstacle OOD | $\gamma=0.4$, lowest collision at index 82 in the declared M100 bank | native nominal $H_P$ (blue) | [MP4](assets/results/b1_current_best/indexed_controller_videos/02_safemppi_ood_nominal_failure.mp4) |
+| B1 r19, giant-obstacle OOD | $\gamma=0.5$, authenticated raw-M50 index 22 collision | offline full-$H$ verifier (green) | [MP4](assets/results/b1_current_best/indexed_controller_videos/03_b1_r19_ood_verifier_audit_failure.mp4) |
+| CFM--MPPI native-cost diagnostic, OOD | $\gamma=0.5$, collision | no polytope; `goal_coef=0`, `safe_coef=0.9`, `MARKUP=1.09` | [MP4](assets/results/b1_current_best/indexed_controller_videos/04_kazuki_ood_markup_failure.mp4) |
+
+![Indexed replay previews](assets/results/b1_current_best/indexed_controller_videos/03_b1_r19_ood_verifier_audit_failure_preview.png)
+
+The Kazuki markup was selected from the fixed M10 bank
+`{1.01,1.05,1.09}`. Its SR changed from 0% to 10% to 20%, respectively.
+`MARKUP=1.09` is close to the $H=10$ equivalent of the external paper's
+$H=80$ value 1.01, but it should be interpreted as front-loading the temporal
+CBF term ($1.09^9\approx2.17$), not as a uniform safety-weight increase. All
+three refinement stages use the exact frozen B1 SafeMPPI plan cost.
+
 ## 1. Static scene and SafeMPPI teacher
 
 The in-distribution scene is a `5 m x 5 m` workspace with radius-0.2 static
@@ -180,6 +208,7 @@ safeMPPI project or use the original source commit shown below.
 | RBF, beta, execution, negative update | `afe_rbf_core.py`, `afe_adaptive.py`, `afe_execution.py`, `afe_signed_update.py` |
 | exact B1 sweep/selection launcher | `run_low7_b1_balanced_sweep.sh`, `analysis/low7_b1_balanced_sweep_driver.py` |
 | raw temperature-1 M50 evaluation | `paper_results/low7_raw_m50_eval.py` |
+| indexed controller/polytope videos | `paper_results/b1_indexed_video_suite.py` |
 
 Canonical identities:
 

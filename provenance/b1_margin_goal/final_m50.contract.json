@@ -1,0 +1,74 @@
+{
+  "M_per_gamma": 50,
+  "NFE": 8,
+  "adaptive": null,
+  "arm_dir": "/home/dohyun/projects/afe2_runs/b1_margin50_giant_cap768_ess050_alpha0010_39fb3e6/run",
+  "bank_sha256": "54e79f05f867fef23f51e3a4d4cb37ad559524ea6f7d7254a22952901ef068b6",
+  "bank_split": "b1_margin50_final3_v1",
+  "bank_version": "b1_round_eval_m_v1",
+  "checkpoint_sha256": {
+    "15": "604f8fe657254c1ec644dce16dbea28a36d6e3308aa9ee712adbac3ec68ca672"
+  },
+  "elapsed_seconds": 148.23517417907715,
+  "gammas": [
+    0.1,
+    0.2,
+    0.3,
+    0.4,
+    0.5,
+    0.7,
+    1.0
+  ],
+  "metrics": "/home/dohyun/projects/afe2_runs/b1_margin50_final3B_r15_tempmap_4718b59/final3_m50.jsonl",
+  "metrics_sha256": "5a98923c6efb7f4f7bf23f1c602bd44e074efef170a331b81247af546922d255",
+  "raw_policy": "bare receding-horizon flow; no GP, tilt, verifier, or fallback",
+  "rounds": [
+    15
+  ],
+  "status": "B1_METRICS_ONLY_EVALUATION_COMPLETE",
+  "temperature_map": {
+    "0.1": [
+      [
+        0,
+        0.3
+      ]
+    ],
+    "0.2": [
+      [
+        0,
+        1.0
+      ]
+    ],
+    "0.3": [
+      [
+        0,
+        0.3
+      ]
+    ],
+    "0.4": [
+      [
+        0,
+        0.3
+      ]
+    ],
+    "0.5": [
+      [
+        0,
+        0.75
+      ]
+    ],
+    "0.7": [
+      [
+        0,
+        0.75
+      ]
+    ],
+    "1": [
+      [
+        0,
+        0.45
+      ]
+    ]
+  },
+  "trajectories_persisted": false
+}

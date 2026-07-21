@@ -1,0 +1,41 @@
+{
+  "M_per_gamma": [
+    200
+  ],
+  "claim": "curves are bare-policy metrics-only evaluation using each input row's declared sampling temperature and a round-independent CRN bank; no GP, acquisition tilt, verifier, fallback, or trajectory archive",
+  "confidence_bands": "95% Wilson intervals for CR and V_safe; mean +/- 1.96 standard errors for clearance and successful time-to-goal",
+  "highlight_inputs": {},
+  "inputs": {
+    "M200 revised": "/data3/research1/b1_margin_fixedtemp_retest_gpu1_78322eb/merged/fixedtemp_m200_revised.jsonl"
+  },
+  "outputs": [
+    "/data3/research1/b1_margin_fixedtemp_retest_gpu1_78322eb/figure/b1_margin_fixedtemp_m200_revised_r0_r15.png",
+    "/data3/research1/b1_margin_fixedtemp_retest_gpu1_78322eb/figure/b1_margin_fixedtemp_m200_revised_r0_r15.pdf"
+  ],
+  "sampling_temperature_by_arm_gamma": {
+    "M200 revised": {
+      "0.1": [
+        0.5
+      ],
+      "0.2": [
+        1.0
+      ],
+      "0.3": [
+        0.3
+      ],
+      "0.4": [
+        0.3
+      ],
+      "0.5": [
+        0.75
+      ],
+      "0.7": [
+        1.0
+      ],
+      "1": [
+        1.0
+      ]
+    }
+  },
+  "status": "B1_MARGIN50_METRIC_TRENDS_COMPLETE"
+}

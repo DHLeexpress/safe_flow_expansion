@@ -111,6 +111,48 @@ def test_current_assets_exist():
         "assets/results/b1_current_best/selected_expansion.mp4",
         "assets/results/b1_current_best/b1_current_best_5x3_gallery.png",
         "assets/results/b1_current_best/b1_current_best_5x3_gallery.pdf",
+        "assets/paper/b1_margin_fixedtemp_m200_revised_r0_r15.png",
+        "assets/paper/b1_margin_fixedtemp_m200_revised_r0_r15.pdf",
+        "assets/results/b1_current_best/indexed_controller_videos/01_safemppi_id_nominal.mp4",
+        "assets/results/b1_current_best/indexed_controller_videos/01_safemppi_id_nominal_preview.png",
+        "assets/results/b1_current_best/indexed_controller_videos/02_safemppi_ood_nominal_failure.mp4",
+        "assets/results/b1_current_best/indexed_controller_videos/02_safemppi_ood_nominal_failure_preview.png",
+        "assets/results/b1_current_best/indexed_controller_videos/03_b1_r19_ood_verifier_audit_failure.mp4",
+        "assets/results/b1_current_best/indexed_controller_videos/03_b1_r19_ood_verifier_audit_failure_preview.png",
+        "assets/results/b1_current_best/indexed_controller_videos/04_kazuki_ood_markup_failure.mp4",
+        "assets/results/b1_current_best/indexed_controller_videos/04_kazuki_ood_markup_failure_preview.png",
+        "provenance/b1_current_best/indexed_controller_videos/video_suite_manifest.json",
     )
     for relative in expected:
         assert (ROOT / relative).is_file(), relative
+
+
+def test_indexed_controller_video_contract():
+    asset_root = (
+        ROOT / "assets" / "results" / "b1_current_best"
+        / "indexed_controller_videos"
+    )
+    manifest = json.loads(
+        (
+            ROOT / "provenance" / "b1_current_best"
+            / "indexed_controller_videos" / "video_suite_manifest.json"
+        ).read_text()
+    )
+    assert manifest["status"] == "B1_INDEXED_CONTROLLER_VIDEO_SUITE_COMPLETE"
+    assert manifest["reference_sfm_video_sha256"] == (
+        "a13a29c3c45a6a9f2c8a9eeb4ddf461b7666927ff73d2e4470e58e65ce7eb801"
+    )
+
+    episodes = manifest["episodes"]
+    assert episodes["01_safemppi_id_nominal"]["outcome"] == "SR"
+    assert episodes["02_safemppi_ood_nominal_failure"]["outcome"] == "CR"
+    assert episodes["02_safemppi_ood_nominal_failure"]["gamma"] == 0.4
+    assert episodes["02_safemppi_ood_nominal_failure"]["rollout_index"] == 82
+    assert episodes["03_b1_r19_ood_verifier_audit_failure"]["outcome"] == "CR"
+    assert episodes["04_kazuki_ood_markup_failure"]["outcome"] == "CR"
+    assert manifest["kazuki_markup_sweep"]["selected"] == 1.09
+
+    for rendered in manifest["rendered"].values():
+        for kind in ("video", "preview"):
+            copied = asset_root / Path(rendered[kind]).name
+            assert sha256_file(copied) == rendered[f"{kind}_sha256"]

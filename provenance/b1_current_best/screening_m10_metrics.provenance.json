@@ -1,0 +1,9 @@
+{
+  "file": "screening_m10_metrics.jsonl",
+  "description": "Per-round raw temperature-1 M10/gamma screening metrics for the selected arm (rounds 0-20, 7 gammas + pooled per round). Copied verbatim for the paper evolution curves; the M50 confirmation in metrics.jsonl remains the scientific result.",
+  "source_path": "/home/dohyun/projects/afe2_runs/low7_b1_balanced_sweep_63ebefa/screening/cap512_ess025_alpha0010_cost/metrics.jsonl",
+  "source_sha256": "ce395dc1e7d215c1c9bbb543929878234806bca3d3959b26480a578fbc6b140d",
+  "arm_id": "cap512_ess025_alpha0010_cost",
+  "evaluation_profile": "raw temperature-1 M10 per gamma every round (screening, not confirmation)",
+  "copied_utc": "2026-07-20"
+}

@@ -1,0 +1,20 @@
+{
+  "metric_version": "b1_current_best_gallery_v1",
+  "scene": "low7_radius1_canonical_v1",
+  "schema": "low7_closest_boundary_tie_mean",
+  "gamma_ctx": 0.5,
+  "checkpoint_sha256": "524c9c0a4fd071221ac509b9d8e6fbbfb85fdf1811aa04160317f2a9e2d3ef90",
+  "M": 15,
+  "T": 300,
+  "reach": 0.15,
+  "H_full": 250,
+  "regen": 25,
+  "dilute": 0.8,
+  "bounds_w": 100.0,
+  "n_sample": 200,
+  "n_elite": 10,
+  "n_copy": 200,
+  "SR": 0.4,
+  "CR": 0.13333333333333333,
+  "timeout": 0.4666666666666667
+}

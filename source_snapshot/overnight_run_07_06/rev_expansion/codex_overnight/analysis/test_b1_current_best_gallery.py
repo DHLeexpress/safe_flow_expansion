@@ -15,14 +15,37 @@ assert SPEC.loader is not None
 SPEC.loader.exec_module(MODULE)
 
 
-def test_low_high_are_predeclared_endpoints_not_metric_selected():
+def _summary(sr_values):
+    return {
+        "pooled": {"sr": sum(sr_values) / len(sr_values)},
+        "per_gamma": {
+            str(index): {
+                "sr": value, "cr": 1.0 - value, "timeout": 0.0,
+                "route_value_mean": float(index),
+            }
+            for index, value in enumerate(sr_values)
+        },
+    }
+
+
+def test_low_high_are_nonperfect_gamma_sensitive_endpoints():
     summaries = {
-        0.03: {"balance": 1.0, "route_value_std": 0.4},
-        0.1: {"balance": 0.8, "route_value_std": 0.3},
-        0.3: {"balance": 0.4, "route_value_std": 0.2},
-        0.9: {"balance": 0.0, "route_value_std": 0.1},
+        0.0: _summary([0.0, 0.0, 0.0]),
+        0.03: _summary([0.2, 0.4, 0.6]),
+        0.1: _summary([0.5, 0.5, 0.5]),
+        0.3: _summary([1.0, 1.0, 1.0]),
+        0.9: _summary([0.1, 0.4, 0.7]),
     }
     assert MODULE.choose_low_high(summaries) == (0.03, 0.9)
+
+
+def test_outcome_effect_takes_priority_over_route_only_effect():
+    summaries = {
+        0.1: _summary([0.0, 0.0, 0.0]),
+        0.7: _summary([0.1, 0.0, 0.0]),
+        0.9: _summary([0.2, 0.0, 0.0]),
+    }
+    assert MODULE.choose_low_high(summaries) == (0.7, 0.9)
 
 
 def test_route_summary_counts_both_modes():
@@ -65,10 +88,13 @@ def test_reused_kazuki_round_trip(tmp_path):
     paths = np.empty(2, dtype=object)
     paths[0] = np.asarray([[0.3, 0.3], [1.0, 1.2]], dtype=np.float32)
     paths[1] = np.asarray([[0.3, 0.3], [1.2, 1.0]], dtype=np.float32)
-    np.savez_compressed(
-        tmp_path / "kazuki_ws_0.1.npz", paths=paths,
-        outcomes=np.asarray(["TO", "CR"]),
-    )
-    loaded_paths, outcomes = MODULE.load_reused_kazuki(tmp_path, 0.1)
-    assert outcomes == ["TO", "CR"]
-    assert np.array_equal(loaded_paths[0], paths[0])
+    payload = {}
+    for gamma in MODULE.GAMMAS:
+        suffix = f"g{gamma:g}"
+        payload[f"paths_{suffix}"] = paths
+        payload[f"outcomes_{suffix}"] = np.asarray(["TO", "CR"])
+    np.savez_compressed(tmp_path / "kazuki_ws_0.1.npz", **payload)
+    cells = MODULE.load_reused_kazuki(tmp_path, 0.1)
+    for loaded_paths, outcomes in cells.values():
+        assert outcomes == ["TO", "CR"]
+        assert np.array_equal(loaded_paths[0], paths[0])
