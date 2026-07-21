@@ -4,11 +4,11 @@
   ],
   "claim": "curves are raw temperature-1 metrics-only evaluation; star highlights are separately calibrated and confirmed metrics; no trajectory archives",
   "highlight_inputs": {
-    "cap768_ess050_alpha0010_margin": "/home/dohyun/projects/afe2_runs/b1_margin50_final3B_r15_tempmap_4718b59/final3_m50.jsonl"
+    "cap768 / ESS .50": "/home/dohyun/projects/afe2_runs/b1_margin50_final3B_r15_tempmap_4718b59/final3_m50.jsonl"
   },
   "inputs": {
-    "cap512_ess025_alpha0010_margin": "/home/dohyun/projects/afe2_runs/b1_margin50_giant_39fb3e6/metrics_m50/raw_temp1_m50.jsonl",
-    "cap768_ess050_alpha0010_margin": "/home/dohyun/projects/afe2_runs/b1_margin50_giant_cap768_ess050_alpha0010_39fb3e6/metrics_m50/raw_temp1_m50.jsonl"
+    "cap512 / ESS .25": "/home/dohyun/projects/afe2_runs/b1_margin50_giant_39fb3e6/metrics_m50/raw_temp1_m50.jsonl",
+    "cap768 / ESS .50": "/home/dohyun/projects/afe2_runs/b1_margin50_giant_cap768_ess050_alpha0010_39fb3e6/metrics_m50/raw_temp1_m50.jsonl"
   },
   "outputs": [
     "/home/dohyun/projects/afe2_runs/b1_margin50_final_summary_4718b59/b1_margin_raw_and_calibrated_trends_r0_r30.png",
