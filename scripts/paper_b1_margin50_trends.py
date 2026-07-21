@@ -115,8 +115,21 @@ def main() -> int:
                 axis.set_xlabel("expansion round")
         axes[row_i, 0].set_ylabel(label, fontsize=17, labelpad=12)
 
+    fixed_temps = {}
+    for gamma in GAMMAS:
+        values = {
+            float(table[(round_i, gamma)].get("temp", 1.0))
+            for _, _, table, rounds in arms for round_i in rounds
+        }
+        fixed_temps[gamma] = next(iter(values)) if len(values) == 1 else None
     handles = [
-        plt.Line2D([0], [0], color=colors[gamma], lw=2.2, label=rf"$\gamma={gamma:g}$")
+        plt.Line2D(
+            [0], [0], color=colors[gamma], lw=2.2,
+            label=(
+                rf"$\gamma={gamma:g},\;\tau={fixed_temps[gamma]:g}$"
+                if fixed_temps[gamma] is not None else rf"$\gamma={gamma:g}$"
+            ),
+        )
         for gamma in GAMMAS
     ]
     handles.append(plt.Line2D([0], [0], color="black", lw=3.0, label="pooled"))
