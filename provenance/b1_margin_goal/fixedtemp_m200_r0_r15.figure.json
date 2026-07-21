@@ -5,14 +5,14 @@
   "claim": "curves are bare-policy metrics-only evaluation using each input row's declared sampling temperature and a round-independent CRN bank; no GP, acquisition tilt, verifier, fallback, or trajectory archive",
   "highlight_inputs": {},
   "inputs": {
-    "fixed per-gamma temp": "/home/dohyun/projects/afe2_runs/b1_margin_fixedtemp_m200_parallel12_04019fd/merged/fixedtemp_m200_merged.jsonl"
+    "M200 fixed temp": "/home/dohyun/projects/afe2_runs/b1_margin_fixedtemp_m200_parallel12_04019fd/merged/fixedtemp_m200_merged.jsonl"
   },
   "outputs": [
     "/home/dohyun/projects/afe2_runs/b1_margin_fixedtemp_m200_parallel12_04019fd/figure/b1_margin_fixedtemp_m200_r0_r15.png",
     "/home/dohyun/projects/afe2_runs/b1_margin_fixedtemp_m200_parallel12_04019fd/figure/b1_margin_fixedtemp_m200_r0_r15.pdf"
   ],
   "sampling_temperature_by_arm_gamma": {
-    "fixed per-gamma temp": {
+    "M200 fixed temp": {
       "0.1": [
         0.3
       ],
