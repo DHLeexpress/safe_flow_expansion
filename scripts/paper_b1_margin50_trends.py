@@ -16,7 +16,7 @@ import numpy as np
 GAMMAS = (0.1, 0.2, 0.3, 0.4, 0.5, 0.7, 1.0)
 SPECS = (
     ("CR", "Collision rate", (-0.03, 1.03)),
-    ("v_safe", r"$V_{\mathrm{safe}}$", (-0.03, 1.03)),
+    ("v_safe", "Validity", (-0.03, 1.03)),
     ("clearance", "Min. clearance [m]", None),
     ("time", "Time-to-goal [s]", None),
 )
@@ -82,14 +82,21 @@ def main() -> int:
     }
     plt.rcParams.update({
         "font.family": "serif", "mathtext.fontset": "cm",
-        "axes.titlesize": 18, "axes.labelsize": 16,
-        "xtick.labelsize": 13, "ytick.labelsize": 13,
+        "axes.titlesize": 24, "axes.labelsize": 20,
+        "xtick.labelsize": 17, "ytick.labelsize": 17,
+        "legend.fontsize": 16,
     })
-    fig, axes = plt.subplots(
-        len(arms), 4, figsize=(20.5, 4.4 * len(arms)), squeeze=False
-    )
+    single_arm = len(arms) == 1
+    if single_arm:
+        fig, axes_2d = plt.subplots(2, 2, figsize=(14.6, 10.8), squeeze=False)
+        axes_by_arm = [axes_2d.reshape(-1)]
+    else:
+        fig, axes_2d = plt.subplots(
+            len(arms), 4, figsize=(20.5, 4.4 * len(arms)), squeeze=False
+        )
+        axes_by_arm = list(axes_2d)
     for row_i, (label, _, table, rounds) in enumerate(arms):
-        for axis, (metric, title, ylim) in zip(axes[row_i], SPECS):
+        for axis, (metric, title, ylim) in zip(axes_by_arm[row_i], SPECS):
             gamma_means = []
             gamma_ses = []
             for gamma in GAMMAS:
@@ -135,9 +142,9 @@ def main() -> int:
             axis.set_xlim(rounds[0] - 0.4, rounds[-1] + 0.4)
             if ylim is not None:
                 axis.set_ylim(*ylim)
-            if row_i == len(arms) - 1:
-                axis.set_xlabel("expansion round")
-        axes[row_i, 0].set_ylabel(label, fontsize=17, labelpad=12)
+            axis.set_xlabel("Expansion round")
+        if not single_arm:
+            axes_by_arm[row_i][0].set_ylabel(label, fontsize=19, labelpad=12)
 
     handles = [
         plt.Line2D([0], [0], color=colors[gamma], lw=2.2, label=rf"$\gamma={gamma:g}$")
@@ -150,8 +157,9 @@ def main() -> int:
             markerfacecolor="white", markeredgecolor="black",
             label="calibrated holdout",
         ))
-    fig.legend(handles=handles, ncol=8, loc="upper center", frameon=False)
-    fig.tight_layout(rect=(0, 0, 1, 0.95))
+    fig.legend(handles=handles, ncol=4 if single_arm else 8,
+               loc="upper center", frameon=False)
+    fig.tight_layout(rect=(0, 0, 1, 0.90 if single_arm else 0.95))
     outputs = []
     for suffix in ("png", "pdf"):
         path = args.outdir / f"{args.stem}.{suffix}"

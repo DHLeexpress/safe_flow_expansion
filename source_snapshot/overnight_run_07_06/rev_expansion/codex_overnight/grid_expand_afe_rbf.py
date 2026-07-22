@@ -804,6 +804,17 @@ def run_parallel_episodes(
                     "terminal_tau": [row[2]["terminal_tau"] for row in query_rows],
                     "n_socp_solve": stats["n_socp_solve"],
                     "sel": (-1 if best is None else best[3]),
+                    # Per-plan values are retained for diagnostic replay.  The
+                    # historical compact artifacts stored only quantiles,
+                    # which was insufficient to color the displayed K/B plans
+                    # without inventing values after the run.
+                    "sigma_K": marginal_sigma_cpu[local_index].numpy().astype(
+                        np.float32
+                    ),
+                    "sigma_B": [
+                        float(acquired_scores[candidate_id])
+                        for candidate_id in drawn
+                    ],
                     "sig_q": stats["sig_all"],
                     "sigB_q": stats["sig_sel"],
                     "min_margin": (
