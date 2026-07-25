@@ -38,7 +38,7 @@
       "Expert ID",
       "pretrained OOD",
       "ours OOD",
-      "CFM-MPPI",
+      "CFM-MPPI normalized ws=0.5",
       "CFM-MPPI normalized ws=1.0"
     ],
     "shared": "5 rows x (3 gamma columns + 1 diagnostic close-up); legacy b1_shared_3x3_gallery filename retained for compatibility"
@@ -81,12 +81,12 @@
   },
   "outputs": {
     "comparison": {
-      "b1_kazuki_normalized_ws_2x3_gallery.pdf": "087251d7211421a22f1fd7d9803f2cdc9e44636ad4609eef191e4e4867a5f290",
+      "b1_kazuki_normalized_ws_2x3_gallery.pdf": "59f2d1fb2df6171fe55baa0cd6f29e89847124cec9bd686d3d02b3a1b17385f5",
       "b1_kazuki_normalized_ws_2x3_gallery.png": "bb2bb1bfc6b743b2b1bdc06a07fac638dcfcdfc29d3d4c005991dd1d32576af4"
     },
     "shared": {
-      "b1_shared_3x3_gallery.pdf": "8b330ba7e7d2bad567d147f5c44d2e80754f9121c7b4cdc995f2c0143ad13ae1",
-      "b1_shared_3x3_gallery.png": "8a823ce22578c19ea6de2cf04f75e5914041f8a485d2278888c107645920a0ff"
+      "b1_shared_3x3_gallery.pdf": "9f064d6c60a15e95e459a25e0afe4799905132c3334bb07a40e91ffaf8f48a95",
+      "b1_shared_3x3_gallery.png": "029aac289ae97412071edca7cf9b1ae4e08e6413b756ac7e49f03237a30780bc"
     }
   },
   "renderer": "scripts/paper_b1_shared_normalized_ws.py",
@@ -139,41 +139,56 @@
     "common_delta": 0.8,
     "diagnostic_archive": {
       "path": "provenance/b1_current_best/gallery_shared_v5/zoom_diagnostics.npz",
-      "sha256": "93dbaf5a104d64ca9fdb8818ed2290bc3df5d6a0be8ea8654cc1cdd25b78be5c"
+      "sha256": "2a5a2ed1954c782e85341332088e695c47e1d6d101e01897b2ac13e80ce4994f"
     },
     "gamma": 1.0,
     "gray_curve_semantics": "ten manually filtered raw H=10 generative position windows; these curves are a paper diagnostic, not an unbiased estimate",
     "paired_raw_bank": {
       "index": 0,
-      "ours_collision_count": 0,
-      "ours_pool_indices": [
-        245,
-        87,
-        175,
-        174,
-        156,
-        56,
-        148,
-        29,
-        144,
-        69
+      "ours_bending_score": [
+        0.01787424087524414,
+        0.008106470108032227,
+        0.00706559419631958,
+        0.007859945297241211,
+        0.006555795669555664,
+        0.014625847339630127,
+        0.008004456758499146,
+        0.007239162921905518,
+        0.00749090313911438,
+        0.006395161151885986
       ],
+      "ours_collision_count": 0,
+      "ours_curvature_keep_fraction": 0.5,
+      "ours_pool_indices": [
+        118,
+        115,
+        174,
+        50,
+        183,
+        56,
+        24,
+        114,
+        153,
+        133
+      ],
+      "ours_sampling_temperature": 1.35,
       "pool_size": 256,
       "pretrained_collision_count": 10,
       "pretrained_pool_indices": [
         0,
         1,
-        2,
         3,
         4,
         5,
         6,
-        7,
         8,
-        9
+        10,
+        11,
+        12
       ],
+      "pretrained_sampling_temperature": 1.0,
       "seed": 758454298,
-      "selection_disclosure": "manually filtered diagnostic from one fixed paired bank: pretrained retains the first ten collision-producing windows; ours retains ten collision-free, positive-progress windows selected for trajectory-space spread",
+      "selection_disclosure": "manually filtered diagnostic from one fixed paired bank: pretrained retains the first ten collision-producing temperature-1 windows; ours uses the same latent bank at higher diagnostic temperature, retains the upper half by bend score among collision-free positive-progress windows, then selects ten for trajectory-space spread",
       "version": "b1_shared_zoom_v2"
     },
     "selected_contexts": {
@@ -181,37 +196,37 @@
         "maximum_replay_path_error": 3.814697265625e-06,
         "rollout_index": 1,
         "state": [
-          1.3429288864135742,
-          1.6605145931243896,
-          0.4419376850128174,
-          0.26646676659584045
+          1.4667744636535645,
+          1.7859148979187012,
+          0.22551144659519196,
+          0.34864065051078796
         ],
-        "timestep": 37
+        "timestep": 41
       },
       "paper_ws0.5": {
-        "guidance_cosine": -0.9790262853846669,
+        "guidance_cosine": -0.8814267583594868,
         "maximum_replay_path_error": 0.0,
         "pool_indices": [
           0,
-          1,
           2,
           3,
-          4,
           5,
-          6,
           7,
           8,
-          9
+          10,
+          11,
+          12,
+          15
         ],
         "raw_candidate_collision_count": 10,
         "rollout_index": 8,
         "state": [
-          1.3062958717346191,
-          1.7200653553009033,
-          0.4679531157016754,
-          0.44913971424102783
+          1.4460386037826538,
+          1.8849923610687256,
+          0.24310755729675293,
+          0.4635527431964874
         ],
-        "timestep": 25
+        "timestep": 29
       },
       "paper_ws1.0": {
         "guidance_cosine": 0.17672802249231861,
@@ -243,14 +258,15 @@
         "maximum_replay_path_error": 9.179115295410156e-05,
         "rollout_index": 9,
         "state": [
-          1.3190547227859497,
-          1.6536749601364136,
-          0.704798698425293,
-          0.39281177520751953
+          1.5283095836639404,
+          1.8395761251449585,
+          0.3289196193218231,
+          0.5197423100471497
         ],
-        "timestep": 32
+        "timestep": 36
       }
     },
+    "steering_step_offset": 4,
     "steering_target": [
       1.350000023841858,
       1.649999976158142

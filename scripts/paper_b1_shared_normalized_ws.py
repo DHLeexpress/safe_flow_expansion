@@ -52,9 +52,12 @@ GAMMA_ZOOM = 1.0
 ZOOM_DELTA = 0.8
 COMMON_ZOOM_CENTER = np.asarray((1.0, 2.0), dtype=np.float32)
 STEERING_TARGET = COMMON_ZOOM_CENTER + np.asarray((0.35, -0.35), dtype=np.float32)
+STEERING_STEP_OFFSET = 4
 RAW_BANK_INDEX = 0
 N_CANDIDATES = 10
 RAW_POOL_SIZE = 256
+OURS_DIAGNOSTIC_TEMPERATURE = 1.35
+OURS_CURVATURE_KEEP_FRACTION = 0.5
 RAW_BANK_SPLIT = "b1_margin_fixedtemp_m200_v1"
 PRETRAINED_ROLLOUT_INDEX = 9
 OURS_ROLLOUT_INDEX = 1
@@ -197,7 +200,7 @@ def first_indices(mask: np.ndarray, count: int, label: str) -> np.ndarray:
 def diverse_indices(
     candidates: np.ndarray,
     eligible: np.ndarray,
-    progress: np.ndarray,
+    priority: np.ndarray,
     count: int,
 ) -> np.ndarray:
     indices = np.flatnonzero(eligible)
@@ -206,7 +209,7 @@ def diverse_indices(
             f"ours has only {len(indices)} safe, goal-progress proposals"
         )
     features = candidates[indices].reshape(len(indices), -1)
-    selected_local = [int(np.argmax(progress[indices]))]
+    selected_local = [int(np.argmax(priority[indices]))]
     while len(selected_local) < count:
         chosen = features[selected_local]
         distances = np.linalg.norm(
@@ -216,6 +219,22 @@ def diverse_indices(
         distances[selected_local] = -np.inf
         selected_local.append(int(np.argmax(distances)))
     return indices[np.asarray(selected_local)]
+
+
+def bending_score(state: np.ndarray, candidates: np.ndarray) -> np.ndarray:
+    paths = np.concatenate(
+        (
+            np.broadcast_to(
+                np.asarray(state[:2], dtype=np.float32),
+                (len(candidates), 1, 2),
+            ),
+            np.asarray(candidates, dtype=np.float32),
+        ),
+        axis=1,
+    )
+    arc_length = np.linalg.norm(np.diff(paths, axis=1), axis=2).sum(axis=1)
+    chord_length = np.linalg.norm(paths[:, -1] - paths[:, 0], axis=1)
+    return arc_length - chord_length
 
 
 def build_context(
@@ -339,6 +358,8 @@ def raw_candidate_pool(
     env: Any,
     record: dict[str, Any],
     device: str,
+    *,
+    sampling_temperature: float = 1.0,
 ) -> np.ndarray:
     context = build_context(
         policy,
@@ -359,7 +380,7 @@ def raw_candidate_pool(
             RAW_POOL_SIZE,
             context,
             nfe=EVAL.NFE,
-            temp=1.0,
+            temp=sampling_temperature,
             initial_noise=torch.as_tensor(noise, device=device),
         )
         .detach()
@@ -379,6 +400,7 @@ def replay_kazuki_diagnostic(
     *,
     target: np.ndarray | None = None,
     steps_before_collision: int | None = None,
+    timestep_offset: int = 0,
 ) -> dict[str, Any]:
     configure_native_cost(0.0, 4.0)
     seed = named_seed(
@@ -462,13 +484,17 @@ def replay_kazuki_diagnostic(
     if (target is None) == (steps_before_collision is None):
         raise ValueError("choose exactly one Kazuki diagnostic state rule")
     if target is not None:
-        selected_timestep = int(
+        nearest_timestep = int(
             np.argmin(
                 [
                     np.linalg.norm(call["state"][:2] - target)
                     for call in calls
                 ]
             )
+        )
+        selected_timestep = min(
+            len(calls) - 1,
+            nearest_timestep + int(timestep_offset),
         )
     else:
         selected_timestep = max(
@@ -560,10 +586,12 @@ def draw_zoom(
             dots[:, 0],
             dots[:, 1],
             linestyle="none",
-            marker=".",
-            color=color,
-            markersize=2.8,
-            alpha=0.8,
+            marker="o",
+            markerfacecolor=color,
+            markeredgecolor="#777777",
+            markeredgewidth=0.35,
+            markersize=3.5,
+            alpha=0.9,
             zorder=4,
         )
         if outcome != "SR":
@@ -593,10 +621,12 @@ def draw_zoom(
                 plan[1:, 0],
                 plan[1:, 1],
                 linestyle="none",
-                marker=".",
-                color="#6f6f6f",
-                markersize=2.0,
-                alpha=0.78,
+                marker="o",
+                markerfacecolor="#f5f5f5",
+                markeredgecolor="#6f6f6f",
+                markeredgewidth=0.35,
+                markersize=2.8,
+                alpha=0.9,
                 zorder=6,
             )
         axis.plot(
@@ -827,21 +857,29 @@ def main() -> int:
         args.device,
     )
     common_bounds = zoom_bounds(COMMON_ZOOM_CENTER)
-    ours_timestep = int(
-        np.argmin(
-            np.linalg.norm(
-                ours_replay["path"][:-1] - STEERING_TARGET,
-                axis=1,
+    ours_timestep = min(
+        len(ours_replay["records"]) - 1,
+        int(
+            np.argmin(
+                np.linalg.norm(
+                    ours_replay["path"][:-1] - STEERING_TARGET,
+                    axis=1,
+                )
             )
         )
+        + STEERING_STEP_OFFSET,
     )
-    pretrained_timestep = int(
-        np.argmin(
-            np.linalg.norm(
-                pretrained_replay["path"][:-1] - STEERING_TARGET,
-                axis=1,
+    pretrained_timestep = min(
+        len(pretrained_replay["records"]) - 1,
+        int(
+            np.argmin(
+                np.linalg.norm(
+                    pretrained_replay["path"][:-1] - STEERING_TARGET,
+                    axis=1,
+                )
             )
         )
+        + STEERING_STEP_OFFSET,
     )
     pretrained_record = pretrained_replay["records"][pretrained_timestep]
     ours_record = ours_replay["records"][ours_timestep]
@@ -856,6 +894,7 @@ def main() -> int:
         ood_env,
         ours_record,
         args.device,
+        sampling_temperature=OURS_DIAGNOSTIC_TEMPERATURE,
     )
     pretrained_indices = first_indices(
         collision_mask(pretrained_pool, ood_env),
@@ -869,10 +908,22 @@ def main() -> int:
         ours_pool[:, -1] - ood_env.goal.detach().cpu().numpy()[None],
         axis=1,
     )
+    ours_bending = bending_score(ours_record["state"], ours_pool)
+    ours_eligible = (~collision_mask(ours_pool, ood_env)) & (ours_progress > 0.0)
+    eligible_bending = ours_bending[ours_eligible]
+    if len(eligible_bending) < N_CANDIDATES:
+        raise RuntimeError("ours diagnostic pool lacks safe, progressing proposals")
+    bend_threshold = float(
+        np.quantile(
+            eligible_bending,
+            1.0 - OURS_CURVATURE_KEEP_FRACTION,
+        )
+    )
+    ours_curved_eligible = ours_eligible & (ours_bending >= bend_threshold)
     ours_indices = diverse_indices(
         ours_pool,
-        (~collision_mask(ours_pool, ood_env)) & (ours_progress > 0.0),
-        ours_progress,
+        ours_curved_eligible,
+        ours_bending,
         N_CANDIDATES,
     )
     pretrained_candidates = pretrained_pool[pretrained_indices]
@@ -893,6 +944,7 @@ def main() -> int:
         ws05[GAMMA_ZOOM][0][WS05_ROLLOUT_INDEX],
         args.device,
         target=STEERING_TARGET,
+        timestep_offset=STEERING_STEP_OFFSET,
     )
     ws10_diagnostic = replay_kazuki_diagnostic(
         kazuki_policy,
@@ -959,7 +1011,7 @@ def main() -> int:
             "candidates": ours_candidates,
         },
         {
-            "label": r"CFM--MPPI$^*$",
+            "label": r"CFM--MPPI$^*$" + "\n" + r"$w_s=0.5$",
             "env": ood_env,
             "cells": ws05,
             "bounds": common_bounds,
@@ -991,6 +1043,7 @@ def main() -> int:
         ours_state=ours_record["state"],
         ours_pool_indices=ours_indices,
         ours_candidates=ours_candidates,
+        ours_bending_score=ours_bending[ours_indices],
         ws05_state=ws05_diagnostic["state"],
         ws05_pool_indices=ws05_indices,
         ws05_candidates=ws05_candidates,
@@ -1024,7 +1077,7 @@ def main() -> int:
                 "Expert ID",
                 "pretrained OOD",
                 "ours OOD",
-                "CFM-MPPI",
+                "CFM-MPPI normalized ws=0.5",
                 "CFM-MPPI normalized ws=1.0",
             ],
         },
@@ -1032,6 +1085,7 @@ def main() -> int:
             "gamma": GAMMA_ZOOM,
             "common_center": COMMON_ZOOM_CENTER.tolist(),
             "steering_target": STEERING_TARGET.tolist(),
+            "steering_step_offset": STEERING_STEP_OFFSET,
             "common_delta": ZOOM_DELTA,
             "common_bounds": list(common_bounds),
             "ws1_center": ws10_center.tolist(),
@@ -1052,9 +1106,15 @@ def main() -> int:
                 "selection_disclosure": (
                     "manually filtered diagnostic from one fixed paired bank: "
                     "pretrained retains the first ten collision-producing "
-                    "windows; ours retains ten collision-free, positive-progress "
-                    "windows selected for trajectory-space spread"
+                    "temperature-1 windows; ours uses the same latent bank at "
+                    "higher diagnostic temperature, retains the upper half by "
+                    "bend score among collision-free positive-progress windows, "
+                    "then selects ten for trajectory-space spread"
                 ),
+                "pretrained_sampling_temperature": 1.0,
+                "ours_sampling_temperature": OURS_DIAGNOSTIC_TEMPERATURE,
+                "ours_curvature_keep_fraction": OURS_CURVATURE_KEEP_FRACTION,
+                "ours_bending_score": ours_bending[ours_indices].tolist(),
                 "pretrained_pool_indices": pretrained_indices.tolist(),
                 "ours_pool_indices": ours_indices.tolist(),
                 "pretrained_collision_count": pretrained_candidate_collisions,

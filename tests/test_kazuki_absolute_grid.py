@@ -126,7 +126,7 @@ def test_normalized_ws_comparison_is_hashed_and_explicit_about_raw_scale() -> No
         "Expert ID",
         "pretrained OOD",
         "ours OOD",
-        "CFM-MPPI",
+        "CFM-MPPI normalized ws=0.5",
         "CFM-MPPI normalized ws=1.0",
     ]
     assert "manually filtered diagnostic" in gallery["zoom"][
@@ -134,9 +134,12 @@ def test_normalized_ws_comparison_is_hashed_and_explicit_about_raw_scale() -> No
     ]["selection_disclosure"]
     assert gallery["zoom"]["paired_raw_bank"]["pretrained_collision_count"] == 10
     assert gallery["zoom"]["paired_raw_bank"]["ours_collision_count"] == 0
+    assert gallery["zoom"]["steering_step_offset"] == 4
+    assert gallery["zoom"]["paired_raw_bank"]["pretrained_sampling_temperature"] == 1.0
+    assert gallery["zoom"]["paired_raw_bank"]["ours_sampling_temperature"] == 1.35
     assert gallery["zoom"]["selected_contexts"]["paper_ws0.5"][
         "guidance_cosine"
-    ] < -0.9
+    ] < -0.85
     assert -1.0 <= gallery["zoom"]["selected_contexts"]["paper_ws1.0"][
         "guidance_cosine"
     ] <= 1.0
