@@ -65,6 +65,13 @@ show a 20-step, 2.47-mm dwell interval at the unseen giant obstacle before
 collision. This is local-minimum-like evidence, not a claimed stable
 equilibrium: none of the \(M=10\) episodes timed out.
 
+The subsequent
+[high-\(\alpha\), high-\(w_s\) screen](assets/paper/kazuki_alpha34_wall_grid_metrics.pdf)
+tests eight arms at \(\gamma\in\{0.1,0.5,1\}\). All have zero Validity, and
+six have zero success. A separate \(M=50/\gamma\)
+[wall-route search](assets/paper/kazuki_alpha34_wall_grid_wall_candidate.pdf)
+finds only a weak bottom-wall segment, not a full wall-hugging route.
+
 ### Indexed controller replay suite
 
 All five videos retain the numbered PNG frames under the full Helios artifact

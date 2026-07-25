@@ -1,0 +1,99 @@
+{
+  "M_per_cell": 10,
+  "T": 300,
+  "alphas": [
+    3.0,
+    4.0
+  ],
+  "checkpoint_sha256": "60c155472f5ed0e4a1d53581857f09aead7924f8ce11e8e3adf890d5a57fc079",
+  "conditioning_schema": "low7_closest_boundary_tie_mean",
+  "device": "mps",
+  "elapsed_seconds": 211.32557737501338,
+  "fixed_native_cost": {
+    "beta_mppi": 20.0,
+    "coll_w": 100.0,
+    "goal_w": 0.1,
+    "mppi_lambda": 0.1,
+    "mppi_sigma": 0.2,
+    "n_copy": 200,
+    "n_elite": 10,
+    "n_sample": 200,
+    "refinement_cost": "b1_safemppi"
+  },
+  "gammas": [
+    0.1,
+    0.5,
+    1.0
+  ],
+  "goal_coefficients": [
+    0.0,
+    1.0
+  ],
+  "outputs": [
+    {
+      "alpha": 3.0,
+      "file": "kazuki_a3_wg0_ws3_m10.npz",
+      "goal_coef": 0.0,
+      "safe_coef": 3.0,
+      "sha256": "a4a5e8c6af695f7563184711f5df2141a7ca0fa4de623158a22ad6824065957e"
+    },
+    {
+      "alpha": 3.0,
+      "file": "kazuki_a3_wg0_ws4_m10.npz",
+      "goal_coef": 0.0,
+      "safe_coef": 4.0,
+      "sha256": "5ec58e1ffe9f24412a4bb3e67b2b638e2e2d0a966185a7380d2bac55c62f8e68"
+    },
+    {
+      "alpha": 3.0,
+      "file": "kazuki_a3_wg1_ws3_m10.npz",
+      "goal_coef": 1.0,
+      "safe_coef": 3.0,
+      "sha256": "5e6f792f1b9f6e619c381395953685c3b69bcd996754c8e7ff65494ded438971"
+    },
+    {
+      "alpha": 3.0,
+      "file": "kazuki_a3_wg1_ws4_m10.npz",
+      "goal_coef": 1.0,
+      "safe_coef": 4.0,
+      "sha256": "e7d60154f9ddbe3845db3338057254b203e101a69b41168943621c9a226084d2"
+    },
+    {
+      "alpha": 4.0,
+      "file": "kazuki_a4_wg0_ws3_m10.npz",
+      "goal_coef": 0.0,
+      "safe_coef": 3.0,
+      "sha256": "0f34636e56a5a6f00d702cfa46dba150235ce31932cc110bad849dd8ec2140b0"
+    },
+    {
+      "alpha": 4.0,
+      "file": "kazuki_a4_wg0_ws4_m10.npz",
+      "goal_coef": 0.0,
+      "safe_coef": 4.0,
+      "sha256": "4943dce11b7bbe8fa2829d63b3216081b5873c532daa636da72e7e5883fc107b"
+    },
+    {
+      "alpha": 4.0,
+      "file": "kazuki_a4_wg1_ws3_m10.npz",
+      "goal_coef": 1.0,
+      "safe_coef": 3.0,
+      "sha256": "8b0a0213a0561f7412d35c49bebe9af90d43592635709b014a47ac20cc454cde"
+    },
+    {
+      "alpha": 4.0,
+      "file": "kazuki_a4_wg1_ws4_m10.npz",
+      "goal_coef": 1.0,
+      "safe_coef": 4.0,
+      "sha256": "2bcb8b54a6e9b8ec854777db60e9e54e7df026e8c1621445375c60cb40745d06"
+    }
+  ],
+  "reach": 0.15,
+  "safe_coefficients": [
+    3.0,
+    4.0
+  ],
+  "scene": "low7_radius1_canonical_v1",
+  "seed_contract": "named_seed(version, 'kazuki', gamma, rollout_index); alpha and coefficients excluded for common random numbers",
+  "status": "KAZUKI_ALPHA_COEFFICIENT_GRID_COMPLETE",
+  "version": "kazuki_absolute_coefficient_grid_v1"
+}

@@ -58,3 +58,37 @@ def test_alpha_grid_figures_do_not_claim_a_timeout_local_minimum() -> None:
     assert sidecar["status"] == "KAZUKI_ALPHA_FINE_GRID_FIGURES_COMPLETE"
     assert not sidecar["selected_modes"]["0.1"]["has_timeout_local_minimum"]
     assert not sidecar["selected_modes"]["1.0"]["has_timeout_local_minimum"]
+
+
+def test_retained_alpha34_wall_grid_is_exactly_eight_arms() -> None:
+    root = ROOT / "provenance/paper_baselines/kazuki_alpha34_wall_grid_m10"
+    manifest = json.loads((root / "manifest.json").read_text())
+    assert manifest["status"] == "KAZUKI_ALPHA_COEFFICIENT_GRID_COMPLETE"
+    assert manifest["M_per_cell"] == 10
+    assert manifest["alphas"] == [3.0, 4.0]
+    assert manifest["goal_coefficients"] == [0.0, 1.0]
+    assert manifest["safe_coefficients"] == [3.0, 4.0]
+    assert manifest["gammas"] == [0.1, 0.5, 1.0]
+    assert len(manifest["outputs"]) == 8
+    for entry in manifest["outputs"]:
+        path = root / entry["file"]
+        assert hashlib.sha256(path.read_bytes()).hexdigest() == entry["sha256"]
+
+
+def test_wall_search_is_diagnostic_only_and_uses_fifty_seeds() -> None:
+    root = (
+        ROOT
+        / "provenance/paper_baselines/kazuki_alpha4_wg0_ws3_wall_search_m50"
+    )
+    manifest = json.loads((root / "manifest.json").read_text())
+    assert manifest["M_per_cell"] == 50
+    assert manifest["alphas"] == [4.0]
+    assert manifest["goal_coefficients"] == [0.0]
+    assert manifest["safe_coefficients"] == [3.0]
+    assert manifest["gammas"] == [0.1, 0.5, 1.0]
+    assert len(manifest["outputs"]) == 1
+    sidecar = json.loads(
+        (ROOT / "assets/paper/kazuki_alpha34_wall_grid.json").read_text()
+    )
+    assert sidecar["selected_wall_candidate"]["search_M"] == 50
+    assert sidecar["selected_wall_candidate"]["wall_fraction_0p6"] < 0.2

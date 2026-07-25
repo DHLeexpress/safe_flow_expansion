@@ -174,3 +174,44 @@ python scripts/diagnose_kazuki_guidance_conflict.py \
 The full retained archives are in
 `provenance/paper_baselines/kazuki_alpha_fine_grid_m10/`. The metric and
 diagnostic JSON sidecars define the exact selected episodes and measurements.
+
+## High-\(\alpha\), high-\(w_s\) wall-route search
+
+![High-alpha metric comparison](assets/paper/kazuki_alpha34_wall_grid_metrics.png)
+
+![High-alpha trajectories](assets/paper/kazuki_alpha34_wall_grid_trajectories.png)
+
+The matched \(M=10/\gamma\) screen compares exactly eight arms:
+
+\[
+\alpha\in\{3,4\},\qquad w_g\in\{0,1\},\qquad w_s\in\{3,4\},
+\qquad \gamma\in\{0.1,0.5,1\}.
+\]
+
+All eight arms had zero trajectory Validity. Six had zero success at every
+\(\gamma\). The only nonzero-SR arms were
+
+| \((\alpha,w_g,w_s)\) | SR at \(\gamma=.1/.5/1\) |
+|---|---|
+| \((3,0,3)\) | \(0.1/0.1/0.0\) |
+| \((4,0,3)\) | \(0.3/0.2/0.2\) |
+
+Setting either \(w_g=1\) or \(w_s=4\) caused every retained episode to
+collide, usually within 12--20 receding-horizon steps. Large \(\alpha\) is
+permissive in the standard CBF inequality, while large \(w_s\) scales a
+globally normalized soft gradient; neither creates a safety certificate.
+
+Because \(M=10\) could miss a rare outer route, the promising
+\((4,0,3)\) arm was additionally screened with \(M=50/\gamma\). Its SR was
+\(0.06/0.08/0.12\). The most wall-following success remained seed 7 at
+\(\gamma=1\): only \(12.7\%\) of transit states were within 0.6 m of the
+task-space boundary, with mean boundary distance 0.96 m. It briefly follows
+the bottom wall zone, then turns around the giant obstacle; it is not a full
+wall-hugging route.
+
+![Closest wall-route candidate](assets/paper/kazuki_alpha34_wall_grid_wall_candidate.png)
+
+The \(M=50\) search is diagnostic only and is not mixed into the eight-arm
+metric comparison. Exact archives and seed contracts are retained under
+`provenance/paper_baselines/kazuki_alpha34_wall_grid_m10/` and
+`provenance/paper_baselines/kazuki_alpha4_wg0_ws3_wall_search_m50/`.
