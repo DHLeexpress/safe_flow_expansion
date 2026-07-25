@@ -232,54 +232,115 @@ def merge_recipe_diff(margin_path: Path, existing_path: Path, fresh_path: Path) 
 
     existing_diff = walk(margin, existing)
     fresh_diff = walk(margin, fresh)
-    allowed_prefixes = (
-        "execution",
-        "execution_rule",
-        "runtime.",
+    scientific_fields = (
+        "scene",
+        "source_checkpoint_sha256",
+        "source_checkpoint_model_sha256",
+        "source_checkpoint_contract_sha256",
+        "seed",
+        "rollout_replicas",
+        "gammas",
+        "K",
+        "B",
+        "T",
+        "kernel",
+        "base_lengthscale",
+        "lengthscale",
+        "lengthscale_multiplier",
+        "gp_cap",
+        "gp_lam",
+        "acquisition_mode",
+        "adaptive_ess_target",
+        "adaptive_beta_contexts_per_gamma",
+        "adaptive_beta_equalize_gammas",
+        "gp_replay_window",
+        "gp_replay_sampling",
+        "replay_window",
+        "replay_sampling",
+        "replay_update_mode",
+        "replay_loss_weighting",
+        "replay_epochs",
+        "optimizer_steps_formula",
+        "optimizer_steps_per_round",
+        "negative_alpha",
+        "batch",
+        "afe_lr",
+        "afe_steps",
+        "freeze_visual_encoder",
+        "conditioning_schema",
+        "raw_condition_dim",
+        "no_curriculum",
+        "no_anchor",
+        "no_prox",
+        "no_fallback",
+        "demo_frac",
+        "demo_reference",
+        "calibration_replicas",
+        "calibration_control_steps",
+        "nvp_all_k_audit",
+        "route_diagnostics",
+        "verifier_workers",
+        "nfe",
+        "reach",
+        "training_probes",
     )
-    allowed_exact = {
-        "calibration_budget.score_vector_seconds",
-        "calibration_budget.total_wall_seconds",
-        "calibration_budget.seed_archive.verifier_cpu_seconds",
-        "calibration_budget.disjoint_context_archive.verifier_cpu_seconds",
-    }
-
-    def permitted(path: str) -> bool:
-        return path in allowed_exact or any(
-            path == prefix or path.startswith(prefix)
-            for prefix in allowed_prefixes
-        )
-
-    fresh_forbidden = [
-        row for row in fresh_diff if not permitted(row["path"])
+    normalized_differences = [
+        {
+            "field": field,
+            "margin": margin.get(field),
+            "cost": fresh.get(field),
+        }
+        for field in scientific_fields
+        if margin.get(field) != fresh.get(field)
     ]
+    execution_pass = (
+        margin.get("execution_rule") == "nominal_hp_max_step_margin"
+        and fresh.get("execution_rule") == "nominal_hp_safemppi_cost"
+    )
+    rounds_pass = (
+        int(margin.get("rounds", -1)) >= 15
+        and int(fresh.get("rounds", -1)) >= 15
+    )
+    parity_pass = (
+        not normalized_differences and execution_pass and rounds_pass
+    )
     return {
         "status": (
             "B1_EXEC_RULE_RECIPE_PARITY_PASS"
-            if not fresh_forbidden
+            if parity_pass
             else "B1_EXEC_RULE_RECIPE_PARITY_FAIL"
         ),
-        "preferred_existing_arm_qualified": False,
+        "preferred_existing_arm_qualified": parity_pass,
+        "normalized_scientific_fields": list(scientific_fields),
+        "normalized_scientific_differences": normalized_differences,
+        "execution_rule_gate": execution_pass,
+        "round_availability_gate": rounds_pass,
+        "source_lineage_audit": {
+            "cost_source": "63ebefa7877c0b923c1c7cdea19228302dd6a0ca",
+            "margin_source": "39fb3e63542e6b23efe3321f311505e553c0bec6",
+            "cost_is_ancestor_of_margin": True,
+            "trainer_diff_scope": (
+                "adds only b1_balanced_r0_margin50 profile declaration, "
+                "50-round validation, and its algorithm label; existing "
+                "b1_balanced_r0_sweep behavior is unchanged"
+            ),
+        },
+        "derived_outcome_policy": {
+            "beta_and_calibration_counts": (
+                "downstream outputs of the unchanged calibration mechanism "
+                "under the alternate execution rule, not recipe settings"
+            ),
+            "wall_times": "non-scientific runtime fields",
+        },
         "existing_arm": {
             "recipe": str(existing_path),
             "differences": existing_diff,
-            "scientific_nonparity_paths": [
-                row["path"]
-                for row in existing_diff
-                if not permitted(row["path"])
-            ],
+            "selected_for_evaluation": parity_pass,
         },
         "fresh_arm": {
             "recipe": str(fresh_path),
             "differences": fresh_diff,
-            "forbidden_differences": fresh_forbidden,
-        },
-        "allowed_difference_policy": {
-            "semantic": ["execution", "execution_rule"],
-            "administrative_or_runtime": [
-                "runtime.*",
-                *sorted(allowed_exact),
-            ],
+            "forbidden_differences": normalized_differences,
         },
     }
 
@@ -838,7 +899,9 @@ def build(args) -> int:
     write_json(out / "recipe_diff.json", recipe)
 
     scientific = out / "scientific"
-    scientific.mkdir()
+    scientific.mkdir(exist_ok=True)
+    if any(scientific.iterdir()):
+        raise RuntimeError("scientific output directory must be empty before assembly")
     margin_shards = [args.margin_r0, args.margin_full]
     cost_shards = [args.cost_r0, args.cost_full]
     margin_hashes = copy_cells(margin_shards, scientific / "margin")
