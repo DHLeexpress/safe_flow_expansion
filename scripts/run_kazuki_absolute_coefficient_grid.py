@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
 """Run the native-cost CFM-MPPI absolute coefficient grid locally.
 
-Only guided-flow ``(w_goal, w_safe)`` changes.  The r19 checkpoint, giant
-obstacle scene, exact B1 SafeMPPI refinement cost, and common random-number
-seed bank remain fixed.
+Only guided-flow ``(alpha, w_goal, w_safe)`` changes.  The r19 checkpoint,
+giant-obstacle scene, exact B1 SafeMPPI refinement cost, and common
+random-number seed bank remain fixed.  Its historical default still reproduces
+the retained alpha=1 absolute-coefficient screen.
 """
 
 from __future__ import annotations
@@ -51,8 +52,9 @@ def coefficient_tag(value: float) -> str:
     return f"{value:g}".replace(".", "p")
 
 
-def configure_native_cost(goal_coef: float) -> None:
+def configure_native_cost(goal_coef: float, alpha: float) -> None:
     baseline.GOAL_COEF = float(goal_coef)
+    baseline.A_CBF = float(alpha)
     baseline.COLL_W = 100.0
     baseline.GOAL_W = 0.1
     baseline.BETA_MPPI = 20.0
@@ -70,13 +72,14 @@ def run_cell(
     env,
     goal_coef: float,
     safe_coef: float,
+    alpha: float,
     gamma: float,
     m: int,
     t_cap: int,
     reach: float,
     device: str,
 ) -> tuple[list[np.ndarray], list[str]]:
-    configure_native_cost(goal_coef)
+    configure_native_cost(goal_coef, alpha)
     paths: list[np.ndarray] = []
     outcomes: list[str] = []
     started = time.perf_counter()
@@ -101,7 +104,7 @@ def run_cell(
         outcomes.append(outcome)
         counts = {label: outcomes.count(label) for label in ("SR", "CR", "TO")}
         print(
-            f"[wg={goal_coef:g} ws={safe_coef:g} gamma={gamma:g}] "
+            f"[alpha={alpha:g} wg={goal_coef:g} ws={safe_coef:g} gamma={gamma:g}] "
             f"{rollout_index + 1}/{m} {outcome} steps={len(path) - 1} "
             f"SR={counts['SR'] / len(outcomes):.2f} "
             f"CR={counts['CR'] / len(outcomes):.2f} "
@@ -116,6 +119,7 @@ def pack_pair(
     cells: dict[float, tuple[list[np.ndarray], list[str]]],
     goal_coef: float,
     safe_coef: float,
+    alpha: float,
 ) -> None:
     payload: dict[str, np.ndarray] = {}
     for gamma, (paths, outcomes) in cells.items():
@@ -129,6 +133,7 @@ def pack_pair(
             {
                 "goal_coef": goal_coef,
                 "safe_coef": safe_coef,
+                "alpha": alpha,
                 "refinement_cost": "b1_safemppi",
             },
             sort_keys=True,
@@ -153,6 +158,20 @@ def main() -> int:
     parser.add_argument("--M", type=int, default=10)
     parser.add_argument("--T", type=int, default=300)
     parser.add_argument("--reach", type=float, default=0.15)
+    parser.add_argument(
+        "--goal-coefficients",
+        nargs="+",
+        type=float,
+        default=list(COEFFICIENTS),
+    )
+    parser.add_argument(
+        "--safe-coefficients",
+        nargs="+",
+        type=float,
+        default=list(COEFFICIENTS),
+    )
+    parser.add_argument("--alphas", nargs="+", type=float, default=[1.0])
+    parser.add_argument("--gammas", nargs="+", type=float, default=list(GAMMAS))
     parser.add_argument("--resume", action="store_true")
     args = parser.parse_args()
 
@@ -167,56 +186,72 @@ def main() -> int:
     policy, _ = load_hp(str(args.checkpoint), device="cpu")
     policy = policy.to(args.device).eval()
 
+    goal_coefficients = tuple(float(value) for value in args.goal_coefficients)
+    safe_coefficients = tuple(float(value) for value in args.safe_coefficients)
+    alphas = tuple(float(value) for value in args.alphas)
+    gammas = tuple(float(value) for value in args.gammas)
+    include_alpha_tag = len(alphas) != 1 or alphas[0] != 1.0
     outputs: list[dict[str, object]] = []
     sweep_started = time.perf_counter()
-    for goal_coef in COEFFICIENTS:
-        for safe_coef in COEFFICIENTS:
-            output = args.outdir / (
-                f"kazuki_wg{coefficient_tag(goal_coef)}_"
-                f"ws{coefficient_tag(safe_coef)}_m{args.M}.npz"
-            )
-            if output.exists() and args.resume:
-                print(f"[resume] {output.name}", flush=True)
-            else:
-                cells = {
-                    gamma: run_cell(
-                        policy,
-                        env,
-                        goal_coef,
-                        safe_coef,
-                        gamma,
-                        args.M,
-                        args.T,
-                        args.reach,
-                        args.device,
-                    )
-                    for gamma in GAMMAS
-                }
-                pack_pair(output, cells, goal_coef, safe_coef)
-            outputs.append(
-                {
-                    "goal_coef": goal_coef,
-                    "safe_coef": safe_coef,
-                    "file": output.name,
-                    "sha256": sha256_file(output),
-                }
-            )
+    for alpha in alphas:
+        for goal_coef in goal_coefficients:
+            for safe_coef in safe_coefficients:
+                alpha_tag = (
+                    f"a{coefficient_tag(alpha)}_" if include_alpha_tag else ""
+                )
+                output = args.outdir / (
+                    f"kazuki_{alpha_tag}wg{coefficient_tag(goal_coef)}_"
+                    f"ws{coefficient_tag(safe_coef)}_m{args.M}.npz"
+                )
+                if output.exists() and args.resume:
+                    print(f"[resume] {output.name}", flush=True)
+                else:
+                    cells = {
+                        gamma: run_cell(
+                            policy,
+                            env,
+                            goal_coef,
+                            safe_coef,
+                            alpha,
+                            gamma,
+                            args.M,
+                            args.T,
+                            args.reach,
+                            args.device,
+                        )
+                        for gamma in gammas
+                    }
+                    pack_pair(output, cells, goal_coef, safe_coef, alpha)
+                outputs.append(
+                    {
+                        "alpha": alpha,
+                        "goal_coef": goal_coef,
+                        "safe_coef": safe_coef,
+                        "file": output.name,
+                        "sha256": sha256_file(output),
+                    }
+                )
 
     manifest = {
-        "status": "KAZUKI_ABSOLUTE_COEFFICIENT_GRID_COMPLETE",
+        "status": (
+            "KAZUKI_ALPHA_COEFFICIENT_GRID_COMPLETE"
+            if include_alpha_tag
+            else "KAZUKI_ABSOLUTE_COEFFICIENT_GRID_COMPLETE"
+        ),
         "version": VERSION,
         "scene": "low7_radius1_canonical_v1",
         "checkpoint_sha256": checkpoint_sha,
         "conditioning_schema": SCHEMA,
-        "gammas": list(GAMMAS),
-        "goal_coefficients": list(COEFFICIENTS),
-        "safe_coefficients": list(COEFFICIENTS),
+        "gammas": list(gammas),
+        "goal_coefficients": list(goal_coefficients),
+        "safe_coefficients": list(safe_coefficients),
+        "alphas": list(alphas),
         "M_per_cell": args.M,
         "T": args.T,
         "reach": args.reach,
         "device": args.device,
         "seed_contract": (
-            "named_seed(version, 'kazuki', gamma, rollout_index); "
+            "named_seed(version, 'kazuki', gamma, rollout_index); alpha and "
             "coefficients excluded for common random numbers"
         ),
         "fixed_native_cost": {

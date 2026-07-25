@@ -1,0 +1,23 @@
+{
+  "alpha": 0.5,
+  "diagnostic_definition": "cosine between the zero-guidance mean terminal-plan displacement and the guidance-induced shift of that displacement, using the same context and latent proposals",
+  "dwell_displacement_20": 0.37916172888684857,
+  "dwell_start": 71,
+  "gamma": 0.1,
+  "goal_coef": 0.1,
+  "mean_base_norm": 0.3504392332412219,
+  "mean_cosine": -0.9212113041663951,
+  "mean_guidance_shift_norm": 0.2506751065789643,
+  "minimum_cosine": -0.9999998719952228,
+  "negative_cosine_fraction": 1.0,
+  "outcome": "SR",
+  "outputs": [
+    "/Users/dhl/Documents/safe_flow_expansion/assets/paper/kazuki_conflict_success_g0p1.png",
+    "/Users/dhl/Documents/safe_flow_expansion/assets/paper/kazuki_conflict_success_g0p1.pdf"
+  ],
+  "rollout_index": 0,
+  "safe_coef": 2.0,
+  "seed": 407365410,
+  "status": "KAZUKI_GUIDANCE_CONFLICT_DIAGNOSTIC_COMPLETE",
+  "trajectory_reproduced": true
+}

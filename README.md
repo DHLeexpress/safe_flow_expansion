@@ -54,6 +54,17 @@ and
 show that the guidance response is non-monotone and gamma-dependent; the
 historical low/high coefficient rows were not calibrated optima.
 
+The finer
+[\(\alpha,w_g,w_s\) screen](assets/paper/kazuki_alpha_fine_grid_gamma0.1_metrics.pdf)
+finds no coefficient that jointly restores high task success and verified
+trajectory validity. Its
+[selected-mode figure](assets/paper/kazuki_alpha_fine_grid_selected_modes.pdf)
+and
+[direction-conflict replay](assets/paper/kazuki_conflict_dwell_g0p1.pdf)
+show a 20-step, 2.47-mm dwell interval at the unseen giant obstacle before
+collision. This is local-minimum-like evidence, not a claimed stable
+equilibrium: none of the \(M=10\) episodes timed out.
+
 ### Indexed controller replay suite
 
 All five videos retain the numbered PNG frames under the full Helios artifact

@@ -101,3 +101,76 @@ python scripts/paper_kazuki_absolute_grid.py
 
 The raw trajectory archives and complete seed/cost contract live in
 `provenance/paper_baselines/kazuki_absolute_grid_m10/`.
+
+## CBF-\(\alpha\) and fine guidance sweep
+
+![Alpha sweep, gamma 0.1](assets/paper/kazuki_alpha_fine_grid_gamma0.1_metrics.png)
+
+![Selected successful and failing modes](assets/paper/kazuki_alpha_fine_grid_selected_modes.png)
+
+The common-random-number \(M=10\) screen fixes the r19 checkpoint, native
+SafeMPPI refinement cost, and giant-obstacle scene. It evaluates
+
+\[
+\alpha\in\{0.1,0.5,1,2\},\qquad
+w_g\in\{0,0.01,0.05,0.1\},\qquad
+w_s\in\{0.5,1,1.5,2\}
+\]
+
+at \(\gamma\in\{0.1,1\}\). Here \(w_g,w_s\) scale the flow-guidance
+gradients; the native refinement cost still contains its fixed goal term.
+All 1,280 rollouts share proposal seeds across coefficient settings.
+
+For \(h>0\), increasing \(\alpha\) makes
+\(\dot h+\alpha h\ge0\) easier to satisfy. Thus small, not large,
+\(\alpha\) is the more conservative standard-CBF setting. In this
+implementation the term is only a soft, globally normalized guidance reward,
+so that formal interpretation does not give forward invariance.
+
+| \(\alpha\) | mean SR, \(\gamma=.1\) | mean SR, \(\gamma=1\) | mean Validity, \(\gamma=.1\) | mean Validity, \(\gamma=1\) |
+|---:|---:|---:|---:|---:|
+| .1 | 0.000 | 0.000 | 0.000 | 0.000 |
+| .5 | 0.063 | 0.031 | 0.000 | 0.025 |
+| 1 | 0.531 | 0.244 | 0.019 | 0.025 |
+| 2 | 0.500 | 0.469 | 0.000 | 0.150 |
+
+These are means over the 16 coefficient pairs, not selected optima. The
+highest two-gamma mean SR was \(0.75\) at
+\((\alpha,w_g,w_s)=(2,0.01,1)\), but its mean Validity was zero. The highest
+mean Validity was \(0.25\) at \((2,0.01,1.5)\), with mean SR \(0.65\).
+Coefficient tuning therefore did not jointly recover task completion and
+verified trajectory validity.
+
+No episode timed out, so the sweep does **not** establish a stable local
+minimum. It does expose a local-minimum-like dwell mode at
+\((\gamma,\alpha,w_g,w_s)=(0.1,1,0,2)\): the robot moved only \(2.47\) mm
+over its least-moving 20-step interval near the giant obstacle, then
+collided. In its exact replay, the cosine between the zero-guidance mean
+terminal-plan direction and the guidance-induced terminal-plan shift was
+negative for \(78.4\%\) of steps.
+
+![Dwell-mode direction conflict](assets/paper/kazuki_conflict_dwell_g0p1.png)
+
+Opposition alone is not a failure certificate: the selected successful
+episodes also had predominantly negative cosine. The useful signature is
+opposition together with a plateau in goal distance. This is the concrete
+distribution-shift failure that a soft reward sweep cannot certify away and
+motivates verifier-driven expansion.
+
+Regenerate:
+
+```bash
+python scripts/run_kazuki_absolute_coefficient_grid.py \
+  --device mps --M 10 \
+  --goal-coefficients 0 0.01 0.05 0.1 \
+  --safe-coefficients 0.5 1 1.5 2 \
+  --alphas 0.1 0.5 1 2
+python scripts/paper_kazuki_alpha_grid.py
+python scripts/diagnose_kazuki_guidance_conflict.py \
+  --alpha 1 --goal-coef 0 --safe-coef 2 \
+  --gamma 0.1 --rollout-index 3
+```
+
+The full retained archives are in
+`provenance/paper_baselines/kazuki_alpha_fine_grid_m10/`. The metric and
+diagnostic JSON sidecars define the exact selected episodes and measurements.

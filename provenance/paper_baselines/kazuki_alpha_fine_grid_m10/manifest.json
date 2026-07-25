@@ -1,0 +1,496 @@
+{
+  "M_per_cell": 10,
+  "T": 300,
+  "alphas": [
+    0.1,
+    0.5,
+    1.0,
+    2.0
+  ],
+  "checkpoint_sha256": "60c155472f5ed0e4a1d53581857f09aead7924f8ce11e8e3adf890d5a57fc079",
+  "conditioning_schema": "low7_closest_boundary_tie_mean",
+  "device": "mps",
+  "elapsed_seconds": 3522.7959024580196,
+  "fixed_native_cost": {
+    "beta_mppi": 20.0,
+    "coll_w": 100.0,
+    "goal_w": 0.1,
+    "mppi_lambda": 0.1,
+    "mppi_sigma": 0.2,
+    "n_copy": 200,
+    "n_elite": 10,
+    "n_sample": 200,
+    "refinement_cost": "b1_safemppi"
+  },
+  "gammas": [
+    0.1,
+    1.0
+  ],
+  "goal_coefficients": [
+    0.0,
+    0.01,
+    0.05,
+    0.1
+  ],
+  "outputs": [
+    {
+      "alpha": 0.1,
+      "file": "kazuki_a0p1_wg0_ws0p5_m10.npz",
+      "goal_coef": 0.0,
+      "safe_coef": 0.5,
+      "sha256": "65473d1bb6996f7ffb351550a9468e284cdb414ff30dbb29ad8d107f151555ea"
+    },
+    {
+      "alpha": 0.1,
+      "file": "kazuki_a0p1_wg0_ws1_m10.npz",
+      "goal_coef": 0.0,
+      "safe_coef": 1.0,
+      "sha256": "37777fe47da37886dd81d0ecf58beb44eb23fc2c91ad85a70c3c110f4a540165"
+    },
+    {
+      "alpha": 0.1,
+      "file": "kazuki_a0p1_wg0_ws1p5_m10.npz",
+      "goal_coef": 0.0,
+      "safe_coef": 1.5,
+      "sha256": "e29a6c6c68cac01a6210192882f728019626e2aa088d337a28ab05424ee1a35a"
+    },
+    {
+      "alpha": 0.1,
+      "file": "kazuki_a0p1_wg0_ws2_m10.npz",
+      "goal_coef": 0.0,
+      "safe_coef": 2.0,
+      "sha256": "e46013385f5a5faca0e310baea1ed064c8a58c273bb5e1b98466f0c9ff8138c8"
+    },
+    {
+      "alpha": 0.1,
+      "file": "kazuki_a0p1_wg0p01_ws0p5_m10.npz",
+      "goal_coef": 0.01,
+      "safe_coef": 0.5,
+      "sha256": "0b31d4513c1bdc1080121848dc847c59bf11689d733cbfbc1717b51477f6c8d3"
+    },
+    {
+      "alpha": 0.1,
+      "file": "kazuki_a0p1_wg0p01_ws1_m10.npz",
+      "goal_coef": 0.01,
+      "safe_coef": 1.0,
+      "sha256": "4623b337e6ad8be4170fb34fc4f63b5b26169348e85facb8583e88baf31fc9c6"
+    },
+    {
+      "alpha": 0.1,
+      "file": "kazuki_a0p1_wg0p01_ws1p5_m10.npz",
+      "goal_coef": 0.01,
+      "safe_coef": 1.5,
+      "sha256": "d121290bb46d8d756c77fdfb2404e513b49cd15fa1b5d374c51ce584b493e570"
+    },
+    {
+      "alpha": 0.1,
+      "file": "kazuki_a0p1_wg0p01_ws2_m10.npz",
+      "goal_coef": 0.01,
+      "safe_coef": 2.0,
+      "sha256": "174110b5285d40d703f93bbf525d4daaac1019f863f9d83cef8cab2ae4a3d0d9"
+    },
+    {
+      "alpha": 0.1,
+      "file": "kazuki_a0p1_wg0p05_ws0p5_m10.npz",
+      "goal_coef": 0.05,
+      "safe_coef": 0.5,
+      "sha256": "56493e4b803db3ac0d29025415cc745b2cfa56f85e79ed8892b119a806c3ec81"
+    },
+    {
+      "alpha": 0.1,
+      "file": "kazuki_a0p1_wg0p05_ws1_m10.npz",
+      "goal_coef": 0.05,
+      "safe_coef": 1.0,
+      "sha256": "60f5128c8ad1b6a6e7fcd887aeeca41a9790dc0b7c7a5e96155b12e716c0f2c7"
+    },
+    {
+      "alpha": 0.1,
+      "file": "kazuki_a0p1_wg0p05_ws1p5_m10.npz",
+      "goal_coef": 0.05,
+      "safe_coef": 1.5,
+      "sha256": "9bdb8ac4eb84f4899e46b28aa6b7e4db57c39f964468425d0280787a0bf8a622"
+    },
+    {
+      "alpha": 0.1,
+      "file": "kazuki_a0p1_wg0p05_ws2_m10.npz",
+      "goal_coef": 0.05,
+      "safe_coef": 2.0,
+      "sha256": "bfcc8a9b86b6d3c4f88ab7754cd16011578b1ff8b9a0146fb25706d5c73926d3"
+    },
+    {
+      "alpha": 0.1,
+      "file": "kazuki_a0p1_wg0p1_ws0p5_m10.npz",
+      "goal_coef": 0.1,
+      "safe_coef": 0.5,
+      "sha256": "0383c546ed96fdafd0df37026673a5fe99eb92bc7ad014324642206d29578c9c"
+    },
+    {
+      "alpha": 0.1,
+      "file": "kazuki_a0p1_wg0p1_ws1_m10.npz",
+      "goal_coef": 0.1,
+      "safe_coef": 1.0,
+      "sha256": "bfc337d4271171f5c1b41d6016274a09d1e30ec8eee3a6f751a89ffd69277741"
+    },
+    {
+      "alpha": 0.1,
+      "file": "kazuki_a0p1_wg0p1_ws1p5_m10.npz",
+      "goal_coef": 0.1,
+      "safe_coef": 1.5,
+      "sha256": "ea07bc3a2c67aa4b76dfa2aaff934fe153e5a76f8cf3453fa5e2e10577670246"
+    },
+    {
+      "alpha": 0.1,
+      "file": "kazuki_a0p1_wg0p1_ws2_m10.npz",
+      "goal_coef": 0.1,
+      "safe_coef": 2.0,
+      "sha256": "97eece24afac74dfbb8ee0fc7b6376c02e46d9cd26bdd34d32c19668aeae3d91"
+    },
+    {
+      "alpha": 0.5,
+      "file": "kazuki_a0p5_wg0_ws0p5_m10.npz",
+      "goal_coef": 0.0,
+      "safe_coef": 0.5,
+      "sha256": "cdcb2abb57c8d38f3f74ce4555ca0abf9c41d3a5afffaf99c1e0ffea659dd64d"
+    },
+    {
+      "alpha": 0.5,
+      "file": "kazuki_a0p5_wg0_ws1_m10.npz",
+      "goal_coef": 0.0,
+      "safe_coef": 1.0,
+      "sha256": "6808219554b8fe723852d6fd526ba8f5d5d8e0fdcbc9c1f0ffa42741c83e4ef6"
+    },
+    {
+      "alpha": 0.5,
+      "file": "kazuki_a0p5_wg0_ws1p5_m10.npz",
+      "goal_coef": 0.0,
+      "safe_coef": 1.5,
+      "sha256": "bf4120abe7173330da487b0aec0b135be1f3ca39b6d3d59e265d113be61e9046"
+    },
+    {
+      "alpha": 0.5,
+      "file": "kazuki_a0p5_wg0_ws2_m10.npz",
+      "goal_coef": 0.0,
+      "safe_coef": 2.0,
+      "sha256": "18302dce82df56b2c11d1068089b56e060e80c12993f8fdffb0b6e370f660801"
+    },
+    {
+      "alpha": 0.5,
+      "file": "kazuki_a0p5_wg0p01_ws0p5_m10.npz",
+      "goal_coef": 0.01,
+      "safe_coef": 0.5,
+      "sha256": "b1f2cef2d6906ecd7411ba6966e8e7693b9693fff3f71fadf491ce9ca502fe90"
+    },
+    {
+      "alpha": 0.5,
+      "file": "kazuki_a0p5_wg0p01_ws1_m10.npz",
+      "goal_coef": 0.01,
+      "safe_coef": 1.0,
+      "sha256": "0f7552fa7cddbe0d008c86a22fbc87fcbd70e29e4685a1cf2dc08a947b035449"
+    },
+    {
+      "alpha": 0.5,
+      "file": "kazuki_a0p5_wg0p01_ws1p5_m10.npz",
+      "goal_coef": 0.01,
+      "safe_coef": 1.5,
+      "sha256": "c7b15673f32dabf3c314d4783e25d86d6c00c3085df430d8508aa0f3adcd8b80"
+    },
+    {
+      "alpha": 0.5,
+      "file": "kazuki_a0p5_wg0p01_ws2_m10.npz",
+      "goal_coef": 0.01,
+      "safe_coef": 2.0,
+      "sha256": "03c6859a75ce2c3be65bf2d7391a378057fc47fcba38f0fa6c12cebfbfe4d05f"
+    },
+    {
+      "alpha": 0.5,
+      "file": "kazuki_a0p5_wg0p05_ws0p5_m10.npz",
+      "goal_coef": 0.05,
+      "safe_coef": 0.5,
+      "sha256": "a15bb9de2af63612d68b857558cae0e934d031763c7fc0f9af9ac5836438a743"
+    },
+    {
+      "alpha": 0.5,
+      "file": "kazuki_a0p5_wg0p05_ws1_m10.npz",
+      "goal_coef": 0.05,
+      "safe_coef": 1.0,
+      "sha256": "17daf2d46c00b45cb9ec29f0900e056820c1f1863fc14249817471a506f685b0"
+    },
+    {
+      "alpha": 0.5,
+      "file": "kazuki_a0p5_wg0p05_ws1p5_m10.npz",
+      "goal_coef": 0.05,
+      "safe_coef": 1.5,
+      "sha256": "e8e01a6a349f2c6c43625d64d613845a09925286d14a3ea7a87c4c02e5f478e4"
+    },
+    {
+      "alpha": 0.5,
+      "file": "kazuki_a0p5_wg0p05_ws2_m10.npz",
+      "goal_coef": 0.05,
+      "safe_coef": 2.0,
+      "sha256": "85a027dc20e0512ee215e8f3b288af524a54a765ebc769deeb5139197a790fe6"
+    },
+    {
+      "alpha": 0.5,
+      "file": "kazuki_a0p5_wg0p1_ws0p5_m10.npz",
+      "goal_coef": 0.1,
+      "safe_coef": 0.5,
+      "sha256": "0864dabe15d4b711b1f5c1fe5c4032fd575b483818ad2eec101bea58358419d7"
+    },
+    {
+      "alpha": 0.5,
+      "file": "kazuki_a0p5_wg0p1_ws1_m10.npz",
+      "goal_coef": 0.1,
+      "safe_coef": 1.0,
+      "sha256": "86f9e7a4e52259fd87e49b5619a1c9d44bb4d0e7574d8279368af658b401ebe4"
+    },
+    {
+      "alpha": 0.5,
+      "file": "kazuki_a0p5_wg0p1_ws1p5_m10.npz",
+      "goal_coef": 0.1,
+      "safe_coef": 1.5,
+      "sha256": "c369e73d700c1088914fbff5eee5bc119bdb6a5bcae7670e3674c57f068ca690"
+    },
+    {
+      "alpha": 0.5,
+      "file": "kazuki_a0p5_wg0p1_ws2_m10.npz",
+      "goal_coef": 0.1,
+      "safe_coef": 2.0,
+      "sha256": "63d193f5dc5aef2c3caea11a24e7d4f2e621484d1cb1514920841967af4b64eb"
+    },
+    {
+      "alpha": 1.0,
+      "file": "kazuki_a1_wg0_ws0p5_m10.npz",
+      "goal_coef": 0.0,
+      "safe_coef": 0.5,
+      "sha256": "e1f1a4df7c14915a02885f5a532a1ee2afc4f0b9f2e638c557daac6e4e120802"
+    },
+    {
+      "alpha": 1.0,
+      "file": "kazuki_a1_wg0_ws1_m10.npz",
+      "goal_coef": 0.0,
+      "safe_coef": 1.0,
+      "sha256": "78d945fbcae568ad911e4ec83e558286fbfc868847f50f452eebf0cfd11de397"
+    },
+    {
+      "alpha": 1.0,
+      "file": "kazuki_a1_wg0_ws1p5_m10.npz",
+      "goal_coef": 0.0,
+      "safe_coef": 1.5,
+      "sha256": "f9fbf414825f9403ea87921817f52af60a66d859b19a1f04138dde149a87bea0"
+    },
+    {
+      "alpha": 1.0,
+      "file": "kazuki_a1_wg0_ws2_m10.npz",
+      "goal_coef": 0.0,
+      "safe_coef": 2.0,
+      "sha256": "654e95c8e828451f588a53286750b953e407355ed359effc1f34e119dadbbe96"
+    },
+    {
+      "alpha": 1.0,
+      "file": "kazuki_a1_wg0p01_ws0p5_m10.npz",
+      "goal_coef": 0.01,
+      "safe_coef": 0.5,
+      "sha256": "6db8ad346d5ac9890c31f3f63d920829fbc0f60f47951aadd4208a24b4bc2128"
+    },
+    {
+      "alpha": 1.0,
+      "file": "kazuki_a1_wg0p01_ws1_m10.npz",
+      "goal_coef": 0.01,
+      "safe_coef": 1.0,
+      "sha256": "d4ece99f145b37117c1ef4fd0635eea361bb2ce812bb9287a72dbb8afabded8d"
+    },
+    {
+      "alpha": 1.0,
+      "file": "kazuki_a1_wg0p01_ws1p5_m10.npz",
+      "goal_coef": 0.01,
+      "safe_coef": 1.5,
+      "sha256": "f150d20e321047131cc3ccc3ece242fb5b5856e974ca5baa1dcb5e05bd45fd94"
+    },
+    {
+      "alpha": 1.0,
+      "file": "kazuki_a1_wg0p01_ws2_m10.npz",
+      "goal_coef": 0.01,
+      "safe_coef": 2.0,
+      "sha256": "34d869f91bb22f4a51ebdeaec0e28f50470494c50386ac7c81e80f8bcee8971c"
+    },
+    {
+      "alpha": 1.0,
+      "file": "kazuki_a1_wg0p05_ws0p5_m10.npz",
+      "goal_coef": 0.05,
+      "safe_coef": 0.5,
+      "sha256": "4e4a4add547badb925f60ae2a307820892b5782d126222f32c7868d37f7d1b65"
+    },
+    {
+      "alpha": 1.0,
+      "file": "kazuki_a1_wg0p05_ws1_m10.npz",
+      "goal_coef": 0.05,
+      "safe_coef": 1.0,
+      "sha256": "28fce1b4e627c5539efb0eee0f392c58a6d4acdc275c3b4d888ac0113d26f5a3"
+    },
+    {
+      "alpha": 1.0,
+      "file": "kazuki_a1_wg0p05_ws1p5_m10.npz",
+      "goal_coef": 0.05,
+      "safe_coef": 1.5,
+      "sha256": "2d5b9dc57fe13cf79940870c8265e5ea3cadcc135ef4d9cb2ecca69f46644eda"
+    },
+    {
+      "alpha": 1.0,
+      "file": "kazuki_a1_wg0p05_ws2_m10.npz",
+      "goal_coef": 0.05,
+      "safe_coef": 2.0,
+      "sha256": "138047057c896dd58f9fef42be5b319b6752718ab0b2c9920c835c9d2d502f05"
+    },
+    {
+      "alpha": 1.0,
+      "file": "kazuki_a1_wg0p1_ws0p5_m10.npz",
+      "goal_coef": 0.1,
+      "safe_coef": 0.5,
+      "sha256": "77d4a35851649e4675576ffce4408895bf1290a8b43f0c686f9605ef923065e0"
+    },
+    {
+      "alpha": 1.0,
+      "file": "kazuki_a1_wg0p1_ws1_m10.npz",
+      "goal_coef": 0.1,
+      "safe_coef": 1.0,
+      "sha256": "4e5f7aba0e4232973214464973b0309e934660885ad69ba768d6fd97ec8821bc"
+    },
+    {
+      "alpha": 1.0,
+      "file": "kazuki_a1_wg0p1_ws1p5_m10.npz",
+      "goal_coef": 0.1,
+      "safe_coef": 1.5,
+      "sha256": "ecd330adbfa5513a8bef4d346baa1c86bd74d5106de098553198fa8bb7050d5a"
+    },
+    {
+      "alpha": 1.0,
+      "file": "kazuki_a1_wg0p1_ws2_m10.npz",
+      "goal_coef": 0.1,
+      "safe_coef": 2.0,
+      "sha256": "b30fbf2b078ae9552647c23f1dc4b258a1ed5d6220983379175af81759fcc9d0"
+    },
+    {
+      "alpha": 2.0,
+      "file": "kazuki_a2_wg0_ws0p5_m10.npz",
+      "goal_coef": 0.0,
+      "safe_coef": 0.5,
+      "sha256": "be720fccc1aab66403c302caba97a7ae16653b3bad81035109eb94a870c02082"
+    },
+    {
+      "alpha": 2.0,
+      "file": "kazuki_a2_wg0_ws1_m10.npz",
+      "goal_coef": 0.0,
+      "safe_coef": 1.0,
+      "sha256": "b537cb69f4ca870f1eddfa2efa1dc85e9506203ac880e6ea3b574669efaf724e"
+    },
+    {
+      "alpha": 2.0,
+      "file": "kazuki_a2_wg0_ws1p5_m10.npz",
+      "goal_coef": 0.0,
+      "safe_coef": 1.5,
+      "sha256": "108f72e59787bef05bc087dc510b671e24c09683001bb06436cd10b25ac411c6"
+    },
+    {
+      "alpha": 2.0,
+      "file": "kazuki_a2_wg0_ws2_m10.npz",
+      "goal_coef": 0.0,
+      "safe_coef": 2.0,
+      "sha256": "81dda5b671035f485f3fde3a2c426df97304d4a24a1a279880d463eadbe11295"
+    },
+    {
+      "alpha": 2.0,
+      "file": "kazuki_a2_wg0p01_ws0p5_m10.npz",
+      "goal_coef": 0.01,
+      "safe_coef": 0.5,
+      "sha256": "60a1fd05dfbc028354d7ec2a4455543328e3e8c63413557a7e485d718f78aed4"
+    },
+    {
+      "alpha": 2.0,
+      "file": "kazuki_a2_wg0p01_ws1_m10.npz",
+      "goal_coef": 0.01,
+      "safe_coef": 1.0,
+      "sha256": "7e1f69031725a421957e521e02f29739fdeb05afd3dab84da674920ac37e2663"
+    },
+    {
+      "alpha": 2.0,
+      "file": "kazuki_a2_wg0p01_ws1p5_m10.npz",
+      "goal_coef": 0.01,
+      "safe_coef": 1.5,
+      "sha256": "8b1909d8ee05c9cbe56b61875a24d0a86fa1d17b94fccf37b35eb02f8d2d5a67"
+    },
+    {
+      "alpha": 2.0,
+      "file": "kazuki_a2_wg0p01_ws2_m10.npz",
+      "goal_coef": 0.01,
+      "safe_coef": 2.0,
+      "sha256": "068cd495591a5bffd234a321b00c07e710781f0719c25b7a0bfc5df7a142703a"
+    },
+    {
+      "alpha": 2.0,
+      "file": "kazuki_a2_wg0p05_ws0p5_m10.npz",
+      "goal_coef": 0.05,
+      "safe_coef": 0.5,
+      "sha256": "0279b886651a16101cb83c6acde4ed6a0bc0b0e621b71d953ee9e39d4210ec1e"
+    },
+    {
+      "alpha": 2.0,
+      "file": "kazuki_a2_wg0p05_ws1_m10.npz",
+      "goal_coef": 0.05,
+      "safe_coef": 1.0,
+      "sha256": "98bb8d74da8e8447b8825b4d4fe60e67d7433a072bd1a5f63d2361ca4e28920f"
+    },
+    {
+      "alpha": 2.0,
+      "file": "kazuki_a2_wg0p05_ws1p5_m10.npz",
+      "goal_coef": 0.05,
+      "safe_coef": 1.5,
+      "sha256": "3ef91fe2a0d25cb2eae25250d70ad3a50b7beef529d5657b3ecd62c4f14d2203"
+    },
+    {
+      "alpha": 2.0,
+      "file": "kazuki_a2_wg0p05_ws2_m10.npz",
+      "goal_coef": 0.05,
+      "safe_coef": 2.0,
+      "sha256": "17bb813986024467e281c8479c74ad2d481f4de483637ec0c92b9c5b4a71d1b2"
+    },
+    {
+      "alpha": 2.0,
+      "file": "kazuki_a2_wg0p1_ws0p5_m10.npz",
+      "goal_coef": 0.1,
+      "safe_coef": 0.5,
+      "sha256": "df505fe8a16f1556a7878c47a1397d6e8b60a1d8f2bfa31824b9c1d411de6f56"
+    },
+    {
+      "alpha": 2.0,
+      "file": "kazuki_a2_wg0p1_ws1_m10.npz",
+      "goal_coef": 0.1,
+      "safe_coef": 1.0,
+      "sha256": "ef3efe65fc172aaf9995fc9e2a5da953c6ccf0eb5c5f244817fe7d84a7c05b42"
+    },
+    {
+      "alpha": 2.0,
+      "file": "kazuki_a2_wg0p1_ws1p5_m10.npz",
+      "goal_coef": 0.1,
+      "safe_coef": 1.5,
+      "sha256": "1d694aa6b375bbc74cd702e20d709df3acc76529a8ac36f0c768a752a0f13329"
+    },
+    {
+      "alpha": 2.0,
+      "file": "kazuki_a2_wg0p1_ws2_m10.npz",
+      "goal_coef": 0.1,
+      "safe_coef": 2.0,
+      "sha256": "3aa7309386f20eaa93288c5afa6573275e81b459e4a6ec2194abe9a4e6022b21"
+    }
+  ],
+  "reach": 0.15,
+  "safe_coefficients": [
+    0.5,
+    1.0,
+    1.5,
+    2.0
+  ],
+  "scene": "low7_radius1_canonical_v1",
+  "seed_contract": "named_seed(version, 'kazuki', gamma, rollout_index); alpha and coefficients excluded for common random numbers",
+  "status": "KAZUKI_ALPHA_COEFFICIENT_GRID_COMPLETE",
+  "version": "kazuki_absolute_coefficient_grid_v1"
+}
