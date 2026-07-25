@@ -35,10 +35,10 @@
   "layout": {
     "comparison": "2 rows x 3 gamma columns",
     "rows": [
-      "SafeMPPI ID",
+      "Expert ID",
       "pretrained OOD",
-      "ours r15 OOD",
-      "CFM-MPPI normalized ws=0.5",
+      "ours OOD",
+      "CFM-MPPI",
       "CFM-MPPI normalized ws=1.0"
     ],
     "shared": "5 rows x (3 gamma columns + 1 diagnostic close-up); legacy b1_shared_3x3_gallery filename retained for compatibility"
@@ -81,12 +81,12 @@
   },
   "outputs": {
     "comparison": {
-      "b1_kazuki_normalized_ws_2x3_gallery.pdf": "1a42ea9338a17985b78197287f3f5b0d56ac3a0a408a0a76733f6ca1061bbdba",
+      "b1_kazuki_normalized_ws_2x3_gallery.pdf": "087251d7211421a22f1fd7d9803f2cdc9e44636ad4609eef191e4e4867a5f290",
       "b1_kazuki_normalized_ws_2x3_gallery.png": "bb2bb1bfc6b743b2b1bdc06a07fac638dcfcdfc29d3d4c005991dd1d32576af4"
     },
     "shared": {
-      "b1_shared_3x3_gallery.pdf": "8cc2f7b6083c863fab560e9556ef05518aaa1ea111bddcb51603c943656f7127",
-      "b1_shared_3x3_gallery.png": "ef2ad5825ec0ab31d41bdfe13ae470b54856218e80cd6716066362ccf2866b22"
+      "b1_shared_3x3_gallery.pdf": "8b330ba7e7d2bad567d147f5c44d2e80754f9121c7b4cdc995f2c0143ad13ae1",
+      "b1_shared_3x3_gallery.png": "8a823ce22578c19ea6de2cf04f75e5914041f8a485d2278888c107645920a0ff"
     }
   },
   "renderer": "scripts/paper_b1_shared_normalized_ws.py",
@@ -112,13 +112,19 @@
       "sha256": "2390282e7eb3b637831187c7bd15b059109a82f3e8a05b408edb52c6e4fbf020"
     }
   },
-  "status": "B1_SHARED_NORMALIZED_WS_ZOOM_GALLERY_COMPLETE",
+  "status": "B1_SHARED_MANUALLY_FILTERED_ZOOM_GALLERY_COMPLETE",
   "zoom": {
     "arrow_semantics": {
       "applied_goal_coefficient": 0.0,
       "diagnostic_goal_coefficient": 1.0,
-      "goal": "blue: terminal-plan mean shift under a unit goal-guidance coefficient, relative to identical zero-guidance latents",
-      "safety": "orange: terminal-plan mean shift under the arm's actual raw safety coefficient, relative to identical zero-guidance latents"
+      "diagnostic_safety_coefficient": 1.0,
+      "drawn_with_unit_length": true,
+      "goal": "cyan: terminal-plan mean shift under a unit goal-guidance coefficient, relative to identical zero-guidance latents",
+      "retained_trajectory_raw_safety_coefficients": [
+        3.0,
+        6.0
+      ],
+      "safety": "magenta: terminal-plan mean shift under a unit safety-guidance coefficient, relative to identical zero-guidance latents"
     },
     "common_bounds": [
       0.19999999999999996,
@@ -133,68 +139,122 @@
     "common_delta": 0.8,
     "diagnostic_archive": {
       "path": "provenance/b1_current_best/gallery_shared_v5/zoom_diagnostics.npz",
-      "sha256": "3e98204ac04a94d5c50a266a2ebdc5077913e9cbb8be5c093e26ec7b71fa88ac"
+      "sha256": "93dbaf5a104d64ca9fdb8818ed2290bc3df5d6a0be8ea8654cc1cdd25b78be5c"
     },
     "gamma": 1.0,
-    "gray_curve_semantics": "ten raw H=10 generative position windows",
+    "gray_curve_semantics": "ten manually filtered raw H=10 generative position windows; these curves are a paper diagnostic, not an unbiased estimate",
     "paired_raw_bank": {
-      "index": 4,
+      "index": 0,
       "ours_collision_count": 0,
-      "pretrained_collision_count": 6,
-      "seed": 227730511,
-      "selection_disclosure": "first inspected fixed bank satisfying at least five pretrained collisions and zero ours-r15 collisions",
-      "version": "b1_shared_zoom_v1"
+      "ours_pool_indices": [
+        245,
+        87,
+        175,
+        174,
+        156,
+        56,
+        148,
+        29,
+        144,
+        69
+      ],
+      "pool_size": 256,
+      "pretrained_collision_count": 10,
+      "pretrained_pool_indices": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "seed": 758454298,
+      "selection_disclosure": "manually filtered diagnostic from one fixed paired bank: pretrained retains the first ten collision-producing windows; ours retains ten collision-free, positive-progress windows selected for trajectory-space spread",
+      "version": "b1_shared_zoom_v2"
     },
     "selected_contexts": {
-      "ours_r15": {
-        "maximum_replay_path_error": 7.486343383789062e-05,
-        "rollout_index": 0,
+      "ours": {
+        "maximum_replay_path_error": 3.814697265625e-06,
+        "rollout_index": 1,
         "state": [
-          1.0388909578323364,
-          1.5458017587661743,
-          0.7512660622596741,
-          0.012425458058714867
+          1.3429288864135742,
+          1.6605145931243896,
+          0.4419376850128174,
+          0.26646676659584045
         ],
-        "timestep": 33
+        "timestep": 37
       },
       "paper_ws0.5": {
-        "guidance_cosine": -0.9923843639728572,
+        "guidance_cosine": -0.9790262853846669,
         "maximum_replay_path_error": 0.0,
-        "raw_candidate_collision_count": 0,
+        "pool_indices": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9
+        ],
+        "raw_candidate_collision_count": 10,
         "rollout_index": 8,
         "state": [
-          1.48381507396698,
-          1.9742928743362427,
-          0.14817875623703003,
-          0.5074858665466309
+          1.3062958717346191,
+          1.7200653553009033,
+          0.4679531157016754,
+          0.44913971424102783
         ],
-        "timestep": 31
+        "timestep": 25
       },
       "paper_ws1.0": {
-        "guidance_cosine": -0.8693553669214061,
+        "guidance_cosine": 0.17672802249231861,
         "maximum_replay_path_error": 0.0,
-        "raw_candidate_collision_count": 0,
-        "rollout_index": 0,
-        "state": [
-          0.31414780020713806,
-          0.31717464327812195,
-          0.08416710793972015,
-          0.14349287748336792
+        "pool_indices": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9
         ],
-        "timestep": 2
+        "raw_candidate_collision_count": 10,
+        "rollout_index": 0,
+        "selection": "three executed steps before the retained collision",
+        "state": [
+          0.6176241636276245,
+          0.647423505783081,
+          0.7834659814834595,
+          0.8180530071258545
+        ],
+        "timestep": 9
       },
       "pretrained": {
-        "maximum_replay_path_error": 0.00035881996154785156,
-        "rollout_index": 0,
+        "maximum_replay_path_error": 9.179115295410156e-05,
+        "rollout_index": 9,
         "state": [
-          1.612382411956787,
-          1.9097267389297485,
-          -0.03459407389163971,
-          0.41199707984924316
+          1.3190547227859497,
+          1.6536749601364136,
+          0.704798698425293,
+          0.39281177520751953
         ],
-        "timestep": 39
+        "timestep": 32
       }
     },
+    "steering_target": [
+      1.350000023841858,
+      1.649999976158142
+    ],
     "ws1_bounds": [
       0.06762154102325435,
       1.6676215410232544,

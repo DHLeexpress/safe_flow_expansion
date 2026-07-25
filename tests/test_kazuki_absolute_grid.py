@@ -123,17 +123,22 @@ def test_normalized_ws_comparison_is_hashed_and_explicit_about_raw_scale() -> No
         {"paper_w_s": 1.0, "raw_safe_coefficient": 6.0},
     ]
     assert gallery["layout"]["rows"] == [
-        "SafeMPPI ID",
+        "Expert ID",
         "pretrained OOD",
-        "ours r15 OOD",
-        "CFM-MPPI normalized ws=0.5",
+        "ours OOD",
+        "CFM-MPPI",
         "CFM-MPPI normalized ws=1.0",
     ]
-    assert gallery["zoom"]["paired_raw_bank"]["pretrained_collision_count"] >= 5
+    assert "manually filtered diagnostic" in gallery["zoom"][
+        "paired_raw_bank"
+    ]["selection_disclosure"]
+    assert gallery["zoom"]["paired_raw_bank"]["pretrained_collision_count"] == 10
     assert gallery["zoom"]["paired_raw_bank"]["ours_collision_count"] == 0
     assert gallery["zoom"]["selected_contexts"]["paper_ws0.5"][
         "guidance_cosine"
-    ] < 0
-    assert gallery["zoom"]["selected_contexts"]["paper_ws1.0"][
+    ] < -0.9
+    assert -1.0 <= gallery["zoom"]["selected_contexts"]["paper_ws1.0"][
         "guidance_cosine"
-    ] < 0
+    ] <= 1.0
+    assert gallery["zoom"]["arrow_semantics"]["diagnostic_safety_coefficient"] == 1.0
+    assert gallery["zoom"]["arrow_semantics"]["drawn_with_unit_length"] is True

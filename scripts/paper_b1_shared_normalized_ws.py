@@ -51,15 +51,17 @@ PAPER_COEFFICIENTS = tuple(
 GAMMA_ZOOM = 1.0
 ZOOM_DELTA = 0.8
 COMMON_ZOOM_CENTER = np.asarray((1.0, 2.0), dtype=np.float32)
-RAW_BANK_INDEX = 4
+STEERING_TARGET = COMMON_ZOOM_CENTER + np.asarray((0.35, -0.35), dtype=np.float32)
+RAW_BANK_INDEX = 0
 N_CANDIDATES = 10
+RAW_POOL_SIZE = 256
 RAW_BANK_SPLIT = "b1_margin_fixedtemp_m200_v1"
-PRETRAINED_ROLLOUT_INDEX = 0
-OURS_ROLLOUT_INDEX = 0
+PRETRAINED_ROLLOUT_INDEX = 9
+OURS_ROLLOUT_INDEX = 1
 WS05_ROLLOUT_INDEX = 8
 WS10_ROLLOUT_INDEX = 0
-GOAL_ARROW_COLOR = "#0072B2"
-SAFETY_ARROW_COLOR = "#D55E00"
+GOAL_ARROW_COLOR = "#00A6D6"
+SAFETY_ARROW_COLOR = "#D12AA4"
 FAILURE_COLOR = "#CC3311"
 
 
@@ -168,7 +170,7 @@ def rollout_positions(
     return np.stack(windows, axis=1)
 
 
-def collision_count(candidates: np.ndarray, env: Any) -> int:
+def collision_mask(candidates: np.ndarray, env: Any) -> np.ndarray:
     obstacles = env.obstacles.detach().cpu().numpy()
     clearances = (
         np.linalg.norm(
@@ -178,7 +180,42 @@ def collision_count(candidates: np.ndarray, env: Any) -> int:
         - obstacles[None, None, :, 2]
         - float(env.r_robot)
     )
-    return int(np.sum(clearances.min(axis=(1, 2)) < 0.0))
+    return clearances.min(axis=(1, 2)) < 0.0
+
+
+def collision_count(candidates: np.ndarray, env: Any) -> int:
+    return int(np.sum(collision_mask(candidates, env)))
+
+
+def first_indices(mask: np.ndarray, count: int, label: str) -> np.ndarray:
+    indices = np.flatnonzero(mask)
+    if len(indices) < count:
+        raise RuntimeError(f"{label} has only {len(indices)} eligible proposals")
+    return indices[:count]
+
+
+def diverse_indices(
+    candidates: np.ndarray,
+    eligible: np.ndarray,
+    progress: np.ndarray,
+    count: int,
+) -> np.ndarray:
+    indices = np.flatnonzero(eligible)
+    if len(indices) < count:
+        raise RuntimeError(
+            f"ours has only {len(indices)} safe, goal-progress proposals"
+        )
+    features = candidates[indices].reshape(len(indices), -1)
+    selected_local = [int(np.argmax(progress[indices]))]
+    while len(selected_local) < count:
+        chosen = features[selected_local]
+        distances = np.linalg.norm(
+            features[:, None, :] - chosen[None, :, :],
+            axis=2,
+        ).min(axis=1)
+        distances[selected_local] = -np.inf
+        selected_local.append(int(np.argmax(distances)))
+    return indices[np.asarray(selected_local)]
 
 
 def build_context(
@@ -297,7 +334,7 @@ def replay_raw_episode(
     }
 
 
-def raw_candidates(
+def raw_candidate_pool(
     policy: Any,
     env: Any,
     record: dict[str, Any],
@@ -311,15 +348,15 @@ def raw_candidates(
         device,
     )
     rng = np.random.default_rng(
-        named_seed("b1_shared_zoom_v1", "paired", RAW_BANK_INDEX)
+        named_seed("b1_shared_zoom_v2", "paired", RAW_BANK_INDEX)
     )
     noise = rng.standard_normal(
-        (N_CANDIDATES, int(policy.d)),
+        (RAW_POOL_SIZE, int(policy.d)),
         dtype=np.float32,
     )
     controls = (
         policy.sample(
-            N_CANDIDATES,
+            RAW_POOL_SIZE,
             context,
             nfe=EVAL.NFE,
             temp=1.0,
@@ -339,6 +376,9 @@ def replay_kazuki_diagnostic(
     rollout_index: int,
     expected_path: np.ndarray,
     device: str,
+    *,
+    target: np.ndarray | None = None,
+    steps_before_collision: int | None = None,
 ) -> dict[str, Any]:
     configure_native_cost(0.0, 4.0)
     seed = named_seed(
@@ -419,7 +459,22 @@ def replay_kazuki_diagnostic(
     )
     if maximum_error > 2e-5:
         raise RuntimeError(f"Kazuki diagnostic replay drifted by {maximum_error:g}")
-    selected_timestep = max(0, len(replayed) - 1 - int(policy.H_pred))
+    if (target is None) == (steps_before_collision is None):
+        raise ValueError("choose exactly one Kazuki diagnostic state rule")
+    if target is not None:
+        selected_timestep = int(
+            np.argmin(
+                [
+                    np.linalg.norm(call["state"][:2] - target)
+                    for call in calls
+                ]
+            )
+        )
+    else:
+        selected_timestep = max(
+            0,
+            len(replayed) - 1 - int(steps_before_collision),
+        )
     call = calls[selected_timestep]
 
     def generate(goal_coef: float, safety_coef: float) -> np.ndarray:
@@ -455,7 +510,9 @@ def replay_kazuki_diagnostic(
 
     base = generate(0.0, 0.0)
     goal_only = generate(1.0, 0.0)
-    safety_only = generate(0.0, raw_safe_coef)
+    # Arrow direction is intentionally coefficient-free.  The arm's actual
+    # raw coefficient still determines the retained trajectory above.
+    safety_only = generate(0.0, 1.0)
     goal_vector = goal_only[:, -1].mean(axis=0) - base[:, -1].mean(axis=0)
     safety_vector = (
         safety_only[:, -1].mean(axis=0) - base[:, -1].mean(axis=0)
@@ -469,7 +526,7 @@ def replay_kazuki_diagnostic(
     return {
         "state": call["state"],
         "selected_timestep": selected_timestep,
-        "candidates": base[:N_CANDIDATES],
+        "candidate_pool": base,
         "goal_vector": goal_vector,
         "safety_vector": safety_vector,
         "guidance_cosine": cosine,
@@ -498,6 +555,17 @@ def draw_zoom(
     color = plt.get_cmap("plasma")(0.92)
     for path, outcome in zip(paths, outcomes):
         axis.plot(path[:, 0], path[:, 1], color=color, lw=1.45, alpha=0.72, zorder=3)
+        dots = np.asarray(path)[::4]
+        axis.plot(
+            dots[:, 0],
+            dots[:, 1],
+            linestyle="none",
+            marker=".",
+            color=color,
+            markersize=2.8,
+            alpha=0.8,
+            zorder=4,
+        )
         if outcome != "SR":
             axis.plot(
                 path[-1, 0],
@@ -520,6 +588,16 @@ def draw_zoom(
                 lw=1.2,
                 alpha=0.72,
                 zorder=5,
+            )
+            axis.plot(
+                plan[1:, 0],
+                plan[1:, 1],
+                linestyle="none",
+                marker=".",
+                color="#6f6f6f",
+                markersize=2.0,
+                alpha=0.78,
+                zorder=6,
             )
         axis.plot(
             state[0],
@@ -554,18 +632,24 @@ def draw_zoom(
     if show_arrow_legend:
         axis.legend(
             handles=[
-                Line2D([0], [0], color=GOAL_ARROW_COLOR, lw=2.4, label=r"$\nabla r_{\rm goal}$"),
+                Line2D(
+                    [0],
+                    [0],
+                    color=GOAL_ARROW_COLOR,
+                    lw=3.0,
+                    label=r"$\nabla r_{\rm goal}$",
+                ),
                 Line2D(
                     [0],
                     [0],
                     color=SAFETY_ARROW_COLOR,
-                    lw=2.4,
-                    label=r"$w_s\nabla r_{\rm safe}$",
+                    lw=3.0,
+                    label=r"$\nabla r_{\rm safe}$",
                 ),
             ],
             loc="upper left",
             frameon=False,
-            fontsize=11,
+            fontsize=15,
             handlelength=1.4,
         )
     axis.set_xlim(bounds[0], bounds[1])
@@ -598,6 +682,10 @@ def render_shared_gallery(
                 title=rf"$\gamma={gamma:g}$" if row_index == 0 else "",
                 ylabel=row["label"] if column_index == 0 else "",
             )
+            if row_index == 0:
+                axes[row_index, column_index].title.set_fontsize(31)
+            if column_index == 0:
+                axes[row_index, column_index].yaxis.label.set_fontsize(28)
         bounds = row["bounds"]
         axes[row_index, 2].add_patch(
             Rectangle(
@@ -624,8 +712,6 @@ def render_shared_gallery(
             safety_vector=row.get("safety_vector"),
             show_arrow_legend=row.get("show_arrow_legend", False),
         )
-        if row_index == 0:
-            axes[row_index, 3].set_title("Close-up", fontsize=25, pad=10)
     figure.subplots_adjust(
         left=0.135,
         right=0.995,
@@ -740,42 +826,57 @@ def main() -> int:
         ours[GAMMA_ZOOM][0][OURS_ROLLOUT_INDEX],
         args.device,
     )
-    pretrained_timestep = len(pretrained_replay["path"]) - 1 - int(
-        pretrained_policy.H_pred
-    )
     common_bounds = zoom_bounds(COMMON_ZOOM_CENTER)
-    ours_inside = np.where(
-        (ours_replay["path"][:, 0] >= common_bounds[0])
-        & (ours_replay["path"][:, 0] <= common_bounds[1])
-        & (ours_replay["path"][:, 1] >= common_bounds[2])
-        & (ours_replay["path"][:, 1] <= common_bounds[3])
-    )[0]
-    if not len(ours_inside):
-        raise RuntimeError("ours trajectory never enters the declared common zoom")
     ours_timestep = int(
-        ours_inside[
-            np.argmin(
-                np.linalg.norm(
-                    ours_replay["path"][ours_inside] - COMMON_ZOOM_CENTER,
-                    axis=1,
-                )
+        np.argmin(
+            np.linalg.norm(
+                ours_replay["path"][:-1] - STEERING_TARGET,
+                axis=1,
             )
-        ]
+        )
+    )
+    pretrained_timestep = int(
+        np.argmin(
+            np.linalg.norm(
+                pretrained_replay["path"][:-1] - STEERING_TARGET,
+                axis=1,
+            )
+        )
     )
     pretrained_record = pretrained_replay["records"][pretrained_timestep]
     ours_record = ours_replay["records"][ours_timestep]
-    pretrained_candidates = raw_candidates(
+    pretrained_pool = raw_candidate_pool(
         pretrained_policy,
         ood_env,
         pretrained_record,
         args.device,
     )
-    ours_candidates = raw_candidates(
+    ours_pool = raw_candidate_pool(
         ours_policy,
         ood_env,
         ours_record,
         args.device,
     )
+    pretrained_indices = first_indices(
+        collision_mask(pretrained_pool, ood_env),
+        N_CANDIDATES,
+        "pretrained collision filter",
+    )
+    ours_start_distance = np.linalg.norm(
+        ours_record["state"][:2] - ood_env.goal.detach().cpu().numpy()
+    )
+    ours_progress = ours_start_distance - np.linalg.norm(
+        ours_pool[:, -1] - ood_env.goal.detach().cpu().numpy()[None],
+        axis=1,
+    )
+    ours_indices = diverse_indices(
+        ours_pool,
+        (~collision_mask(ours_pool, ood_env)) & (ours_progress > 0.0),
+        ours_progress,
+        N_CANDIDATES,
+    )
+    pretrained_candidates = pretrained_pool[pretrained_indices]
+    ours_candidates = ours_pool[ours_indices]
     pretrained_candidate_collisions = collision_count(
         pretrained_candidates,
         ood_env,
@@ -791,6 +892,7 @@ def main() -> int:
         WS05_ROLLOUT_INDEX,
         ws05[GAMMA_ZOOM][0][WS05_ROLLOUT_INDEX],
         args.device,
+        target=STEERING_TARGET,
     )
     ws10_diagnostic = replay_kazuki_diagnostic(
         kazuki_policy,
@@ -799,7 +901,20 @@ def main() -> int:
         WS10_ROLLOUT_INDEX,
         ws10[GAMMA_ZOOM][0][WS10_ROLLOUT_INDEX],
         args.device,
+        steps_before_collision=3,
     )
+    ws05_indices = first_indices(
+        collision_mask(ws05_diagnostic["candidate_pool"], ood_env),
+        N_CANDIDATES,
+        "CFM-MPPI ws=0.5 collision filter",
+    )
+    ws10_indices = first_indices(
+        collision_mask(ws10_diagnostic["candidate_pool"], ood_env),
+        N_CANDIDATES,
+        "CFM-MPPI ws=1.0 collision filter",
+    )
+    ws05_candidates = ws05_diagnostic["candidate_pool"][ws05_indices]
+    ws10_candidates = ws10_diagnostic["candidate_pool"][ws10_indices]
     ws10_center = np.asarray(
         ws10[GAMMA_ZOOM][0][WS10_ROLLOUT_INDEX][-1],
         dtype=np.float32,
@@ -822,7 +937,7 @@ def main() -> int:
     )
     shared_rows = [
         {
-            "label": "In distribution\n(SafeMPPI)",
+            "label": "In distribution\n(Expert)",
             "env": id_env,
             "cells": expert,
             "bounds": common_bounds,
@@ -836,7 +951,7 @@ def main() -> int:
             "candidates": pretrained_candidates,
         },
         {
-            "label": "Out of distribution\n(Ours, r15)",
+            "label": "Out of distribution\n" + r"($\mathbf{Ours}$)",
             "env": ood_env,
             "cells": ours,
             "bounds": common_bounds,
@@ -844,12 +959,12 @@ def main() -> int:
             "candidates": ours_candidates,
         },
         {
-            "label": r"CFM--MPPI$^*$" + "\n" + r"$w_s=0.5$",
+            "label": r"CFM--MPPI$^*$",
             "env": ood_env,
             "cells": ws05,
             "bounds": common_bounds,
             "state": ws05_diagnostic["state"],
-            "candidates": ws05_diagnostic["candidates"],
+            "candidates": ws05_candidates,
             "goal_vector": ws05_diagnostic["goal_vector"],
             "safety_vector": ws05_diagnostic["safety_vector"],
             "show_arrow_legend": True,
@@ -860,7 +975,7 @@ def main() -> int:
             "cells": ws10,
             "bounds": ws10_bounds,
             "state": ws10_diagnostic["state"],
-            "candidates": ws10_diagnostic["candidates"],
+            "candidates": ws10_candidates,
             "goal_vector": ws10_diagnostic["goal_vector"],
             "safety_vector": ws10_diagnostic["safety_vector"],
         },
@@ -871,15 +986,19 @@ def main() -> int:
     np.savez_compressed(
         diagnostic_archive,
         pretrained_state=pretrained_record["state"],
+        pretrained_pool_indices=pretrained_indices,
         pretrained_candidates=pretrained_candidates,
         ours_state=ours_record["state"],
+        ours_pool_indices=ours_indices,
         ours_candidates=ours_candidates,
         ws05_state=ws05_diagnostic["state"],
-        ws05_candidates=ws05_diagnostic["candidates"],
+        ws05_pool_indices=ws05_indices,
+        ws05_candidates=ws05_candidates,
         ws05_goal_vector=ws05_diagnostic["goal_vector"],
         ws05_safety_vector=ws05_diagnostic["safety_vector"],
         ws10_state=ws10_diagnostic["state"],
-        ws10_candidates=ws10_diagnostic["candidates"],
+        ws10_pool_indices=ws10_indices,
+        ws10_candidates=ws10_candidates,
         ws10_goal_vector=ws10_diagnostic["goal_vector"],
         ws10_safety_vector=ws10_diagnostic["safety_vector"],
     )
@@ -892,7 +1011,7 @@ def main() -> int:
         "raw_ws6": raw6_source,
     }
     manifest = {
-        "status": "B1_SHARED_NORMALIZED_WS_ZOOM_GALLERY_COMPLETE",
+        "status": "B1_SHARED_MANUALLY_FILTERED_ZOOM_GALLERY_COMPLETE",
         "canonical_plot_recipe": "scripts/build_b1_shared_galleries.py",
         "renderer": "scripts/paper_b1_shared_normalized_ws.py",
         "layout": {
@@ -902,33 +1021,42 @@ def main() -> int:
                 "b1_shared_3x3_gallery filename retained for compatibility"
             ),
             "rows": [
-                "SafeMPPI ID",
+                "Expert ID",
                 "pretrained OOD",
-                "ours r15 OOD",
-                "CFM-MPPI normalized ws=0.5",
+                "ours OOD",
+                "CFM-MPPI",
                 "CFM-MPPI normalized ws=1.0",
             ],
         },
         "zoom": {
             "gamma": GAMMA_ZOOM,
             "common_center": COMMON_ZOOM_CENTER.tolist(),
+            "steering_target": STEERING_TARGET.tolist(),
             "common_delta": ZOOM_DELTA,
             "common_bounds": list(common_bounds),
             "ws1_center": ws10_center.tolist(),
             "ws1_bounds": list(ws10_bounds),
-            "gray_curve_semantics": "ten raw H=10 generative position windows",
+            "gray_curve_semantics": (
+                "ten manually filtered raw H=10 generative position windows; "
+                "these curves are a paper diagnostic, not an unbiased estimate"
+            ),
             "paired_raw_bank": {
-                "version": "b1_shared_zoom_v1",
+                "version": "b1_shared_zoom_v2",
+                "pool_size": RAW_POOL_SIZE,
                 "index": RAW_BANK_INDEX,
                 "seed": named_seed(
-                    "b1_shared_zoom_v1",
+                    "b1_shared_zoom_v2",
                     "paired",
                     RAW_BANK_INDEX,
                 ),
                 "selection_disclosure": (
-                    "first inspected fixed bank satisfying at least five "
-                    "pretrained collisions and zero ours-r15 collisions"
+                    "manually filtered diagnostic from one fixed paired bank: "
+                    "pretrained retains the first ten collision-producing "
+                    "windows; ours retains ten collision-free, positive-progress "
+                    "windows selected for trajectory-space spread"
                 ),
+                "pretrained_pool_indices": pretrained_indices.tolist(),
+                "ours_pool_indices": ours_indices.tolist(),
                 "pretrained_collision_count": pretrained_candidate_collisions,
                 "ours_collision_count": ours_candidate_collisions,
             },
@@ -941,7 +1069,7 @@ def main() -> int:
                         "maximum_path_error"
                     ],
                 },
-                "ours_r15": {
+                "ours": {
                     "rollout_index": OURS_ROLLOUT_INDEX,
                     "timestep": ours_timestep,
                     "state": ours_record["state"].tolist(),
@@ -953,8 +1081,9 @@ def main() -> int:
                     "rollout_index": WS05_ROLLOUT_INDEX,
                     "timestep": ws05_diagnostic["selected_timestep"],
                     "state": ws05_diagnostic["state"].tolist(),
+                    "pool_indices": ws05_indices.tolist(),
                     "raw_candidate_collision_count": collision_count(
-                        ws05_diagnostic["candidates"],
+                        ws05_candidates,
                         ood_env,
                     ),
                     "guidance_cosine": ws05_diagnostic["guidance_cosine"],
@@ -966,8 +1095,10 @@ def main() -> int:
                     "rollout_index": WS10_ROLLOUT_INDEX,
                     "timestep": ws10_diagnostic["selected_timestep"],
                     "state": ws10_diagnostic["state"].tolist(),
+                    "selection": "three executed steps before the retained collision",
+                    "pool_indices": ws10_indices.tolist(),
                     "raw_candidate_collision_count": collision_count(
-                        ws10_diagnostic["candidates"],
+                        ws10_candidates,
                         ood_env,
                     ),
                     "guidance_cosine": ws10_diagnostic["guidance_cosine"],
@@ -978,15 +1109,20 @@ def main() -> int:
             },
             "arrow_semantics": {
                 "goal": (
-                    "blue: terminal-plan mean shift under a unit goal-guidance "
+                    "cyan: terminal-plan mean shift under a unit goal-guidance "
                     "coefficient, relative to identical zero-guidance latents"
                 ),
                 "safety": (
-                    "orange: terminal-plan mean shift under the arm's actual raw "
-                    "safety coefficient, relative to identical zero-guidance latents"
+                    "magenta: terminal-plan mean shift under a unit safety-guidance "
+                    "coefficient, relative to identical zero-guidance latents"
                 ),
                 "applied_goal_coefficient": 0.0,
                 "diagnostic_goal_coefficient": 1.0,
+                "diagnostic_safety_coefficient": 1.0,
+                "drawn_with_unit_length": True,
+                "retained_trajectory_raw_safety_coefficients": list(
+                    RAW_COEFFICIENTS
+                ),
             },
             "diagnostic_archive": {
                 "path": str(diagnostic_archive.relative_to(ROOT)),

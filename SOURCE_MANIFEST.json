@@ -73,7 +73,7 @@
     {
       "bytes": 198806,
       "path": "assets/paper/b1_kazuki_normalized_ws_2x3_gallery.pdf",
-      "sha256": "1a42ea9338a17985b78197287f3f5b0d56ac3a0a408a0a76733f6ca1061bbdba"
+      "sha256": "087251d7211421a22f1fd7d9803f2cdc9e44636ad4609eef191e4e4867a5f290"
     },
     {
       "bytes": 631968,
@@ -376,14 +376,14 @@
       "sha256": "8a866a3c3c99f85ef48729cfc10bd41d995de75725bbaa7d87d0b4957af3d19d"
     },
     {
-      "bytes": 623695,
+      "bytes": 630253,
       "path": "assets/results/b1_current_best/b1_shared_3x3_gallery.pdf",
-      "sha256": "8cc2f7b6083c863fab560e9556ef05518aaa1ea111bddcb51603c943656f7127"
+      "sha256": "8b330ba7e7d2bad567d147f5c44d2e80754f9121c7b4cdc995f2c0143ad13ae1"
     },
     {
-      "bytes": 2744498,
+      "bytes": 2781785,
       "path": "assets/results/b1_current_best/b1_shared_3x3_gallery.png",
-      "sha256": "ef2ad5825ec0ab31d41bdfe13ae470b54856218e80cd6716066362ccf2866b22"
+      "sha256": "8a823ce22578c19ea6de2cf04f75e5914041f8a485d2278888c107645920a0ff"
     },
     {
       "bytes": 914626,
@@ -881,14 +881,14 @@
       "sha256": "5ee7ac30975bf3bda6ec699d6844a044b13d080348d7c8c92f64728e3ae963d5"
     },
     {
-      "bytes": 6464,
+      "bytes": 7621,
       "path": "provenance/b1_current_best/gallery_shared_v5/gallery_manifest.json",
-      "sha256": "29b179d19cff21bdf1ae448de4a195a311a92b9f03906da11e5f35ca0e5ac47c"
+      "sha256": "4391e42f740ed0c35cdfa19c1dcc06320c3df0410ec2329961c68837b212b119"
     },
     {
-      "bytes": 5580,
+      "bytes": 6400,
       "path": "provenance/b1_current_best/gallery_shared_v5/zoom_diagnostics.npz",
-      "sha256": "3e98204ac04a94d5c50a266a2ebdc5077913e9cbb8be5c093e26ec7b71fa88ac"
+      "sha256": "93dbaf5a104d64ca9fdb8818ed2290bc3df5d6a0be8ea8654cc1cdd25b78be5c"
     },
     {
       "bytes": 155,
@@ -1701,9 +1701,9 @@
       "sha256": "9433fd2cdf0981c490b909a40fffd519656c12dc07cf7ef4d68e75c9c1b1ff3a"
     },
     {
-      "bytes": 34279,
+      "bytes": 38879,
       "path": "scripts/paper_b1_shared_normalized_ws.py",
-      "sha256": "2a81c3da0f5f9352f5cfcd7127af03e5af53bfbf4cabc61627961e65041a0a48"
+      "sha256": "c8941827720687263571651cea3af4101406e936b83860eaf25184d8ae01378f"
     },
     {
       "bytes": 9348,
@@ -2536,9 +2536,9 @@
       "sha256": "8f152cd2db7dff9a35035723576de6248b648d79a1579aa4ce6276d7ab50e5a6"
     },
     {
-      "bytes": 5624,
+      "bytes": 5899,
       "path": "tests/test_kazuki_absolute_grid.py",
-      "sha256": "4d02e2031bdd08059c8a912b6cb3ff44a475571a40decb359cbbc18d10624646"
+      "sha256": "df6188d91bac68fc8c6d6348a8e07de7b5c251fe67ea759a8e8c3493a7c2fb17"
     },
     {
       "bytes": 1679,
