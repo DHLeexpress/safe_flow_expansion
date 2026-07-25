@@ -111,7 +111,7 @@ def test_normalized_ws_comparison_is_hashed_and_explicit_about_raw_scale() -> No
     gallery = json.loads(
         (
             ROOT
-            / "provenance/b1_current_best/gallery_shared_v4/gallery_manifest.json"
+            / "provenance/b1_current_best/gallery_shared_v5/gallery_manifest.json"
         ).read_text()
     )
     assert gallery["canonical_plot_recipe"] == "scripts/build_b1_shared_galleries.py"
@@ -122,3 +122,18 @@ def test_normalized_ws_comparison_is_hashed_and_explicit_about_raw_scale() -> No
         {"paper_w_s": 0.5, "raw_safe_coefficient": 3.0},
         {"paper_w_s": 1.0, "raw_safe_coefficient": 6.0},
     ]
+    assert gallery["layout"]["rows"] == [
+        "SafeMPPI ID",
+        "pretrained OOD",
+        "ours r15 OOD",
+        "CFM-MPPI normalized ws=0.5",
+        "CFM-MPPI normalized ws=1.0",
+    ]
+    assert gallery["zoom"]["paired_raw_bank"]["pretrained_collision_count"] >= 5
+    assert gallery["zoom"]["paired_raw_bank"]["ours_collision_count"] == 0
+    assert gallery["zoom"]["selected_contexts"]["paper_ws0.5"][
+        "guidance_cosine"
+    ] < 0
+    assert gallery["zoom"]["selected_contexts"]["paper_ws1.0"][
+        "guidance_cosine"
+    ] < 0

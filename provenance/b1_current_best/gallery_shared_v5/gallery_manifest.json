@@ -1,0 +1,209 @@
+{
+  "canonical_plot_recipe": "scripts/build_b1_shared_galleries.py",
+  "checkpoints": {
+    "kazuki_r19": "60c155472f5ed0e4a1d53581857f09aead7924f8ce11e8e3adf890d5a57fc079",
+    "ours_r15": "604f8fe657254c1ec644dce16dbea28a36d6e3308aa9ee712adbac3ec68ca672",
+    "pretrained": "524c9c0a4fd071221ac509b9d8e6fbbfb85fdf1811aa04160317f2a9e2d3ef90"
+  },
+  "guidance": {
+    "M_per_gamma": 10,
+    "alpha": 4.0,
+    "arms": [
+      {
+        "paper_w_s": 0.5,
+        "raw_safe_coefficient": 3.0
+      },
+      {
+        "paper_w_s": 1.0,
+        "raw_safe_coefficient": 6.0
+      }
+    ],
+    "gammas": [
+      0.1,
+      0.5,
+      1.0
+    ],
+    "goal_coefficient": 0.0,
+    "normalization": "paper_w_s = raw_safe_coefficient / 6",
+    "raw_ws3_manifest_sha256": "fba10b70d3cf9b56bf11892bb81b1664866e64465ddb219617b3780c04499568",
+    "raw_ws3_sweep_elapsed_seconds": 211.32557737501338,
+    "raw_ws6_manifest_sha256": "35ef583a77da1c625de06cca3f3a1b6ffaba5118acb709f35948d7d01d33574f",
+    "raw_ws6_sweep_elapsed_seconds": 21.754528750199825,
+    "refinement_cost": "b1_safemppi",
+    "seed_contract": "named_seed(version, 'kazuki', gamma, rollout_index); alpha and coefficients excluded for common random numbers"
+  },
+  "layout": {
+    "comparison": "2 rows x 3 gamma columns",
+    "rows": [
+      "SafeMPPI ID",
+      "pretrained OOD",
+      "ours r15 OOD",
+      "CFM-MPPI normalized ws=0.5",
+      "CFM-MPPI normalized ws=1.0"
+    ],
+    "shared": "5 rows x (3 gamma columns + 1 diagnostic close-up); legacy b1_shared_3x3_gallery filename retained for compatibility"
+  },
+  "outcome_counts": {
+    "paper_ws0.5": {
+      "0.1": {
+        "CR": 7,
+        "SR": 3,
+        "TO": 0
+      },
+      "0.5": {
+        "CR": 8,
+        "SR": 2,
+        "TO": 0
+      },
+      "1": {
+        "CR": 8,
+        "SR": 2,
+        "TO": 0
+      }
+    },
+    "paper_ws1.0": {
+      "0.1": {
+        "CR": 10,
+        "SR": 0,
+        "TO": 0
+      },
+      "0.5": {
+        "CR": 10,
+        "SR": 0,
+        "TO": 0
+      },
+      "1": {
+        "CR": 10,
+        "SR": 0,
+        "TO": 0
+      }
+    }
+  },
+  "outputs": {
+    "comparison": {
+      "b1_kazuki_normalized_ws_2x3_gallery.pdf": "1a42ea9338a17985b78197287f3f5b0d56ac3a0a408a0a76733f6ca1061bbdba",
+      "b1_kazuki_normalized_ws_2x3_gallery.png": "bb2bb1bfc6b743b2b1bdc06a07fac638dcfcdfc29d3d4c005991dd1d32576af4"
+    },
+    "shared": {
+      "b1_shared_3x3_gallery.pdf": "8cc2f7b6083c863fab560e9556ef05518aaa1ea111bddcb51603c943656f7127",
+      "b1_shared_3x3_gallery.png": "ef2ad5825ec0ab31d41bdfe13ae470b54856218e80cd6716066362ccf2866b22"
+    }
+  },
+  "renderer": "scripts/paper_b1_shared_normalized_ws.py",
+  "sources": {
+    "expert_id": {
+      "path": "provenance/b1_current_best/gallery_shared_v3/expert_id.npz",
+      "sha256": "763c3b074fdb841f3f1247866be1a74a10bc50f2e0e2ea670b556955d5bcad38"
+    },
+    "ours_r15_ood": {
+      "path": "provenance/b1_current_best/gallery_shared_v3/ours_r15_ood.npz",
+      "sha256": "e74b187163474719a63a64daab4bc1b4520b073cd07228a3c11d91bfaa558faf"
+    },
+    "pretrained_ood": {
+      "path": "provenance/b1_current_best/gallery_shared_v3/pretrained_ood.npz",
+      "sha256": "f7fb80f30eb9025f8010db36bce750e25cca98ac8b7352374afc7c0c478f1c2b"
+    },
+    "raw_ws3": {
+      "path": "provenance/paper_baselines/kazuki_alpha34_wall_grid_m10/kazuki_a4_wg0_ws3_m10.npz",
+      "sha256": "0f34636e56a5a6f00d702cfa46dba150235ce31932cc110bad849dd8ec2140b0"
+    },
+    "raw_ws6": {
+      "path": "provenance/paper_baselines/kazuki_alpha4_wg0_ws6_m10/kazuki_a4_wg0_ws6_m10.npz",
+      "sha256": "2390282e7eb3b637831187c7bd15b059109a82f3e8a05b408edb52c6e4fbf020"
+    }
+  },
+  "status": "B1_SHARED_NORMALIZED_WS_ZOOM_GALLERY_COMPLETE",
+  "zoom": {
+    "arrow_semantics": {
+      "applied_goal_coefficient": 0.0,
+      "diagnostic_goal_coefficient": 1.0,
+      "goal": "blue: terminal-plan mean shift under a unit goal-guidance coefficient, relative to identical zero-guidance latents",
+      "safety": "orange: terminal-plan mean shift under the arm's actual raw safety coefficient, relative to identical zero-guidance latents"
+    },
+    "common_bounds": [
+      0.19999999999999996,
+      1.8,
+      1.2,
+      2.8
+    ],
+    "common_center": [
+      1.0,
+      2.0
+    ],
+    "common_delta": 0.8,
+    "diagnostic_archive": {
+      "path": "provenance/b1_current_best/gallery_shared_v5/zoom_diagnostics.npz",
+      "sha256": "3e98204ac04a94d5c50a266a2ebdc5077913e9cbb8be5c093e26ec7b71fa88ac"
+    },
+    "gamma": 1.0,
+    "gray_curve_semantics": "ten raw H=10 generative position windows",
+    "paired_raw_bank": {
+      "index": 4,
+      "ours_collision_count": 0,
+      "pretrained_collision_count": 6,
+      "seed": 227730511,
+      "selection_disclosure": "first inspected fixed bank satisfying at least five pretrained collisions and zero ours-r15 collisions",
+      "version": "b1_shared_zoom_v1"
+    },
+    "selected_contexts": {
+      "ours_r15": {
+        "maximum_replay_path_error": 7.486343383789062e-05,
+        "rollout_index": 0,
+        "state": [
+          1.0388909578323364,
+          1.5458017587661743,
+          0.7512660622596741,
+          0.012425458058714867
+        ],
+        "timestep": 33
+      },
+      "paper_ws0.5": {
+        "guidance_cosine": -0.9923843639728572,
+        "maximum_replay_path_error": 0.0,
+        "raw_candidate_collision_count": 0,
+        "rollout_index": 8,
+        "state": [
+          1.48381507396698,
+          1.9742928743362427,
+          0.14817875623703003,
+          0.5074858665466309
+        ],
+        "timestep": 31
+      },
+      "paper_ws1.0": {
+        "guidance_cosine": -0.8693553669214061,
+        "maximum_replay_path_error": 0.0,
+        "raw_candidate_collision_count": 0,
+        "rollout_index": 0,
+        "state": [
+          0.31414780020713806,
+          0.31717464327812195,
+          0.08416710793972015,
+          0.14349287748336792
+        ],
+        "timestep": 2
+      },
+      "pretrained": {
+        "maximum_replay_path_error": 0.00035881996154785156,
+        "rollout_index": 0,
+        "state": [
+          1.612382411956787,
+          1.9097267389297485,
+          -0.03459407389163971,
+          0.41199707984924316
+        ],
+        "timestep": 39
+      }
+    },
+    "ws1_bounds": [
+      0.06762154102325435,
+      1.6676215410232544,
+      0.09885985851287837,
+      1.6988598585128785
+    ],
+    "ws1_center": [
+      0.8676215410232544,
+      0.8988598585128784
+    ]
+  }
+}
