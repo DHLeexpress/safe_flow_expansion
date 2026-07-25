@@ -1,0 +1,39 @@
+{
+  "status": "KAZUKI_NATIVE_COST_LOCAL_SWEEP_SPEC",
+  "scene": "low7_radius1_canonical_v1",
+  "checkpoint": "B1_current_best r19",
+  "checkpoint_sha256": "60c155472f5ed0e4a1d53581857f09aead7924f8ce11e8e3adf890d5a57fc079",
+  "refinement_cost": "exact native B1 SafeMPPI cost at proposal ranking, perturbation weighting, and refined-mode selection",
+  "pairs": [
+    {
+      "goal_coef": 0.0,
+      "safe_coef": 0.0,
+      "archive": "../provenance/paper_baselines/local_native_cost_m10/kazuki_wg0_ws0_ood_m10.npz"
+    },
+    {
+      "goal_coef": 0.0,
+      "safe_coef": 0.1,
+      "archive": "../provenance/paper_baselines/local_native_cost_m10/kazuki_wg0_ws0.1_ood_m10.npz"
+    },
+    {
+      "goal_coef": 0.0,
+      "safe_coef": 0.3,
+      "archive": "../provenance/paper_baselines/local_native_cost_m10/kazuki_wg0_ws0.3_ood_m10.npz"
+    },
+    {
+      "goal_coef": 0.0,
+      "safe_coef": 0.5,
+      "archive": "../provenance/paper_baselines/local_native_cost_m10/kazuki_wg0_ws0.5_ood_m10.npz"
+    },
+    {
+      "goal_coef": 0.0,
+      "safe_coef": 0.7,
+      "archive": "../provenance/paper_baselines/local_native_cost_m10/kazuki_wg0_ws0.7_ood_m10.npz"
+    },
+    {
+      "goal_coef": 0.0,
+      "safe_coef": 0.9,
+      "archive": "../provenance/paper_baselines/local_native_cost_m10/kazuki_wg0_ws0.9_ood_m10.npz"
+    }
+  ]
+}

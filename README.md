@@ -29,9 +29,26 @@ exclusivity gate after training and evaluation had completed.
 
 [Vector PDF](assets/paper/b1_margin_fixedtemp_m200_revised_r0_r15.pdf)
 
+## Paper baseline assembly
+
+The reusable baseline figure modules and their current preview are documented
+in [`PAPER_BASELINE_STUDY.md`](PAPER_BASELINE_STUDY.md). They provide:
+
+- a four-metric, four-gamma comparison interface for SafeMPPI, max-safety
+  expansion, the pending SafeMPPI-cost expansion, and native-cost CFM--MPPI;
+- a coefficient-pair sweep and trajectory-overlay interface for CFM--MPPI;
+- explicit JSON sidecars, without filling missing experimental results.
+
+![Paper method comparison preview](assets/paper/method_gamma_comparison.png)
+
+The preview is not yet a matched paper claim: max-safety uses its declared
+per-gamma evaluation temperatures, while the local baseline screens use native
+deployment. The final figure must use one common seed-bank, sample-count, and
+temperature contract after the running cost arm finishes.
+
 ### Indexed controller replay suite
 
-All four videos retain the numbered PNG frames under the full Helios artifact
+All five videos retain the numbered PNG frames under the full Helios artifact
 root `/data3/research1/b1_indexed_video_suite_f93a3ed`. Blue contours are the
 actual nominal $H_P$ levels returned by SafeMPPI. Green contours are an offline,
 candidate-specific full-$H$ verifier audit; they never select the raw B1 action.
@@ -41,17 +58,17 @@ Kazuki has no polytope overlay.
 |---|---|---|---|
 | SafeMPPI, in distribution | $\gamma=0.5$, SR | native nominal $H_P$ (blue) | [MP4](assets/results/b1_current_best/indexed_controller_videos/01_safemppi_id_nominal.mp4) |
 | SafeMPPI, giant-obstacle OOD | $\gamma=0.4$, lowest collision at index 82 in the declared M100 bank | native nominal $H_P$ (blue) | [MP4](assets/results/b1_current_best/indexed_controller_videos/02_safemppi_ood_nominal_failure.mp4) |
-| B1 r19, giant-obstacle OOD | $\gamma=0.5$, authenticated raw-M50 index 22 collision | offline full-$H$ verifier (green) | [MP4](assets/results/b1_current_best/indexed_controller_videos/03_b1_r19_ood_verifier_audit_failure.mp4) |
-| CFM--MPPI native-cost diagnostic, OOD | $\gamma=0.5$, collision | no polytope; `goal_coef=0`, `safe_coef=0.9`, `MARKUP=1.09` | [MP4](assets/results/b1_current_best/indexed_controller_videos/04_kazuki_ood_markup_failure.mp4) |
+| Expansion mechanism, giant-obstacle OOD | rounds 0/5/10/15, $\gamma\in\{0.1,0.5,1.0\}$ | queried plans, uncertainty, positive/NVP traces | [MP4](assets/results/b1_current_best/indexed_controller_videos/03_b1_r0_r15_expansion_mechanism.mp4) |
+| B1 r15, giant-obstacle OOD | successful parallel rollouts at $\gamma\in\{0.1,0.5,1.0\}$ | offline full-$H$ verifier (green) | [MP4](assets/results/b1_current_best/indexed_controller_videos/04_b1_r15_ood_verifier_success.mp4) |
+| CFM--MPPI native-cost diagnostic, OOD | parallel failures at $\gamma\in\{0.1,0.5,1.0\}$ | no polytope; `goal_coef=0`, `safe_coef=0.1` | [MP4](assets/results/b1_current_best/indexed_controller_videos/05_kazuki_r19_ood_guidance_failure.mp4) |
 
-![Indexed replay previews](assets/results/b1_current_best/indexed_controller_videos/03_b1_r19_ood_verifier_audit_failure_preview.png)
+![Indexed replay previews](assets/results/b1_current_best/indexed_controller_videos/03_b1_r0_r15_expansion_mechanism_preview.png)
 
-The Kazuki markup was selected from the fixed M10 bank
-`{1.01,1.05,1.09}`. Its SR changed from 0% to 10% to 20%, respectively.
-`MARKUP=1.09` is close to the $H=10$ equivalent of the external paper's
-$H=80$ value 1.01, but it should be interpreted as front-loading the temporal
-CBF term ($1.09^9\approx2.17$), not as a uniform safety-weight increase. All
-three refinement stages use the exact frozen B1 SafeMPPI plan cost.
+The displayed Kazuki video is a diagnostic failure under the latest r19 model.
+All three refinement stages use the exact frozen B1 SafeMPPI plan cost. Its
+coefficient sweep is reported separately in
+[`PAPER_BASELINE_STUDY.md`](PAPER_BASELINE_STUDY.md); no displayed coefficient
+is treated as an optimized final baseline.
 
 ## 1. Static scene and SafeMPPI teacher
 

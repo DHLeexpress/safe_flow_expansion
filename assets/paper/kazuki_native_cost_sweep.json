@@ -1,0 +1,886 @@
+{
+  "outputs": [
+    "/Users/dhl/Documents/safe_flow_expansion/assets/paper/kazuki_native_cost_sweep_metrics.png",
+    "/Users/dhl/Documents/safe_flow_expansion/assets/paper/kazuki_native_cost_sweep_metrics.pdf",
+    "/Users/dhl/Documents/safe_flow_expansion/assets/paper/kazuki_native_cost_sweep_overlays.png",
+    "/Users/dhl/Documents/safe_flow_expansion/assets/paper/kazuki_native_cost_sweep_overlays.pdf"
+  ],
+  "pairs": [
+    {
+      "archive": "/Users/dhl/Documents/safe_flow_expansion/provenance/paper_baselines/local_native_cost_m10/kazuki_wg0_ws0_ood_m10.npz",
+      "cells": {
+        "0.1": {
+          "CR": {
+            "mean": 1.0,
+            "n": 10,
+            "se": 0.0
+          },
+          "M": 10,
+          "SR": {
+            "mean": 0.0,
+            "n": 10,
+            "se": 0.0
+          },
+          "clearance": {
+            "mean": -0.017673899874745904,
+            "n": 10,
+            "se": 0.004589956918915502
+          },
+          "time": {
+            "mean": null,
+            "n": 0,
+            "se": null
+          },
+          "timeout": {
+            "mean": 0.0,
+            "n": 10,
+            "se": 0.0
+          },
+          "v_safe": {
+            "mean": 0.0,
+            "n": 10,
+            "se": 0.0
+          }
+        },
+        "0.3": {
+          "CR": {
+            "mean": 1.0,
+            "n": 10,
+            "se": 0.0
+          },
+          "M": 10,
+          "SR": {
+            "mean": 0.0,
+            "n": 10,
+            "se": 0.0
+          },
+          "clearance": {
+            "mean": -0.016185580196433364,
+            "n": 10,
+            "se": 0.003460153598230465
+          },
+          "time": {
+            "mean": null,
+            "n": 0,
+            "se": null
+          },
+          "timeout": {
+            "mean": 0.0,
+            "n": 10,
+            "se": 0.0
+          },
+          "v_safe": {
+            "mean": 0.0,
+            "n": 10,
+            "se": 0.0
+          }
+        },
+        "0.5": {
+          "CR": {
+            "mean": 1.0,
+            "n": 10,
+            "se": 0.0
+          },
+          "M": 10,
+          "SR": {
+            "mean": 0.0,
+            "n": 10,
+            "se": 0.0
+          },
+          "clearance": {
+            "mean": -0.015185358977599636,
+            "n": 10,
+            "se": 0.0038002620276961136
+          },
+          "time": {
+            "mean": null,
+            "n": 0,
+            "se": null
+          },
+          "timeout": {
+            "mean": 0.0,
+            "n": 10,
+            "se": 0.0
+          },
+          "v_safe": {
+            "mean": 0.0,
+            "n": 10,
+            "se": 0.0
+          }
+        },
+        "1.0": {
+          "CR": {
+            "mean": 1.0,
+            "n": 10,
+            "se": 0.0
+          },
+          "M": 10,
+          "SR": {
+            "mean": 0.0,
+            "n": 10,
+            "se": 0.0
+          },
+          "clearance": {
+            "mean": -0.0227154475504259,
+            "n": 10,
+            "se": 0.0065724657807778196
+          },
+          "time": {
+            "mean": null,
+            "n": 0,
+            "se": null
+          },
+          "timeout": {
+            "mean": 0.0,
+            "n": 10,
+            "se": 0.0
+          },
+          "v_safe": {
+            "mean": 0.0,
+            "n": 10,
+            "se": 0.0
+          }
+        }
+      },
+      "goal_coef": 0.0,
+      "safe_coef": 0.0
+    },
+    {
+      "archive": "/Users/dhl/Documents/safe_flow_expansion/provenance/paper_baselines/local_native_cost_m10/kazuki_wg0_ws0.1_ood_m10.npz",
+      "cells": {
+        "0.1": {
+          "CR": {
+            "mean": 1.0,
+            "n": 10,
+            "se": 0.0
+          },
+          "M": 10,
+          "SR": {
+            "mean": 0.0,
+            "n": 10,
+            "se": 0.0
+          },
+          "clearance": {
+            "mean": -0.021637587158742436,
+            "n": 10,
+            "se": 0.0040460575768524925
+          },
+          "time": {
+            "mean": null,
+            "n": 0,
+            "se": null
+          },
+          "timeout": {
+            "mean": 0.0,
+            "n": 10,
+            "se": 0.0
+          },
+          "v_safe": {
+            "mean": 0.0,
+            "n": 10,
+            "se": 0.0
+          }
+        },
+        "0.3": {
+          "CR": {
+            "mean": 1.0,
+            "n": 10,
+            "se": 0.0
+          },
+          "M": 10,
+          "SR": {
+            "mean": 0.0,
+            "n": 10,
+            "se": 0.0
+          },
+          "clearance": {
+            "mean": -0.009043762335275032,
+            "n": 10,
+            "se": 0.0018214153737868151
+          },
+          "time": {
+            "mean": null,
+            "n": 0,
+            "se": null
+          },
+          "timeout": {
+            "mean": 0.0,
+            "n": 10,
+            "se": 0.0
+          },
+          "v_safe": {
+            "mean": 0.0,
+            "n": 10,
+            "se": 0.0
+          }
+        },
+        "0.5": {
+          "CR": {
+            "mean": 1.0,
+            "n": 10,
+            "se": 0.0
+          },
+          "M": 10,
+          "SR": {
+            "mean": 0.0,
+            "n": 10,
+            "se": 0.0
+          },
+          "clearance": {
+            "mean": -0.018058662968036168,
+            "n": 10,
+            "se": 0.003336813420532714
+          },
+          "time": {
+            "mean": null,
+            "n": 0,
+            "se": null
+          },
+          "timeout": {
+            "mean": 0.0,
+            "n": 10,
+            "se": 0.0
+          },
+          "v_safe": {
+            "mean": 0.0,
+            "n": 10,
+            "se": 0.0
+          }
+        },
+        "1.0": {
+          "CR": {
+            "mean": 1.0,
+            "n": 10,
+            "se": 0.0
+          },
+          "M": 10,
+          "SR": {
+            "mean": 0.0,
+            "n": 10,
+            "se": 0.0
+          },
+          "clearance": {
+            "mean": -0.02588219379591349,
+            "n": 10,
+            "se": 0.005902673480706915
+          },
+          "time": {
+            "mean": null,
+            "n": 0,
+            "se": null
+          },
+          "timeout": {
+            "mean": 0.0,
+            "n": 10,
+            "se": 0.0
+          },
+          "v_safe": {
+            "mean": 0.0,
+            "n": 10,
+            "se": 0.0
+          }
+        }
+      },
+      "goal_coef": 0.0,
+      "safe_coef": 0.1
+    },
+    {
+      "archive": "/Users/dhl/Documents/safe_flow_expansion/provenance/paper_baselines/local_native_cost_m10/kazuki_wg0_ws0.3_ood_m10.npz",
+      "cells": {
+        "0.1": {
+          "CR": {
+            "mean": 1.0,
+            "n": 10,
+            "se": 0.0
+          },
+          "M": 10,
+          "SR": {
+            "mean": 0.0,
+            "n": 10,
+            "se": 0.0
+          },
+          "clearance": {
+            "mean": -0.00948447580911021,
+            "n": 10,
+            "se": 0.0021313680630036494
+          },
+          "time": {
+            "mean": null,
+            "n": 0,
+            "se": null
+          },
+          "timeout": {
+            "mean": 0.0,
+            "n": 10,
+            "se": 0.0
+          },
+          "v_safe": {
+            "mean": 0.0,
+            "n": 10,
+            "se": 0.0
+          }
+        },
+        "0.3": {
+          "CR": {
+            "mean": 1.0,
+            "n": 10,
+            "se": 0.0
+          },
+          "M": 10,
+          "SR": {
+            "mean": 0.0,
+            "n": 10,
+            "se": 0.0
+          },
+          "clearance": {
+            "mean": -0.016415548356550493,
+            "n": 10,
+            "se": 0.0022456357377979943
+          },
+          "time": {
+            "mean": null,
+            "n": 0,
+            "se": null
+          },
+          "timeout": {
+            "mean": 0.0,
+            "n": 10,
+            "se": 0.0
+          },
+          "v_safe": {
+            "mean": 0.0,
+            "n": 10,
+            "se": 0.0
+          }
+        },
+        "0.5": {
+          "CR": {
+            "mean": 1.0,
+            "n": 10,
+            "se": 0.0
+          },
+          "M": 10,
+          "SR": {
+            "mean": 0.0,
+            "n": 10,
+            "se": 0.0
+          },
+          "clearance": {
+            "mean": -0.020201202294006203,
+            "n": 10,
+            "se": 0.0033661908403828035
+          },
+          "time": {
+            "mean": null,
+            "n": 0,
+            "se": null
+          },
+          "timeout": {
+            "mean": 0.0,
+            "n": 10,
+            "se": 0.0
+          },
+          "v_safe": {
+            "mean": 0.0,
+            "n": 10,
+            "se": 0.0
+          }
+        },
+        "1.0": {
+          "CR": {
+            "mean": 1.0,
+            "n": 10,
+            "se": 0.0
+          },
+          "M": 10,
+          "SR": {
+            "mean": 0.0,
+            "n": 10,
+            "se": 0.0
+          },
+          "clearance": {
+            "mean": -0.023735360091267678,
+            "n": 10,
+            "se": 0.005895019364171203
+          },
+          "time": {
+            "mean": null,
+            "n": 0,
+            "se": null
+          },
+          "timeout": {
+            "mean": 0.0,
+            "n": 10,
+            "se": 0.0
+          },
+          "v_safe": {
+            "mean": 0.0,
+            "n": 10,
+            "se": 0.0
+          }
+        }
+      },
+      "goal_coef": 0.0,
+      "safe_coef": 0.3
+    },
+    {
+      "archive": "/Users/dhl/Documents/safe_flow_expansion/provenance/paper_baselines/local_native_cost_m10/kazuki_wg0_ws0.5_ood_m10.npz",
+      "cells": {
+        "0.1": {
+          "CR": {
+            "mean": 1.0,
+            "n": 10,
+            "se": 0.0
+          },
+          "M": 10,
+          "SR": {
+            "mean": 0.0,
+            "n": 10,
+            "se": 0.0
+          },
+          "clearance": {
+            "mean": -0.006299714329750572,
+            "n": 10,
+            "se": 0.0013813043117077083
+          },
+          "time": {
+            "mean": null,
+            "n": 0,
+            "se": null
+          },
+          "timeout": {
+            "mean": 0.0,
+            "n": 10,
+            "se": 0.0
+          },
+          "v_safe": {
+            "mean": 0.0,
+            "n": 10,
+            "se": 0.0
+          }
+        },
+        "0.3": {
+          "CR": {
+            "mean": 1.0,
+            "n": 10,
+            "se": 0.0
+          },
+          "M": 10,
+          "SR": {
+            "mean": 0.0,
+            "n": 10,
+            "se": 0.0
+          },
+          "clearance": {
+            "mean": -0.01510450621949504,
+            "n": 10,
+            "se": 0.0029070565166849647
+          },
+          "time": {
+            "mean": null,
+            "n": 0,
+            "se": null
+          },
+          "timeout": {
+            "mean": 0.0,
+            "n": 10,
+            "se": 0.0
+          },
+          "v_safe": {
+            "mean": 0.0,
+            "n": 10,
+            "se": 0.0
+          }
+        },
+        "0.5": {
+          "CR": {
+            "mean": 1.0,
+            "n": 10,
+            "se": 0.0
+          },
+          "M": 10,
+          "SR": {
+            "mean": 0.0,
+            "n": 10,
+            "se": 0.0
+          },
+          "clearance": {
+            "mean": -0.020341716516930092,
+            "n": 10,
+            "se": 0.0033497268403228806
+          },
+          "time": {
+            "mean": null,
+            "n": 0,
+            "se": null
+          },
+          "timeout": {
+            "mean": 0.0,
+            "n": 10,
+            "se": 0.0
+          },
+          "v_safe": {
+            "mean": 0.0,
+            "n": 10,
+            "se": 0.0
+          }
+        },
+        "1.0": {
+          "CR": {
+            "mean": 1.0,
+            "n": 10,
+            "se": 0.0
+          },
+          "M": 10,
+          "SR": {
+            "mean": 0.0,
+            "n": 10,
+            "se": 0.0
+          },
+          "clearance": {
+            "mean": -0.011149717386868796,
+            "n": 10,
+            "se": 0.003780307090905773
+          },
+          "time": {
+            "mean": null,
+            "n": 0,
+            "se": null
+          },
+          "timeout": {
+            "mean": 0.0,
+            "n": 10,
+            "se": 0.0
+          },
+          "v_safe": {
+            "mean": 0.0,
+            "n": 10,
+            "se": 0.0
+          }
+        }
+      },
+      "goal_coef": 0.0,
+      "safe_coef": 0.5
+    },
+    {
+      "archive": "/Users/dhl/Documents/safe_flow_expansion/provenance/paper_baselines/local_native_cost_m10/kazuki_wg0_ws0.7_ood_m10.npz",
+      "cells": {
+        "0.1": {
+          "CR": {
+            "mean": 0.9,
+            "n": 10,
+            "se": 0.09486832980505137
+          },
+          "M": 10,
+          "SR": {
+            "mean": 0.1,
+            "n": 10,
+            "se": 0.09486832980505139
+          },
+          "clearance": {
+            "mean": -0.006187699804785815,
+            "n": 10,
+            "se": 0.002042272656910249
+          },
+          "time": {
+            "mean": 11.700000000000001,
+            "n": 1,
+            "se": 0.0
+          },
+          "timeout": {
+            "mean": 0.0,
+            "n": 10,
+            "se": 0.0
+          },
+          "v_safe": {
+            "mean": 0.0,
+            "n": 10,
+            "se": 0.0
+          }
+        },
+        "0.3": {
+          "CR": {
+            "mean": 1.0,
+            "n": 10,
+            "se": 0.0
+          },
+          "M": 10,
+          "SR": {
+            "mean": 0.0,
+            "n": 10,
+            "se": 0.0
+          },
+          "clearance": {
+            "mean": -0.006691063192693164,
+            "n": 10,
+            "se": 0.0020116583915025447
+          },
+          "time": {
+            "mean": null,
+            "n": 0,
+            "se": null
+          },
+          "timeout": {
+            "mean": 0.0,
+            "n": 10,
+            "se": 0.0
+          },
+          "v_safe": {
+            "mean": 0.0,
+            "n": 10,
+            "se": 0.0
+          }
+        },
+        "0.5": {
+          "CR": {
+            "mean": 1.0,
+            "n": 10,
+            "se": 0.0
+          },
+          "M": 10,
+          "SR": {
+            "mean": 0.0,
+            "n": 10,
+            "se": 0.0
+          },
+          "clearance": {
+            "mean": -0.018038929442512248,
+            "n": 10,
+            "se": 0.00488794418386313
+          },
+          "time": {
+            "mean": null,
+            "n": 0,
+            "se": null
+          },
+          "timeout": {
+            "mean": 0.0,
+            "n": 10,
+            "se": 0.0
+          },
+          "v_safe": {
+            "mean": 0.0,
+            "n": 10,
+            "se": 0.0
+          }
+        },
+        "1.0": {
+          "CR": {
+            "mean": 1.0,
+            "n": 10,
+            "se": 0.0
+          },
+          "M": 10,
+          "SR": {
+            "mean": 0.0,
+            "n": 10,
+            "se": 0.0
+          },
+          "clearance": {
+            "mean": -0.02011921882731809,
+            "n": 10,
+            "se": 0.004666267131490862
+          },
+          "time": {
+            "mean": null,
+            "n": 0,
+            "se": null
+          },
+          "timeout": {
+            "mean": 0.0,
+            "n": 10,
+            "se": 0.0
+          },
+          "v_safe": {
+            "mean": 0.0,
+            "n": 10,
+            "se": 0.0
+          }
+        }
+      },
+      "goal_coef": 0.0,
+      "safe_coef": 0.7
+    },
+    {
+      "archive": "/Users/dhl/Documents/safe_flow_expansion/provenance/paper_baselines/local_native_cost_m10/kazuki_wg0_ws0.9_ood_m10.npz",
+      "cells": {
+        "0.1": {
+          "CR": {
+            "mean": 0.8,
+            "n": 10,
+            "se": 0.12649110640673517
+          },
+          "M": 10,
+          "SR": {
+            "mean": 0.2,
+            "n": 10,
+            "se": 0.1264911064067352
+          },
+          "clearance": {
+            "mean": -0.0060823421591509556,
+            "n": 10,
+            "se": 0.004130934385810847
+          },
+          "time": {
+            "mean": 13.100000000000001,
+            "n": 2,
+            "se": 0.8999999999999995
+          },
+          "timeout": {
+            "mean": 0.0,
+            "n": 10,
+            "se": 0.0
+          },
+          "v_safe": {
+            "mean": 0.0,
+            "n": 10,
+            "se": 0.0
+          }
+        },
+        "0.3": {
+          "CR": {
+            "mean": 1.0,
+            "n": 10,
+            "se": 0.0
+          },
+          "M": 10,
+          "SR": {
+            "mean": 0.0,
+            "n": 10,
+            "se": 0.0
+          },
+          "clearance": {
+            "mean": -0.004987600254514946,
+            "n": 10,
+            "se": 0.0015871969967619656
+          },
+          "time": {
+            "mean": null,
+            "n": 0,
+            "se": null
+          },
+          "timeout": {
+            "mean": 0.0,
+            "n": 10,
+            "se": 0.0
+          },
+          "v_safe": {
+            "mean": 0.0,
+            "n": 10,
+            "se": 0.0
+          }
+        },
+        "0.5": {
+          "CR": {
+            "mean": 1.0,
+            "n": 10,
+            "se": 0.0
+          },
+          "M": 10,
+          "SR": {
+            "mean": 0.0,
+            "n": 10,
+            "se": 0.0
+          },
+          "clearance": {
+            "mean": -0.029639352447333085,
+            "n": 10,
+            "se": 0.003744381141943925
+          },
+          "time": {
+            "mean": null,
+            "n": 0,
+            "se": null
+          },
+          "timeout": {
+            "mean": 0.0,
+            "n": 10,
+            "se": 0.0
+          },
+          "v_safe": {
+            "mean": 0.0,
+            "n": 10,
+            "se": 0.0
+          }
+        },
+        "1.0": {
+          "CR": {
+            "mean": 1.0,
+            "n": 10,
+            "se": 0.0
+          },
+          "M": 10,
+          "SR": {
+            "mean": 0.0,
+            "n": 10,
+            "se": 0.0
+          },
+          "clearance": {
+            "mean": -0.01944557123831968,
+            "n": 10,
+            "se": 0.0034813909284252815
+          },
+          "time": {
+            "mean": null,
+            "n": 0,
+            "se": null
+          },
+          "timeout": {
+            "mean": 0.0,
+            "n": 10,
+            "se": 0.0
+          },
+          "v_safe": {
+            "mean": 0.0,
+            "n": 10,
+            "se": 0.0
+          }
+        }
+      },
+      "goal_coef": 0.0,
+      "safe_coef": 0.9
+    }
+  ],
+  "selection_statement": "No coefficient is promoted by this renderer. The historical ws=0.1 and ws=0.9 gallery rows were low/high visualization endpoints, not an optimization result.",
+  "source_spec": {
+    "checkpoint": "B1_current_best r19",
+    "checkpoint_sha256": "60c155472f5ed0e4a1d53581857f09aead7924f8ce11e8e3adf890d5a57fc079",
+    "pairs": [
+      {
+        "archive": "../provenance/paper_baselines/local_native_cost_m10/kazuki_wg0_ws0_ood_m10.npz",
+        "goal_coef": 0.0,
+        "safe_coef": 0.0
+      },
+      {
+        "archive": "../provenance/paper_baselines/local_native_cost_m10/kazuki_wg0_ws0.1_ood_m10.npz",
+        "goal_coef": 0.0,
+        "safe_coef": 0.1
+      },
+      {
+        "archive": "../provenance/paper_baselines/local_native_cost_m10/kazuki_wg0_ws0.3_ood_m10.npz",
+        "goal_coef": 0.0,
+        "safe_coef": 0.3
+      },
+      {
+        "archive": "../provenance/paper_baselines/local_native_cost_m10/kazuki_wg0_ws0.5_ood_m10.npz",
+        "goal_coef": 0.0,
+        "safe_coef": 0.5
+      },
+      {
+        "archive": "../provenance/paper_baselines/local_native_cost_m10/kazuki_wg0_ws0.7_ood_m10.npz",
+        "goal_coef": 0.0,
+        "safe_coef": 0.7
+      },
+      {
+        "archive": "../provenance/paper_baselines/local_native_cost_m10/kazuki_wg0_ws0.9_ood_m10.npz",
+        "goal_coef": 0.0,
+        "safe_coef": 0.9
+      }
+    ],
+    "refinement_cost": "exact native B1 SafeMPPI cost at proposal ranking, perturbation weighting, and refined-mode selection",
+    "scene": "low7_radius1_canonical_v1",
+    "status": "KAZUKI_NATIVE_COST_LOCAL_SWEEP_SPEC"
+  },
+  "spec": "/Users/dhl/Documents/safe_flow_expansion/configs/kazuki_native_cost_sweep.json",
+  "status": "KAZUKI_NATIVE_COST_SWEEP_FIGURES_COMPLETE"
+}

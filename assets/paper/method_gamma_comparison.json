@@ -1,0 +1,578 @@
+{
+  "comparison_scope": "giant-obstacle OOD; path archives are re-scored with the canonical sliding-window SOCP predicate; the max-safety JSONL retains its declared per-gamma sampling temperatures",
+  "gammas": [
+    0.1,
+    0.3,
+    0.5,
+    1.0
+  ],
+  "methods": [
+    {
+      "cells": {
+        "0.1": {
+          "CR": {
+            "mean": 0.0,
+            "n": 10,
+            "se": 0.0
+          },
+          "M": 10,
+          "SR": {
+            "mean": 1.0,
+            "n": 10,
+            "se": 0.0
+          },
+          "clearance": {
+            "mean": 0.12227135461317876,
+            "n": 10,
+            "se": 0.006264235860442024
+          },
+          "time": {
+            "mean": 16.940000000000005,
+            "n": 10,
+            "se": 0.3606167556346273
+          },
+          "timeout": {
+            "mean": 0.0,
+            "n": 10,
+            "se": 0.0
+          },
+          "v_safe": {
+            "mean": 1.0,
+            "n": 10,
+            "se": 0.0
+          }
+        },
+        "0.3": {
+          "CR": {
+            "mean": 0.0,
+            "n": 10,
+            "se": 0.0
+          },
+          "M": 10,
+          "SR": {
+            "mean": 1.0,
+            "n": 10,
+            "se": 0.0
+          },
+          "clearance": {
+            "mean": 0.04003641781997426,
+            "n": 10,
+            "se": 0.00593941676831229
+          },
+          "time": {
+            "mean": 12.59,
+            "n": 10,
+            "se": 0.42201895692018376
+          },
+          "timeout": {
+            "mean": 0.0,
+            "n": 10,
+            "se": 0.0
+          },
+          "v_safe": {
+            "mean": 0.8,
+            "n": 10,
+            "se": 0.12649110640673517
+          }
+        },
+        "0.5": {
+          "CR": {
+            "mean": 0.0,
+            "n": 10,
+            "se": 0.0
+          },
+          "M": 10,
+          "SR": {
+            "mean": 1.0,
+            "n": 10,
+            "se": 0.0
+          },
+          "clearance": {
+            "mean": 0.03441373993384551,
+            "n": 10,
+            "se": 0.006430125282412206
+          },
+          "time": {
+            "mean": 11.77,
+            "n": 10,
+            "se": 0.2366666666666667
+          },
+          "timeout": {
+            "mean": 0.0,
+            "n": 10,
+            "se": 0.0
+          },
+          "v_safe": {
+            "mean": 0.8,
+            "n": 10,
+            "se": 0.12649110640673517
+          }
+        },
+        "1.0": {
+          "CR": {
+            "mean": 0.0,
+            "n": 10,
+            "se": 0.0
+          },
+          "M": 10,
+          "SR": {
+            "mean": 1.0,
+            "n": 10,
+            "se": 0.0
+          },
+          "clearance": {
+            "mean": 0.03250348603577685,
+            "n": 10,
+            "se": 0.005921934082997871
+          },
+          "time": {
+            "mean": 11.830000000000002,
+            "n": 10,
+            "se": 0.2848196310337864
+          },
+          "timeout": {
+            "mean": 0.0,
+            "n": 10,
+            "se": 0.0
+          },
+          "v_safe": {
+            "mean": 0.6,
+            "n": 10,
+            "se": 0.15491933384829668
+          }
+        }
+      },
+      "label": "SafeMPPI",
+      "round": null,
+      "source": "/Users/dhl/Documents/safe_flow_expansion/provenance/paper_baselines/local_native_cost_m10/safemppi_ood_m10.npz",
+      "status": "complete"
+    },
+    {
+      "cells": {
+        "0.1": {
+          "CR": {
+            "mean": 0.0,
+            "se": 0.0
+          },
+          "SR": {
+            "mean": 1.0,
+            "se": 0.0
+          },
+          "clearance": {
+            "mean": 0.06587415899320537,
+            "se": 0.0015374593596128939
+          },
+          "gamma": 0.1,
+          "m": 200,
+          "mode": "fixed",
+          "n": 200,
+          "round": 15,
+          "temp": 0.5,
+          "time": {
+            "mean": 18.858,
+            "n_success": 200,
+            "se": 0.04133063156458705
+          },
+          "v_safe": {
+            "mean": 0.765,
+            "se": 0.029981244136960027
+          }
+        },
+        "0.3": {
+          "CR": {
+            "mean": 0.0,
+            "se": 0.0
+          },
+          "SR": {
+            "mean": 1.0,
+            "se": 0.0
+          },
+          "clearance": {
+            "mean": 0.06610842180535581,
+            "se": 0.00044773147535201663
+          },
+          "gamma": 0.3,
+          "m": 200,
+          "mode": "fixed",
+          "n": 200,
+          "round": 15,
+          "temp": 0.3,
+          "time": {
+            "mean": 15.196,
+            "n_success": 200,
+            "se": 0.04477660911254993
+          },
+          "v_safe": {
+            "mean": 1.0,
+            "se": 0.0
+          }
+        },
+        "0.5": {
+          "CR": {
+            "mean": 0.005,
+            "se": 0.004987484335815001
+          },
+          "SR": {
+            "mean": 0.995,
+            "se": 0.004987484335815003
+          },
+          "clearance": {
+            "mean": 0.05654628794070733,
+            "se": 0.001279510897212394
+          },
+          "gamma": 0.5,
+          "m": 200,
+          "mode": "fixed",
+          "n": 200,
+          "round": 15,
+          "temp": 0.75,
+          "time": {
+            "mean": 14.820603015075378,
+            "n_success": 199,
+            "se": 0.056926135787915104
+          },
+          "v_safe": {
+            "mean": 0.995,
+            "se": 0.004987484335815003
+          }
+        },
+        "1.0": {
+          "CR": {
+            "mean": 0.05,
+            "se": 0.015411035007422441
+          },
+          "SR": {
+            "mean": 0.95,
+            "se": 0.015411035007422448
+          },
+          "clearance": {
+            "mean": 0.04653264388868509,
+            "se": 0.0018205445554414965
+          },
+          "gamma": 1.0,
+          "m": 200,
+          "mode": "fixed",
+          "n": 200,
+          "round": 15,
+          "temp": 1.0,
+          "time": {
+            "mean": 14.910000000000004,
+            "n_success": 190,
+            "se": 0.06803340048222756
+          },
+          "v_safe": {
+            "mean": 0.95,
+            "se": 0.015411035007422448
+          }
+        }
+      },
+      "label": "Ours (max safety)",
+      "round": 15,
+      "source": "/Users/dhl/Documents/safe_flow_expansion/provenance/b1_margin_goal/fixedtemp_m200_revised_r0_r15.jsonl",
+      "status": "complete"
+    },
+    {
+      "cells": {},
+      "label": "Ours (SafeMPPI cost)",
+      "round": null,
+      "source": null,
+      "status": "pending"
+    },
+    {
+      "cells": {
+        "0.1": {
+          "CR": {
+            "mean": 1.0,
+            "n": 10,
+            "se": 0.0
+          },
+          "M": 10,
+          "SR": {
+            "mean": 0.0,
+            "n": 10,
+            "se": 0.0
+          },
+          "clearance": {
+            "mean": -0.021637587158742436,
+            "n": 10,
+            "se": 0.0040460575768524925
+          },
+          "time": {
+            "mean": null,
+            "n": 0,
+            "se": null
+          },
+          "timeout": {
+            "mean": 0.0,
+            "n": 10,
+            "se": 0.0
+          },
+          "v_safe": {
+            "mean": 0.0,
+            "n": 10,
+            "se": 0.0
+          }
+        },
+        "0.3": {
+          "CR": {
+            "mean": 1.0,
+            "n": 10,
+            "se": 0.0
+          },
+          "M": 10,
+          "SR": {
+            "mean": 0.0,
+            "n": 10,
+            "se": 0.0
+          },
+          "clearance": {
+            "mean": -0.009043762335275032,
+            "n": 10,
+            "se": 0.0018214153737868151
+          },
+          "time": {
+            "mean": null,
+            "n": 0,
+            "se": null
+          },
+          "timeout": {
+            "mean": 0.0,
+            "n": 10,
+            "se": 0.0
+          },
+          "v_safe": {
+            "mean": 0.0,
+            "n": 10,
+            "se": 0.0
+          }
+        },
+        "0.5": {
+          "CR": {
+            "mean": 1.0,
+            "n": 10,
+            "se": 0.0
+          },
+          "M": 10,
+          "SR": {
+            "mean": 0.0,
+            "n": 10,
+            "se": 0.0
+          },
+          "clearance": {
+            "mean": -0.018058662968036168,
+            "n": 10,
+            "se": 0.003336813420532714
+          },
+          "time": {
+            "mean": null,
+            "n": 0,
+            "se": null
+          },
+          "timeout": {
+            "mean": 0.0,
+            "n": 10,
+            "se": 0.0
+          },
+          "v_safe": {
+            "mean": 0.0,
+            "n": 10,
+            "se": 0.0
+          }
+        },
+        "1.0": {
+          "CR": {
+            "mean": 1.0,
+            "n": 10,
+            "se": 0.0
+          },
+          "M": 10,
+          "SR": {
+            "mean": 0.0,
+            "n": 10,
+            "se": 0.0
+          },
+          "clearance": {
+            "mean": -0.02588219379591349,
+            "n": 10,
+            "se": 0.005902673480706915
+          },
+          "time": {
+            "mean": null,
+            "n": 0,
+            "se": null
+          },
+          "timeout": {
+            "mean": 0.0,
+            "n": 10,
+            "se": 0.0
+          },
+          "v_safe": {
+            "mean": 0.0,
+            "n": 10,
+            "se": 0.0
+          }
+        }
+      },
+      "label": "CFM\u2013MPPI$^*$ ($w_g=0,w_s=0.1$)",
+      "round": null,
+      "source": "/Users/dhl/Documents/safe_flow_expansion/provenance/paper_baselines/local_native_cost_m10/kazuki_wg0_ws0.1_ood_m10.npz",
+      "status": "complete"
+    },
+    {
+      "cells": {
+        "0.1": {
+          "CR": {
+            "mean": 0.8,
+            "n": 10,
+            "se": 0.12649110640673517
+          },
+          "M": 10,
+          "SR": {
+            "mean": 0.2,
+            "n": 10,
+            "se": 0.1264911064067352
+          },
+          "clearance": {
+            "mean": -0.0060823421591509556,
+            "n": 10,
+            "se": 0.004130934385810847
+          },
+          "time": {
+            "mean": 13.100000000000001,
+            "n": 2,
+            "se": 0.8999999999999995
+          },
+          "timeout": {
+            "mean": 0.0,
+            "n": 10,
+            "se": 0.0
+          },
+          "v_safe": {
+            "mean": 0.0,
+            "n": 10,
+            "se": 0.0
+          }
+        },
+        "0.3": {
+          "CR": {
+            "mean": 1.0,
+            "n": 10,
+            "se": 0.0
+          },
+          "M": 10,
+          "SR": {
+            "mean": 0.0,
+            "n": 10,
+            "se": 0.0
+          },
+          "clearance": {
+            "mean": -0.004987600254514946,
+            "n": 10,
+            "se": 0.0015871969967619656
+          },
+          "time": {
+            "mean": null,
+            "n": 0,
+            "se": null
+          },
+          "timeout": {
+            "mean": 0.0,
+            "n": 10,
+            "se": 0.0
+          },
+          "v_safe": {
+            "mean": 0.0,
+            "n": 10,
+            "se": 0.0
+          }
+        },
+        "0.5": {
+          "CR": {
+            "mean": 1.0,
+            "n": 10,
+            "se": 0.0
+          },
+          "M": 10,
+          "SR": {
+            "mean": 0.0,
+            "n": 10,
+            "se": 0.0
+          },
+          "clearance": {
+            "mean": -0.029639352447333085,
+            "n": 10,
+            "se": 0.003744381141943925
+          },
+          "time": {
+            "mean": null,
+            "n": 0,
+            "se": null
+          },
+          "timeout": {
+            "mean": 0.0,
+            "n": 10,
+            "se": 0.0
+          },
+          "v_safe": {
+            "mean": 0.0,
+            "n": 10,
+            "se": 0.0
+          }
+        },
+        "1.0": {
+          "CR": {
+            "mean": 1.0,
+            "n": 10,
+            "se": 0.0
+          },
+          "M": 10,
+          "SR": {
+            "mean": 0.0,
+            "n": 10,
+            "se": 0.0
+          },
+          "clearance": {
+            "mean": -0.01944557123831968,
+            "n": 10,
+            "se": 0.0034813909284252815
+          },
+          "time": {
+            "mean": null,
+            "n": 0,
+            "se": null
+          },
+          "timeout": {
+            "mean": 0.0,
+            "n": 10,
+            "se": 0.0
+          },
+          "v_safe": {
+            "mean": 0.0,
+            "n": 10,
+            "se": 0.0
+          }
+        }
+      },
+      "label": "CFM\u2013MPPI$^*$ ($w_g=0,w_s=0.9$)",
+      "round": null,
+      "source": "/Users/dhl/Documents/safe_flow_expansion/provenance/paper_baselines/local_native_cost_m10/kazuki_wg0_ws0.9_ood_m10.npz",
+      "status": "complete"
+    }
+  ],
+  "metrics": [
+    "CR",
+    "v_safe",
+    "clearance",
+    "time"
+  ],
+  "outputs": [
+    "/Users/dhl/Documents/safe_flow_expansion/assets/paper/method_gamma_comparison.png",
+    "/Users/dhl/Documents/safe_flow_expansion/assets/paper/method_gamma_comparison.pdf"
+  ],
+  "paper_claim_status": "assembly preview only; rerun every method on one common M and temperature contract before using this as a comparative claim",
+  "pending_contract": {
+    "command": "python scripts/paper_method_gamma_comparison.py --cost-jsonl /path/to/rounds.jsonl --cost-round ROUND",
+    "method": "Ours (SafeMPPI cost)"
+  },
+  "status": "PAPER_METHOD_GAMMA_COMPARISON_COMPLETE"
+}
