@@ -1,0 +1,1197 @@
+{
+  "input_manifest": "/Users/dhl/Documents/safe_flow_expansion/provenance/paper_baselines/kazuki_absolute_grid_m10/manifest.json",
+  "outputs": [
+    "/Users/dhl/Documents/safe_flow_expansion/assets/paper/kazuki_absolute_coefficient_grid_metrics.png",
+    "/Users/dhl/Documents/safe_flow_expansion/assets/paper/kazuki_absolute_coefficient_grid_metrics.pdf",
+    "/Users/dhl/Documents/safe_flow_expansion/assets/paper/kazuki_absolute_coefficient_grid_overlays.png",
+    "/Users/dhl/Documents/safe_flow_expansion/assets/paper/kazuki_absolute_coefficient_grid_overlays.pdf"
+  ],
+  "pairs": {
+    "wg0_ws0": {
+      "goal_coef": 0.0,
+      "metrics": {
+        "0.1": {
+          "CR": {
+            "mean": 1.0,
+            "n": 10,
+            "se": 0.0
+          },
+          "M": 10,
+          "SR": {
+            "mean": 0.0,
+            "n": 10,
+            "se": 0.0
+          },
+          "clearance": {
+            "mean": -0.010352478313714608,
+            "n": 10,
+            "se": 0.00232118484416484
+          },
+          "time": {
+            "mean": null,
+            "n": 0,
+            "se": null
+          },
+          "timeout": {
+            "mean": 0.0,
+            "n": 10,
+            "se": 0.0
+          },
+          "v_safe": {
+            "mean": 0.0,
+            "n": 10,
+            "se": 0.0
+          }
+        },
+        "1.0": {
+          "CR": {
+            "mean": 1.0,
+            "n": 10,
+            "se": 0.0
+          },
+          "M": 10,
+          "SR": {
+            "mean": 0.0,
+            "n": 10,
+            "se": 0.0
+          },
+          "clearance": {
+            "mean": -0.014120712767258018,
+            "n": 10,
+            "se": 0.005003496522428505
+          },
+          "time": {
+            "mean": null,
+            "n": 0,
+            "se": null
+          },
+          "timeout": {
+            "mean": 0.0,
+            "n": 10,
+            "se": 0.0
+          },
+          "v_safe": {
+            "mean": 0.0,
+            "n": 10,
+            "se": 0.0
+          }
+        }
+      },
+      "safe_coef": 0.0,
+      "source_file": "kazuki_wg0_ws0_m10.npz",
+      "source_sha256": "c7add4edef9e586dfaac818326f8f64f9390b6ac1d9261f88670bd0695288fae"
+    },
+    "wg0_ws1": {
+      "goal_coef": 0.0,
+      "metrics": {
+        "0.1": {
+          "CR": {
+            "mean": 0.3,
+            "n": 10,
+            "se": 0.14491376746189438
+          },
+          "M": 10,
+          "SR": {
+            "mean": 0.7,
+            "n": 10,
+            "se": 0.14491376746189438
+          },
+          "clearance": {
+            "mean": 0.009065736083262544,
+            "n": 10,
+            "se": 0.0036809818014584953
+          },
+          "time": {
+            "mean": 14.985714285714286,
+            "n": 7,
+            "se": 0.14380637019563333
+          },
+          "timeout": {
+            "mean": 0.0,
+            "n": 10,
+            "se": 0.0
+          },
+          "v_safe": {
+            "mean": 0.0,
+            "n": 10,
+            "se": 0.0
+          }
+        },
+        "1.0": {
+          "CR": {
+            "mean": 0.8,
+            "n": 10,
+            "se": 0.12649110640673517
+          },
+          "M": 10,
+          "SR": {
+            "mean": 0.2,
+            "n": 10,
+            "se": 0.1264911064067352
+          },
+          "clearance": {
+            "mean": -0.005423723745292308,
+            "n": 10,
+            "se": 0.002260107473912713
+          },
+          "time": {
+            "mean": 11.05,
+            "n": 2,
+            "se": 0.15000000000000036
+          },
+          "timeout": {
+            "mean": 0.0,
+            "n": 10,
+            "se": 0.0
+          },
+          "v_safe": {
+            "mean": 0.0,
+            "n": 10,
+            "se": 0.0
+          }
+        }
+      },
+      "safe_coef": 1.0,
+      "source_file": "kazuki_wg0_ws1_m10.npz",
+      "source_sha256": "cb7aa7a25dc0cebf6aa7c69b462dbe9ab3e080ad8fe9b24ddde96ac30888d0fc"
+    },
+    "wg0_ws2": {
+      "goal_coef": 0.0,
+      "metrics": {
+        "0.1": {
+          "CR": {
+            "mean": 1.0,
+            "n": 10,
+            "se": 0.0
+          },
+          "M": 10,
+          "SR": {
+            "mean": 0.0,
+            "n": 10,
+            "se": 0.0
+          },
+          "clearance": {
+            "mean": -0.008435817123458353,
+            "n": 10,
+            "se": 0.0030265068516546977
+          },
+          "time": {
+            "mean": null,
+            "n": 0,
+            "se": null
+          },
+          "timeout": {
+            "mean": 0.0,
+            "n": 10,
+            "se": 0.0
+          },
+          "v_safe": {
+            "mean": 0.0,
+            "n": 10,
+            "se": 0.0
+          }
+        },
+        "1.0": {
+          "CR": {
+            "mean": 0.5,
+            "n": 10,
+            "se": 0.15811388300841897
+          },
+          "M": 10,
+          "SR": {
+            "mean": 0.5,
+            "n": 10,
+            "se": 0.15811388300841897
+          },
+          "clearance": {
+            "mean": 0.005111347705541713,
+            "n": 10,
+            "se": 0.005231777778832958
+          },
+          "time": {
+            "mean": 14.320000000000002,
+            "n": 5,
+            "se": 0.1655294535724685
+          },
+          "timeout": {
+            "mean": 0.0,
+            "n": 10,
+            "se": 0.0
+          },
+          "v_safe": {
+            "mean": 0.2,
+            "n": 10,
+            "se": 0.1264911064067352
+          }
+        }
+      },
+      "safe_coef": 2.0,
+      "source_file": "kazuki_wg0_ws2_m10.npz",
+      "source_sha256": "61d48a6839a4ac63b6bfbe2187cd5b80cfb23bea7943639a0ca0b83203594ff4"
+    },
+    "wg0_ws3": {
+      "goal_coef": 0.0,
+      "metrics": {
+        "0.1": {
+          "CR": {
+            "mean": 1.0,
+            "n": 10,
+            "se": 0.0
+          },
+          "M": 10,
+          "SR": {
+            "mean": 0.0,
+            "n": 10,
+            "se": 0.0
+          },
+          "clearance": {
+            "mean": -0.016804071397222224,
+            "n": 10,
+            "se": 0.003592848772050772
+          },
+          "time": {
+            "mean": null,
+            "n": 0,
+            "se": null
+          },
+          "timeout": {
+            "mean": 0.0,
+            "n": 10,
+            "se": 0.0
+          },
+          "v_safe": {
+            "mean": 0.0,
+            "n": 10,
+            "se": 0.0
+          }
+        },
+        "1.0": {
+          "CR": {
+            "mean": 1.0,
+            "n": 10,
+            "se": 0.0
+          },
+          "M": 10,
+          "SR": {
+            "mean": 0.0,
+            "n": 10,
+            "se": 0.0
+          },
+          "clearance": {
+            "mean": -0.016195864494007457,
+            "n": 10,
+            "se": 0.0035661238116295063
+          },
+          "time": {
+            "mean": null,
+            "n": 0,
+            "se": null
+          },
+          "timeout": {
+            "mean": 0.0,
+            "n": 10,
+            "se": 0.0
+          },
+          "v_safe": {
+            "mean": 0.0,
+            "n": 10,
+            "se": 0.0
+          }
+        }
+      },
+      "safe_coef": 3.0,
+      "source_file": "kazuki_wg0_ws3_m10.npz",
+      "source_sha256": "78631b6e9d1e0a00eb9f97bd0086ca2f2ef5121b60c025f31dd50c93c26c8dbc"
+    },
+    "wg1_ws0": {
+      "goal_coef": 1.0,
+      "metrics": {
+        "0.1": {
+          "CR": {
+            "mean": 1.0,
+            "n": 10,
+            "se": 0.0
+          },
+          "M": 10,
+          "SR": {
+            "mean": 0.0,
+            "n": 10,
+            "se": 0.0
+          },
+          "clearance": {
+            "mean": -0.09721442418688561,
+            "n": 10,
+            "se": 0.016358887050778752
+          },
+          "time": {
+            "mean": null,
+            "n": 0,
+            "se": null
+          },
+          "timeout": {
+            "mean": 0.0,
+            "n": 10,
+            "se": 0.0
+          },
+          "v_safe": {
+            "mean": 0.0,
+            "n": 10,
+            "se": 0.0
+          }
+        },
+        "1.0": {
+          "CR": {
+            "mean": 1.0,
+            "n": 10,
+            "se": 0.0
+          },
+          "M": 10,
+          "SR": {
+            "mean": 0.0,
+            "n": 10,
+            "se": 0.0
+          },
+          "clearance": {
+            "mean": -0.05132748900232851,
+            "n": 10,
+            "se": 0.017843887335730932
+          },
+          "time": {
+            "mean": null,
+            "n": 0,
+            "se": null
+          },
+          "timeout": {
+            "mean": 0.0,
+            "n": 10,
+            "se": 0.0
+          },
+          "v_safe": {
+            "mean": 0.0,
+            "n": 10,
+            "se": 0.0
+          }
+        }
+      },
+      "safe_coef": 0.0,
+      "source_file": "kazuki_wg1_ws0_m10.npz",
+      "source_sha256": "32861faeb03129a94875626f7af90ecbc157957ce30096fd97729c93303cbe0c"
+    },
+    "wg1_ws1": {
+      "goal_coef": 1.0,
+      "metrics": {
+        "0.1": {
+          "CR": {
+            "mean": 1.0,
+            "n": 10,
+            "se": 0.0
+          },
+          "M": 10,
+          "SR": {
+            "mean": 0.0,
+            "n": 10,
+            "se": 0.0
+          },
+          "clearance": {
+            "mean": -0.008057402199466643,
+            "n": 10,
+            "se": 0.0016790267432010304
+          },
+          "time": {
+            "mean": null,
+            "n": 0,
+            "se": null
+          },
+          "timeout": {
+            "mean": 0.0,
+            "n": 10,
+            "se": 0.0
+          },
+          "v_safe": {
+            "mean": 0.0,
+            "n": 10,
+            "se": 0.0
+          }
+        },
+        "1.0": {
+          "CR": {
+            "mean": 1.0,
+            "n": 10,
+            "se": 0.0
+          },
+          "M": 10,
+          "SR": {
+            "mean": 0.0,
+            "n": 10,
+            "se": 0.0
+          },
+          "clearance": {
+            "mean": -0.016875126148538415,
+            "n": 10,
+            "se": 0.0025248952822694865
+          },
+          "time": {
+            "mean": null,
+            "n": 0,
+            "se": null
+          },
+          "timeout": {
+            "mean": 0.0,
+            "n": 10,
+            "se": 0.0
+          },
+          "v_safe": {
+            "mean": 0.0,
+            "n": 10,
+            "se": 0.0
+          }
+        }
+      },
+      "safe_coef": 1.0,
+      "source_file": "kazuki_wg1_ws1_m10.npz",
+      "source_sha256": "0e4a94df9c3ffc0640e41136102fb1a6ab3ca00c80ce2762943ee431b8076bbd"
+    },
+    "wg1_ws2": {
+      "goal_coef": 1.0,
+      "metrics": {
+        "0.1": {
+          "CR": {
+            "mean": 1.0,
+            "n": 10,
+            "se": 0.0
+          },
+          "M": 10,
+          "SR": {
+            "mean": 0.0,
+            "n": 10,
+            "se": 0.0
+          },
+          "clearance": {
+            "mean": -0.009593418515339467,
+            "n": 10,
+            "se": 0.002660222066535713
+          },
+          "time": {
+            "mean": null,
+            "n": 0,
+            "se": null
+          },
+          "timeout": {
+            "mean": 0.0,
+            "n": 10,
+            "se": 0.0
+          },
+          "v_safe": {
+            "mean": 0.0,
+            "n": 10,
+            "se": 0.0
+          }
+        },
+        "1.0": {
+          "CR": {
+            "mean": 1.0,
+            "n": 10,
+            "se": 0.0
+          },
+          "M": 10,
+          "SR": {
+            "mean": 0.0,
+            "n": 10,
+            "se": 0.0
+          },
+          "clearance": {
+            "mean": -0.00754525435090562,
+            "n": 10,
+            "se": 0.001978434342657539
+          },
+          "time": {
+            "mean": null,
+            "n": 0,
+            "se": null
+          },
+          "timeout": {
+            "mean": 0.0,
+            "n": 10,
+            "se": 0.0
+          },
+          "v_safe": {
+            "mean": 0.0,
+            "n": 10,
+            "se": 0.0
+          }
+        }
+      },
+      "safe_coef": 2.0,
+      "source_file": "kazuki_wg1_ws2_m10.npz",
+      "source_sha256": "91e2abbf3d3988696bd3877039f118af6b9a882c20a9d15d5b0eae8ff2be31c1"
+    },
+    "wg1_ws3": {
+      "goal_coef": 1.0,
+      "metrics": {
+        "0.1": {
+          "CR": {
+            "mean": 1.0,
+            "n": 10,
+            "se": 0.0
+          },
+          "M": 10,
+          "SR": {
+            "mean": 0.0,
+            "n": 10,
+            "se": 0.0
+          },
+          "clearance": {
+            "mean": -0.021553858444614247,
+            "n": 10,
+            "se": 0.0032653746465684864
+          },
+          "time": {
+            "mean": null,
+            "n": 0,
+            "se": null
+          },
+          "timeout": {
+            "mean": 0.0,
+            "n": 10,
+            "se": 0.0
+          },
+          "v_safe": {
+            "mean": 0.0,
+            "n": 10,
+            "se": 0.0
+          }
+        },
+        "1.0": {
+          "CR": {
+            "mean": 1.0,
+            "n": 10,
+            "se": 0.0
+          },
+          "M": 10,
+          "SR": {
+            "mean": 0.0,
+            "n": 10,
+            "se": 0.0
+          },
+          "clearance": {
+            "mean": -0.008648674358622543,
+            "n": 10,
+            "se": 0.0017615701746117132
+          },
+          "time": {
+            "mean": null,
+            "n": 0,
+            "se": null
+          },
+          "timeout": {
+            "mean": 0.0,
+            "n": 10,
+            "se": 0.0
+          },
+          "v_safe": {
+            "mean": 0.0,
+            "n": 10,
+            "se": 0.0
+          }
+        }
+      },
+      "safe_coef": 3.0,
+      "source_file": "kazuki_wg1_ws3_m10.npz",
+      "source_sha256": "8d0ed05b1b9e9a52a0c99a6e3eccb0858b2f52b2d95ab1a8ea7bbc42fc6c285f"
+    },
+    "wg2_ws0": {
+      "goal_coef": 2.0,
+      "metrics": {
+        "0.1": {
+          "CR": {
+            "mean": 1.0,
+            "n": 10,
+            "se": 0.0
+          },
+          "M": 10,
+          "SR": {
+            "mean": 0.0,
+            "n": 10,
+            "se": 0.0
+          },
+          "clearance": {
+            "mean": -0.06337883091411382,
+            "n": 10,
+            "se": 0.0009990491625033251
+          },
+          "time": {
+            "mean": null,
+            "n": 0,
+            "se": null
+          },
+          "timeout": {
+            "mean": 0.0,
+            "n": 10,
+            "se": 0.0
+          },
+          "v_safe": {
+            "mean": 0.0,
+            "n": 10,
+            "se": 0.0
+          }
+        },
+        "1.0": {
+          "CR": {
+            "mean": 1.0,
+            "n": 10,
+            "se": 0.0
+          },
+          "M": 10,
+          "SR": {
+            "mean": 0.0,
+            "n": 10,
+            "se": 0.0
+          },
+          "clearance": {
+            "mean": -0.06417290440034948,
+            "n": 10,
+            "se": 0.0006207628149062573
+          },
+          "time": {
+            "mean": null,
+            "n": 0,
+            "se": null
+          },
+          "timeout": {
+            "mean": 0.0,
+            "n": 10,
+            "se": 0.0
+          },
+          "v_safe": {
+            "mean": 0.0,
+            "n": 10,
+            "se": 0.0
+          }
+        }
+      },
+      "safe_coef": 0.0,
+      "source_file": "kazuki_wg2_ws0_m10.npz",
+      "source_sha256": "b8908d71e13639b414ccb2e018d620dd591c92c8624f7c2f7653c67cc23f6313"
+    },
+    "wg2_ws1": {
+      "goal_coef": 2.0,
+      "metrics": {
+        "0.1": {
+          "CR": {
+            "mean": 1.0,
+            "n": 10,
+            "se": 0.0
+          },
+          "M": 10,
+          "SR": {
+            "mean": 0.0,
+            "n": 10,
+            "se": 0.0
+          },
+          "clearance": {
+            "mean": -0.09695471221788135,
+            "n": 10,
+            "se": 0.018378528437935148
+          },
+          "time": {
+            "mean": null,
+            "n": 0,
+            "se": null
+          },
+          "timeout": {
+            "mean": 0.0,
+            "n": 10,
+            "se": 0.0
+          },
+          "v_safe": {
+            "mean": 0.0,
+            "n": 10,
+            "se": 0.0
+          }
+        },
+        "1.0": {
+          "CR": {
+            "mean": 1.0,
+            "n": 10,
+            "se": 0.0
+          },
+          "M": 10,
+          "SR": {
+            "mean": 0.0,
+            "n": 10,
+            "se": 0.0
+          },
+          "clearance": {
+            "mean": -0.032110703299417696,
+            "n": 10,
+            "se": 0.0030521216873022295
+          },
+          "time": {
+            "mean": null,
+            "n": 0,
+            "se": null
+          },
+          "timeout": {
+            "mean": 0.0,
+            "n": 10,
+            "se": 0.0
+          },
+          "v_safe": {
+            "mean": 0.0,
+            "n": 10,
+            "se": 0.0
+          }
+        }
+      },
+      "safe_coef": 1.0,
+      "source_file": "kazuki_wg2_ws1_m10.npz",
+      "source_sha256": "4f53fc8e10def296d87bd5003b7e0979d9aa15c096dfbb5bc0440065fdf8b98e"
+    },
+    "wg2_ws2": {
+      "goal_coef": 2.0,
+      "metrics": {
+        "0.1": {
+          "CR": {
+            "mean": 1.0,
+            "n": 10,
+            "se": 0.0
+          },
+          "M": 10,
+          "SR": {
+            "mean": 0.0,
+            "n": 10,
+            "se": 0.0
+          },
+          "clearance": {
+            "mean": -0.024684433348475074,
+            "n": 10,
+            "se": 0.005774550122416873
+          },
+          "time": {
+            "mean": null,
+            "n": 0,
+            "se": null
+          },
+          "timeout": {
+            "mean": 0.0,
+            "n": 10,
+            "se": 0.0
+          },
+          "v_safe": {
+            "mean": 0.0,
+            "n": 10,
+            "se": 0.0
+          }
+        },
+        "1.0": {
+          "CR": {
+            "mean": 1.0,
+            "n": 10,
+            "se": 0.0
+          },
+          "M": 10,
+          "SR": {
+            "mean": 0.0,
+            "n": 10,
+            "se": 0.0
+          },
+          "clearance": {
+            "mean": -0.04569430774606113,
+            "n": 10,
+            "se": 0.005915077186863545
+          },
+          "time": {
+            "mean": null,
+            "n": 0,
+            "se": null
+          },
+          "timeout": {
+            "mean": 0.0,
+            "n": 10,
+            "se": 0.0
+          },
+          "v_safe": {
+            "mean": 0.0,
+            "n": 10,
+            "se": 0.0
+          }
+        }
+      },
+      "safe_coef": 2.0,
+      "source_file": "kazuki_wg2_ws2_m10.npz",
+      "source_sha256": "1933bf7170be4e5b02c5f7e353cfb8a777de1e3562e8a31dc4871ae817d86d47"
+    },
+    "wg2_ws3": {
+      "goal_coef": 2.0,
+      "metrics": {
+        "0.1": {
+          "CR": {
+            "mean": 1.0,
+            "n": 10,
+            "se": 0.0
+          },
+          "M": 10,
+          "SR": {
+            "mean": 0.0,
+            "n": 10,
+            "se": 0.0
+          },
+          "clearance": {
+            "mean": -0.029541646722076265,
+            "n": 10,
+            "se": 0.006563585644341174
+          },
+          "time": {
+            "mean": null,
+            "n": 0,
+            "se": null
+          },
+          "timeout": {
+            "mean": 0.0,
+            "n": 10,
+            "se": 0.0
+          },
+          "v_safe": {
+            "mean": 0.0,
+            "n": 10,
+            "se": 0.0
+          }
+        },
+        "1.0": {
+          "CR": {
+            "mean": 1.0,
+            "n": 10,
+            "se": 0.0
+          },
+          "M": 10,
+          "SR": {
+            "mean": 0.0,
+            "n": 10,
+            "se": 0.0
+          },
+          "clearance": {
+            "mean": -0.038370040174568416,
+            "n": 10,
+            "se": 0.0069895280714799895
+          },
+          "time": {
+            "mean": null,
+            "n": 0,
+            "se": null
+          },
+          "timeout": {
+            "mean": 0.0,
+            "n": 10,
+            "se": 0.0
+          },
+          "v_safe": {
+            "mean": 0.0,
+            "n": 10,
+            "se": 0.0
+          }
+        }
+      },
+      "safe_coef": 3.0,
+      "source_file": "kazuki_wg2_ws3_m10.npz",
+      "source_sha256": "aec351aaf6b6d4ec8a4396b2b3cc28b52989fbf267ce72619bb82a94a2f9aab8"
+    },
+    "wg3_ws0": {
+      "goal_coef": 3.0,
+      "metrics": {
+        "0.1": {
+          "CR": {
+            "mean": 1.0,
+            "n": 10,
+            "se": 0.0
+          },
+          "M": 10,
+          "SR": {
+            "mean": 0.0,
+            "n": 10,
+            "se": 0.0
+          },
+          "clearance": {
+            "mean": -0.06350777295018042,
+            "n": 10,
+            "se": 0.0009075783803185882
+          },
+          "time": {
+            "mean": null,
+            "n": 0,
+            "se": null
+          },
+          "timeout": {
+            "mean": 0.0,
+            "n": 10,
+            "se": 0.0
+          },
+          "v_safe": {
+            "mean": 0.0,
+            "n": 10,
+            "se": 0.0
+          }
+        },
+        "1.0": {
+          "CR": {
+            "mean": 1.0,
+            "n": 10,
+            "se": 0.0
+          },
+          "M": 10,
+          "SR": {
+            "mean": 0.0,
+            "n": 10,
+            "se": 0.0
+          },
+          "clearance": {
+            "mean": -0.06433681365952804,
+            "n": 10,
+            "se": 0.0005629116590087548
+          },
+          "time": {
+            "mean": null,
+            "n": 0,
+            "se": null
+          },
+          "timeout": {
+            "mean": 0.0,
+            "n": 10,
+            "se": 0.0
+          },
+          "v_safe": {
+            "mean": 0.0,
+            "n": 10,
+            "se": 0.0
+          }
+        }
+      },
+      "safe_coef": 0.0,
+      "source_file": "kazuki_wg3_ws0_m10.npz",
+      "source_sha256": "3a8f218ffd32c0bf8c8b18f1fb70be2836c2e706bcd8372aead31a39b90b5097"
+    },
+    "wg3_ws1": {
+      "goal_coef": 3.0,
+      "metrics": {
+        "0.1": {
+          "CR": {
+            "mean": 1.0,
+            "n": 10,
+            "se": 0.0
+          },
+          "M": 10,
+          "SR": {
+            "mean": 0.0,
+            "n": 10,
+            "se": 0.0
+          },
+          "clearance": {
+            "mean": -0.06337686927791944,
+            "n": 10,
+            "se": 0.0007744725729705257
+          },
+          "time": {
+            "mean": null,
+            "n": 0,
+            "se": null
+          },
+          "timeout": {
+            "mean": 0.0,
+            "n": 10,
+            "se": 0.0
+          },
+          "v_safe": {
+            "mean": 0.0,
+            "n": 10,
+            "se": 0.0
+          }
+        },
+        "1.0": {
+          "CR": {
+            "mean": 1.0,
+            "n": 10,
+            "se": 0.0
+          },
+          "M": 10,
+          "SR": {
+            "mean": 0.0,
+            "n": 10,
+            "se": 0.0
+          },
+          "clearance": {
+            "mean": -0.06330931783549307,
+            "n": 10,
+            "se": 0.0008214829650602457
+          },
+          "time": {
+            "mean": null,
+            "n": 0,
+            "se": null
+          },
+          "timeout": {
+            "mean": 0.0,
+            "n": 10,
+            "se": 0.0
+          },
+          "v_safe": {
+            "mean": 0.0,
+            "n": 10,
+            "se": 0.0
+          }
+        }
+      },
+      "safe_coef": 1.0,
+      "source_file": "kazuki_wg3_ws1_m10.npz",
+      "source_sha256": "f85d5c2cf0a3899ba8d0a552a99a017853e6e64f4303b55dc53d20e19bfcadd4"
+    },
+    "wg3_ws2": {
+      "goal_coef": 3.0,
+      "metrics": {
+        "0.1": {
+          "CR": {
+            "mean": 1.0,
+            "n": 10,
+            "se": 0.0
+          },
+          "M": 10,
+          "SR": {
+            "mean": 0.0,
+            "n": 10,
+            "se": 0.0
+          },
+          "clearance": {
+            "mean": -0.07503081583866347,
+            "n": 10,
+            "se": 0.020817521202924762
+          },
+          "time": {
+            "mean": null,
+            "n": 0,
+            "se": null
+          },
+          "timeout": {
+            "mean": 0.0,
+            "n": 10,
+            "se": 0.0
+          },
+          "v_safe": {
+            "mean": 0.0,
+            "n": 10,
+            "se": 0.0
+          }
+        },
+        "1.0": {
+          "CR": {
+            "mean": 1.0,
+            "n": 10,
+            "se": 0.0
+          },
+          "M": 10,
+          "SR": {
+            "mean": 0.0,
+            "n": 10,
+            "se": 0.0
+          },
+          "clearance": {
+            "mean": -0.04160547122500187,
+            "n": 10,
+            "se": 0.005665677350050328
+          },
+          "time": {
+            "mean": null,
+            "n": 0,
+            "se": null
+          },
+          "timeout": {
+            "mean": 0.0,
+            "n": 10,
+            "se": 0.0
+          },
+          "v_safe": {
+            "mean": 0.0,
+            "n": 10,
+            "se": 0.0
+          }
+        }
+      },
+      "safe_coef": 2.0,
+      "source_file": "kazuki_wg3_ws2_m10.npz",
+      "source_sha256": "398aa843bec4ad0611c08dba9f3c1432644be164e863898c5e543fe2259e0062"
+    },
+    "wg3_ws3": {
+      "goal_coef": 3.0,
+      "metrics": {
+        "0.1": {
+          "CR": {
+            "mean": 1.0,
+            "n": 10,
+            "se": 0.0
+          },
+          "M": 10,
+          "SR": {
+            "mean": 0.0,
+            "n": 10,
+            "se": 0.0
+          },
+          "clearance": {
+            "mean": -0.03193764223627611,
+            "n": 10,
+            "se": 0.006823755935011361
+          },
+          "time": {
+            "mean": null,
+            "n": 0,
+            "se": null
+          },
+          "timeout": {
+            "mean": 0.0,
+            "n": 10,
+            "se": 0.0
+          },
+          "v_safe": {
+            "mean": 0.0,
+            "n": 10,
+            "se": 0.0
+          }
+        },
+        "1.0": {
+          "CR": {
+            "mean": 1.0,
+            "n": 10,
+            "se": 0.0
+          },
+          "M": 10,
+          "SR": {
+            "mean": 0.0,
+            "n": 10,
+            "se": 0.0
+          },
+          "clearance": {
+            "mean": -0.07071244952556274,
+            "n": 10,
+            "se": 0.007989025323931838
+          },
+          "time": {
+            "mean": null,
+            "n": 0,
+            "se": null
+          },
+          "timeout": {
+            "mean": 0.0,
+            "n": 10,
+            "se": 0.0
+          },
+          "v_safe": {
+            "mean": 0.0,
+            "n": 10,
+            "se": 0.0
+          }
+        }
+      },
+      "safe_coef": 3.0,
+      "source_file": "kazuki_wg3_ws3_m10.npz",
+      "source_sha256": "3802b4fb61599c21505386cc9a79d9fab842db02c0338554e364d2aad6ee559f"
+    }
+  },
+  "scientific_contract": "Only guided-flow goal and safety coefficients vary. The r19 checkpoint, common-random-number bank, scene, and exact native B1 SafeMPPI refinement cost are fixed.",
+  "status": "KAZUKI_ABSOLUTE_COEFFICIENT_GRID_FIGURES_COMPLETE"
+}

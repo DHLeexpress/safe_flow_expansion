@@ -1,0 +1,138 @@
+{
+  "M_per_cell": 10,
+  "T": 300,
+  "checkpoint_sha256": "60c155472f5ed0e4a1d53581857f09aead7924f8ce11e8e3adf890d5a57fc079",
+  "conditioning_schema": "low7_closest_boundary_tie_mean",
+  "device": "mps",
+  "elapsed_seconds": 379.9418473751284,
+  "fixed_native_cost": {
+    "beta_mppi": 20.0,
+    "coll_w": 100.0,
+    "goal_w": 0.1,
+    "mppi_lambda": 0.1,
+    "mppi_sigma": 0.2,
+    "n_copy": 200,
+    "n_elite": 10,
+    "n_sample": 200,
+    "refinement_cost": "b1_safemppi"
+  },
+  "gammas": [
+    0.1,
+    1.0
+  ],
+  "goal_coefficients": [
+    0.0,
+    1.0,
+    2.0,
+    3.0
+  ],
+  "outputs": [
+    {
+      "file": "kazuki_wg0_ws0_m10.npz",
+      "goal_coef": 0.0,
+      "safe_coef": 0.0,
+      "sha256": "c7add4edef9e586dfaac818326f8f64f9390b6ac1d9261f88670bd0695288fae"
+    },
+    {
+      "file": "kazuki_wg0_ws1_m10.npz",
+      "goal_coef": 0.0,
+      "safe_coef": 1.0,
+      "sha256": "cb7aa7a25dc0cebf6aa7c69b462dbe9ab3e080ad8fe9b24ddde96ac30888d0fc"
+    },
+    {
+      "file": "kazuki_wg0_ws2_m10.npz",
+      "goal_coef": 0.0,
+      "safe_coef": 2.0,
+      "sha256": "61d48a6839a4ac63b6bfbe2187cd5b80cfb23bea7943639a0ca0b83203594ff4"
+    },
+    {
+      "file": "kazuki_wg0_ws3_m10.npz",
+      "goal_coef": 0.0,
+      "safe_coef": 3.0,
+      "sha256": "78631b6e9d1e0a00eb9f97bd0086ca2f2ef5121b60c025f31dd50c93c26c8dbc"
+    },
+    {
+      "file": "kazuki_wg1_ws0_m10.npz",
+      "goal_coef": 1.0,
+      "safe_coef": 0.0,
+      "sha256": "32861faeb03129a94875626f7af90ecbc157957ce30096fd97729c93303cbe0c"
+    },
+    {
+      "file": "kazuki_wg1_ws1_m10.npz",
+      "goal_coef": 1.0,
+      "safe_coef": 1.0,
+      "sha256": "0e4a94df9c3ffc0640e41136102fb1a6ab3ca00c80ce2762943ee431b8076bbd"
+    },
+    {
+      "file": "kazuki_wg1_ws2_m10.npz",
+      "goal_coef": 1.0,
+      "safe_coef": 2.0,
+      "sha256": "91e2abbf3d3988696bd3877039f118af6b9a882c20a9d15d5b0eae8ff2be31c1"
+    },
+    {
+      "file": "kazuki_wg1_ws3_m10.npz",
+      "goal_coef": 1.0,
+      "safe_coef": 3.0,
+      "sha256": "8d0ed05b1b9e9a52a0c99a6e3eccb0858b2f52b2d95ab1a8ea7bbc42fc6c285f"
+    },
+    {
+      "file": "kazuki_wg2_ws0_m10.npz",
+      "goal_coef": 2.0,
+      "safe_coef": 0.0,
+      "sha256": "b8908d71e13639b414ccb2e018d620dd591c92c8624f7c2f7653c67cc23f6313"
+    },
+    {
+      "file": "kazuki_wg2_ws1_m10.npz",
+      "goal_coef": 2.0,
+      "safe_coef": 1.0,
+      "sha256": "4f53fc8e10def296d87bd5003b7e0979d9aa15c096dfbb5bc0440065fdf8b98e"
+    },
+    {
+      "file": "kazuki_wg2_ws2_m10.npz",
+      "goal_coef": 2.0,
+      "safe_coef": 2.0,
+      "sha256": "1933bf7170be4e5b02c5f7e353cfb8a777de1e3562e8a31dc4871ae817d86d47"
+    },
+    {
+      "file": "kazuki_wg2_ws3_m10.npz",
+      "goal_coef": 2.0,
+      "safe_coef": 3.0,
+      "sha256": "aec351aaf6b6d4ec8a4396b2b3cc28b52989fbf267ce72619bb82a94a2f9aab8"
+    },
+    {
+      "file": "kazuki_wg3_ws0_m10.npz",
+      "goal_coef": 3.0,
+      "safe_coef": 0.0,
+      "sha256": "3a8f218ffd32c0bf8c8b18f1fb70be2836c2e706bcd8372aead31a39b90b5097"
+    },
+    {
+      "file": "kazuki_wg3_ws1_m10.npz",
+      "goal_coef": 3.0,
+      "safe_coef": 1.0,
+      "sha256": "f85d5c2cf0a3899ba8d0a552a99a017853e6e64f4303b55dc53d20e19bfcadd4"
+    },
+    {
+      "file": "kazuki_wg3_ws2_m10.npz",
+      "goal_coef": 3.0,
+      "safe_coef": 2.0,
+      "sha256": "398aa843bec4ad0611c08dba9f3c1432644be164e863898c5e543fe2259e0062"
+    },
+    {
+      "file": "kazuki_wg3_ws3_m10.npz",
+      "goal_coef": 3.0,
+      "safe_coef": 3.0,
+      "sha256": "3802b4fb61599c21505386cc9a79d9fab842db02c0338554e364d2aad6ee559f"
+    }
+  ],
+  "reach": 0.15,
+  "safe_coefficients": [
+    0.0,
+    1.0,
+    2.0,
+    3.0
+  ],
+  "scene": "low7_radius1_canonical_v1",
+  "seed_contract": "named_seed(version, 'kazuki', gamma, rollout_index); coefficients excluded for common random numbers",
+  "status": "KAZUKI_ABSOLUTE_COEFFICIENT_GRID_COMPLETE",
+  "version": "kazuki_absolute_coefficient_grid_v1"
+}

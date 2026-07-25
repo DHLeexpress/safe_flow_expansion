@@ -72,3 +72,32 @@ python scripts/prepare_paper_baseline_inputs.py \
 
 This command refuses to overwrite its output. The manifest records checkpoint,
 source, and output SHA-256 values.
+
+## Absolute Kazuki guidance scale
+
+![Absolute coefficient metrics](assets/paper/kazuki_absolute_coefficient_grid_metrics.png)
+
+![Absolute coefficient overlays](assets/paper/kazuki_absolute_coefficient_grid_overlays.png)
+
+The local common-random-number screen fixes the r19 checkpoint, giant-obstacle
+scene, and exact B1 SafeMPPI refinement cost, then evaluates
+\((w_{\rm goal},w_{\rm safe})\in\{0,1,2,3\}^2\) at
+\(\gamma\in\{0.1,1.0\}\), with \(M=10\) per cell. This tests the absolute
+guidance-reward scale rather than treating either coefficient independently.
+
+Only the \(w_{\rm goal}=0\) row produced successes. At \(\gamma=0.1\),
+\((0,1)\) achieved SR \(0.7\), whereas at \(\gamma=1\), \((0,2)\) achieved
+SR \(0.5\) and Validity \(0.2\). Every \(w_{\rm goal}\ge1\) cell had CR
+\(1.0\). The response is therefore strongly non-monotone and
+gamma-dependent; the historical \(w_{\rm safe}=0.1/0.9\) rows cannot be
+interpreted as calibrated endpoints.
+
+Regenerate the retained trajectories and figures:
+
+```bash
+python scripts/run_kazuki_absolute_coefficient_grid.py --device mps --M 10
+python scripts/paper_kazuki_absolute_grid.py
+```
+
+The raw trajectory archives and complete seed/cost contract live in
+`provenance/paper_baselines/kazuki_absolute_grid_m10/`.

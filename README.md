@@ -37,6 +37,8 @@ in [`PAPER_BASELINE_STUDY.md`](PAPER_BASELINE_STUDY.md). They provide:
 - a four-metric, four-gamma comparison interface for SafeMPPI, max-safety
   expansion, the pending SafeMPPI-cost expansion, and native-cost CFM--MPPI;
 - a coefficient-pair sweep and trajectory-overlay interface for CFM--MPPI;
+- an absolute \(4\times4\) CFM--MPPI guidance-scale screen at
+  \(\gamma\in\{0.1,1.0\}\);
 - explicit JSON sidecars, without filling missing experimental results.
 
 ![Paper method comparison preview](assets/paper/method_gamma_comparison.png)
@@ -45,6 +47,12 @@ The preview is not yet a matched paper claim: max-safety uses its declared
 per-gamma evaluation temperatures, while the local baseline screens use native
 deployment. The final figure must use one common seed-bank, sample-count, and
 temperature contract after the running cost arm finishes.
+
+[Absolute Kazuki coefficient metrics](assets/paper/kazuki_absolute_coefficient_grid_metrics.pdf)
+and
+[trajectory overlays](assets/paper/kazuki_absolute_coefficient_grid_overlays.pdf)
+show that the guidance response is non-monotone and gamma-dependent; the
+historical low/high coefficient rows were not calibrated optima.
 
 ### Indexed controller replay suite
 
