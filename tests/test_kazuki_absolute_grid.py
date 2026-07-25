@@ -92,3 +92,33 @@ def test_wall_search_is_diagnostic_only_and_uses_fifty_seeds() -> None:
     )
     assert sidecar["selected_wall_candidate"]["search_M"] == 50
     assert sidecar["selected_wall_candidate"]["wall_fraction_0p6"] < 0.2
+
+
+def test_normalized_ws_comparison_is_hashed_and_explicit_about_raw_scale() -> None:
+    root = ROOT / "provenance/paper_baselines/kazuki_alpha4_wg0_ws6_m10"
+    source_manifest = json.loads((root / "manifest.json").read_text())
+    assert source_manifest["alphas"] == [4.0]
+    assert source_manifest["goal_coefficients"] == [0.0]
+    assert source_manifest["safe_coefficients"] == [6.0]
+    assert source_manifest["gammas"] == [0.1, 0.5, 1.0]
+    assert source_manifest["M_per_cell"] == 10
+    assert len(source_manifest["outputs"]) == 1
+    entry = source_manifest["outputs"][0]
+    assert hashlib.sha256((root / entry["file"]).read_bytes()).hexdigest() == entry[
+        "sha256"
+    ]
+
+    gallery = json.loads(
+        (
+            ROOT
+            / "provenance/b1_current_best/gallery_shared_v4/gallery_manifest.json"
+        ).read_text()
+    )
+    assert gallery["canonical_plot_recipe"] == "scripts/build_b1_shared_galleries.py"
+    assert gallery["guidance"]["normalization"] == (
+        "paper_w_s = raw_safe_coefficient / 6"
+    )
+    assert gallery["guidance"]["arms"] == [
+        {"paper_w_s": 0.5, "raw_safe_coefficient": 3.0},
+        {"paper_w_s": 1.0, "raw_safe_coefficient": 6.0},
+    ]

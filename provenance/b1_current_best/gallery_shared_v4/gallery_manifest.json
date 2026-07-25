@@ -1,0 +1,101 @@
+{
+  "canonical_plot_recipe": "scripts/build_b1_shared_galleries.py",
+  "guidance": {
+    "M_per_gamma": 10,
+    "alpha": 4.0,
+    "arms": [
+      {
+        "paper_w_s": 0.5,
+        "raw_safe_coefficient": 3.0
+      },
+      {
+        "paper_w_s": 1.0,
+        "raw_safe_coefficient": 6.0
+      }
+    ],
+    "gammas": [
+      0.1,
+      0.5,
+      1.0
+    ],
+    "goal_coefficient": 0.0,
+    "normalization": "paper_w_s = raw_safe_coefficient / 6",
+    "raw_ws3_elapsed_seconds": 211.32557737501338,
+    "raw_ws3_manifest_sha256": "fba10b70d3cf9b56bf11892bb81b1664866e64465ddb219617b3780c04499568",
+    "raw_ws6_elapsed_seconds": 21.754528750199825,
+    "raw_ws6_manifest_sha256": "35ef583a77da1c625de06cca3f3a1b6ffaba5118acb709f35948d7d01d33574f",
+    "refinement_cost": "b1_safemppi",
+    "seed_contract": "named_seed(version, 'kazuki', gamma, rollout_index); alpha and coefficients excluded for common random numbers"
+  },
+  "layout": {
+    "comparison": "2 rows x 3 gamma columns",
+    "shared": "4 rows x 3 gamma columns; legacy b1_shared_3x3_gallery filename retained for downstream compatibility",
+    "shared_first_two_rows": "unchanged authenticated SafeMPPI-ID and Ours-r15 cells"
+  },
+  "outcome_counts": {
+    "paper_ws0.5": {
+      "0.1": {
+        "CR": 7,
+        "SR": 3,
+        "TO": 0
+      },
+      "0.5": {
+        "CR": 8,
+        "SR": 2,
+        "TO": 0
+      },
+      "1": {
+        "CR": 8,
+        "SR": 2,
+        "TO": 0
+      }
+    },
+    "paper_ws1.0": {
+      "0.1": {
+        "CR": 10,
+        "SR": 0,
+        "TO": 0
+      },
+      "0.5": {
+        "CR": 10,
+        "SR": 0,
+        "TO": 0
+      },
+      "1": {
+        "CR": 10,
+        "SR": 0,
+        "TO": 0
+      }
+    }
+  },
+  "outputs": {
+    "comparison": {
+      "b1_kazuki_normalized_ws_2x3_gallery.pdf": "72f1f05ed1e5d7a9bfda3e1accb4ce063f1600f360b8c1459d3fede64631d36d",
+      "b1_kazuki_normalized_ws_2x3_gallery.png": "bb2bb1bfc6b743b2b1bdc06a07fac638dcfcdfc29d3d4c005991dd1d32576af4"
+    },
+    "shared": {
+      "b1_shared_3x3_gallery.pdf": "a6bac0ba5a6215766f5ad4209d86ea0ba5c1bb8358234218713800bac1267e64",
+      "b1_shared_3x3_gallery.png": "cb99ee8a8afc5d4e56affd5ba033222ecc6e6334aefb8c61441ac5d5f1a919b0"
+    }
+  },
+  "renderer": "scripts/paper_b1_shared_normalized_ws.py",
+  "sources": {
+    "expert_id": {
+      "path": "provenance/b1_current_best/gallery_shared_v3/expert_id.npz",
+      "sha256": "763c3b074fdb841f3f1247866be1a74a10bc50f2e0e2ea670b556955d5bcad38"
+    },
+    "ours_r15_ood": {
+      "path": "provenance/b1_current_best/gallery_shared_v3/ours_r15_ood.npz",
+      "sha256": "e74b187163474719a63a64daab4bc1b4520b073cd07228a3c11d91bfaa558faf"
+    },
+    "raw_ws3": {
+      "path": "provenance/paper_baselines/kazuki_alpha34_wall_grid_m10/kazuki_a4_wg0_ws3_m10.npz",
+      "sha256": "0f34636e56a5a6f00d702cfa46dba150235ce31932cc110bad849dd8ec2140b0"
+    },
+    "raw_ws6": {
+      "path": "provenance/paper_baselines/kazuki_alpha4_wg0_ws6_m10/kazuki_a4_wg0_ws6_m10.npz",
+      "sha256": "2390282e7eb3b637831187c7bd15b059109a82f3e8a05b408edb52c6e4fbf020"
+    }
+  },
+  "status": "B1_SHARED_NORMALIZED_WS_GALLERIES_COMPLETE"
+}

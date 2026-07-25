@@ -1,0 +1,47 @@
+{
+  "M_per_cell": 10,
+  "T": 300,
+  "alphas": [
+    4.0
+  ],
+  "checkpoint_sha256": "60c155472f5ed0e4a1d53581857f09aead7924f8ce11e8e3adf890d5a57fc079",
+  "conditioning_schema": "low7_closest_boundary_tie_mean",
+  "device": "mps",
+  "elapsed_seconds": 21.754528750199825,
+  "fixed_native_cost": {
+    "beta_mppi": 20.0,
+    "coll_w": 100.0,
+    "goal_w": 0.1,
+    "mppi_lambda": 0.1,
+    "mppi_sigma": 0.2,
+    "n_copy": 200,
+    "n_elite": 10,
+    "n_sample": 200,
+    "refinement_cost": "b1_safemppi"
+  },
+  "gammas": [
+    0.1,
+    0.5,
+    1.0
+  ],
+  "goal_coefficients": [
+    0.0
+  ],
+  "outputs": [
+    {
+      "alpha": 4.0,
+      "file": "kazuki_a4_wg0_ws6_m10.npz",
+      "goal_coef": 0.0,
+      "safe_coef": 6.0,
+      "sha256": "2390282e7eb3b637831187c7bd15b059109a82f3e8a05b408edb52c6e4fbf020"
+    }
+  ],
+  "reach": 0.15,
+  "safe_coefficients": [
+    6.0
+  ],
+  "scene": "low7_radius1_canonical_v1",
+  "seed_contract": "named_seed(version, 'kazuki', gamma, rollout_index); alpha and coefficients excluded for common random numbers",
+  "status": "KAZUKI_ALPHA_COEFFICIENT_GRID_COMPLETE",
+  "version": "kazuki_absolute_coefficient_grid_v1"
+}

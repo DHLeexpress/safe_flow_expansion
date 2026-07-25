@@ -71,6 +71,16 @@
       "sha256": "a595901d9bda3d9858f7be4c81099f53360562cefa852b5383c6c6b254aa0b17"
     },
     {
+      "bytes": 198806,
+      "path": "assets/paper/b1_kazuki_normalized_ws_2x3_gallery.pdf",
+      "sha256": "72f1f05ed1e5d7a9bfda3e1accb4ce063f1600f360b8c1459d3fede64631d36d"
+    },
+    {
+      "bytes": 631968,
+      "path": "assets/paper/b1_kazuki_normalized_ws_2x3_gallery.png",
+      "sha256": "bb2bb1bfc6b743b2b1bdc06a07fac638dcfcdfc29d3d4c005991dd1d32576af4"
+    },
+    {
       "bytes": 37866,
       "path": "assets/paper/b1_margin_fixedtemp_m200_r0_r15.pdf",
       "sha256": "daf4c1f9f74671754b2842c3e267e507f187b545abc4c1b639420f2f03ee05d0"
@@ -366,14 +376,14 @@
       "sha256": "8a866a3c3c99f85ef48729cfc10bd41d995de75725bbaa7d87d0b4957af3d19d"
     },
     {
-      "bytes": 233503,
+      "bytes": 366927,
       "path": "assets/results/b1_current_best/b1_shared_3x3_gallery.pdf",
-      "sha256": "c1d3b6ccc39a2c2216244d66c380d3b24b7aaf98573f1db7ef77e783ae0d4b11"
+      "sha256": "a6bac0ba5a6215766f5ad4209d86ea0ba5c1bb8358234218713800bac1267e64"
     },
     {
-      "bytes": 1293518,
+      "bytes": 1685865,
       "path": "assets/results/b1_current_best/b1_shared_3x3_gallery.png",
-      "sha256": "666ecc7283a25177872f8460343653dbb2e6875b53a58ad60487e890b830a20d"
+      "sha256": "cb99ee8a8afc5d4e56affd5ba033222ecc6e6334aefb8c61441ac5d5f1a919b0"
     },
     {
       "bytes": 914626,
@@ -866,6 +876,11 @@
       "sha256": "f7fb80f30eb9025f8010db36bce750e25cca98ac8b7352374afc7c0c478f1c2b"
     },
     {
+      "bytes": 3147,
+      "path": "provenance/b1_current_best/gallery_shared_v4/gallery_manifest.json",
+      "sha256": "5ee7ac30975bf3bda6ec699d6844a044b13d080348d7c8c92f64728e3ae963d5"
+    },
+    {
       "bytes": 155,
       "path": "provenance/b1_current_best/holdout_selection.json",
       "sha256": "64b4518474f881329de6f0ebd463c4b7104227cd4305851b81760a4cbb1943ac"
@@ -1184,6 +1199,16 @@
       "bytes": 1151,
       "path": "provenance/paper_baselines/kazuki_alpha4_wg0_ws3_wall_search_m50/manifest.json",
       "sha256": "7d21ebbe91a1253d8ccfc89ce5a23b1ee8aa2395a04b8b78f799cb73d51f4978"
+    },
+    {
+      "bytes": 6919,
+      "path": "provenance/paper_baselines/kazuki_alpha4_wg0_ws6_m10/kazuki_a4_wg0_ws6_m10.npz",
+      "sha256": "2390282e7eb3b637831187c7bd15b059109a82f3e8a05b408edb52c6e4fbf020"
+    },
+    {
+      "bytes": 1151,
+      "path": "provenance/paper_baselines/kazuki_alpha4_wg0_ws6_m10/manifest.json",
+      "sha256": "35ef583a77da1c625de06cca3f3a1b6ffaba5118acb709f35948d7d01d33574f"
     },
     {
       "bytes": 7336,
@@ -1664,6 +1689,11 @@
       "bytes": 9655,
       "path": "scripts/paper_b1_mode_gallery.py",
       "sha256": "9433fd2cdf0981c490b909a40fffd519656c12dc07cf7ef4d68e75c9c1b1ff3a"
+    },
+    {
+      "bytes": 8319,
+      "path": "scripts/paper_b1_shared_normalized_ws.py",
+      "sha256": "4cffe2716458c1d68cc98c19da8941d65205dfd23e0fedcb47872e08bc770530"
     },
     {
       "bytes": 9348,
@@ -2496,9 +2526,9 @@
       "sha256": "8f152cd2db7dff9a35035723576de6248b648d79a1579aa4ce6276d7ab50e5a6"
     },
     {
-      "bytes": 3859,
+      "bytes": 5071,
       "path": "tests/test_kazuki_absolute_grid.py",
-      "sha256": "02d136c57d5c8202a3569409920f3794098b5224172f32cb1c13c9085836158b"
+      "sha256": "44e6c818cb6735ac8e5a74fd58b0a0b17853614fcd3fe43373848bc0fd376f11"
     },
     {
       "bytes": 1679,
