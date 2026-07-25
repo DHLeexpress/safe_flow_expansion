@@ -971,6 +971,16 @@
       "sha256": "eceaa1c56561ad1136ac7b952b8ee696baaf9203c3bcff0521fdc31f024b792c"
     },
     {
+      "bytes": 35636,
+      "path": "scripts/b1_exec_baseline_report.py",
+      "sha256": "aa8f2cd57f63d36cb5780c1496d68d714c3ceb85a98e00b2fb143fd41650bc63"
+    },
+    {
+      "bytes": 3228,
+      "path": "scripts/b1_margin_cost_trainer.py",
+      "sha256": "0fc07039396694734b4c5c651461055877165d5c29a5be60fa8052750e85900b"
+    },
+    {
       "bytes": 2256,
       "path": "scripts/b1_variant_trainer.py",
       "sha256": "7b000f8951e2aaa59eac55d0cd6600b148183596ca2f3e450ce06ca197ff5aba"
@@ -989,6 +999,11 @@
       "bytes": 1434,
       "path": "scripts/build_manifest.py",
       "sha256": "8810e1d074aaf41050d9b991f0b58ae1c591b2cb01f5ec2d0a24f14e1c76085e"
+    },
+    {
+      "bytes": 15005,
+      "path": "scripts/eval_exec_rule_temp1_m200.py",
+      "sha256": "841541312cd257f76c6d57bd3ec052f755dcda10e4c117674493d78de9acecd1"
     },
     {
       "bytes": 22664,
@@ -1829,6 +1844,11 @@
       "bytes": 4815,
       "path": "source_snapshot/overnight_run_today/src/uncertainty.py",
       "sha256": "193442bc0df8a8556224c992b82fdb9cb6bf2718e0bfc65f67e5d4f5c42ddee4"
+    },
+    {
+      "bytes": 1758,
+      "path": "tests/test_b1_margin_cost_trainer.py",
+      "sha256": "8f152cd2db7dff9a35035723576de6248b648d79a1579aa4ce6276d7ab50e5a6"
     },
     {
       "bytes": 1679,
