@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 """Build the shared B1 gallery with normalized Kazuki guidance diagnostics.
 
-The first three columns reuse the canonical B1 paper-gallery renderer and
-authenticated M=10 trajectory cells.  The fourth column is a deterministic
-H=10 diagnostic: gray curves are raw generative proposals at one declared
-state, and the two Kazuki rows additionally separate the goal and safety
-guidance directions using the same latent proposals.
+The first row overlays every authenticated pretraining-expert trajectory for
+the displayed gammas.  The remaining rows reuse canonical B1 M=10 trajectory
+cells.  The fourth column is a deterministic H=10 diagnostic: gray curves are
+raw generative proposals at one declared state, and the two Kazuki rows also
+separate goal and safety guidance directions using identical latent proposals.
 """
 
 from __future__ import annotations
@@ -561,6 +561,71 @@ def replay_kazuki_diagnostic(
     }
 
 
+def draw_dense_expert_scene(
+    axis: Any,
+    env: Any,
+    paths: list[np.ndarray],
+    gamma: float,
+    *,
+    title: str,
+    ylabel: str,
+) -> None:
+    for obstacle in env.obstacles.detach().cpu().numpy():
+        axis.add_patch(
+            plt.Circle(obstacle[:2], obstacle[2], color="#bdbdbd", zorder=1)
+        )
+    color = plt.get_cmap("plasma")({0.1: 0.08, 0.5: 0.52, 1.0: 0.92}[gamma])
+    for path in paths:
+        path = np.asarray(path, dtype=float)
+        axis.plot(
+            path[:, 0],
+            path[:, 1],
+            color=color,
+            lw=0.55,
+            alpha=0.045,
+            zorder=3,
+        )
+        dots = path[::8]
+        axis.plot(
+            dots[:, 0],
+            dots[:, 1],
+            linestyle="none",
+            marker="o",
+            markerfacecolor=color,
+            markeredgecolor="#777777",
+            markeredgewidth=0.15,
+            markersize=1.25,
+            alpha=0.08,
+            zorder=4,
+        )
+    starts = np.asarray([np.asarray(path)[0] for path in paths])
+    axis.scatter(
+        starts[:, 0],
+        starts[:, 1],
+        s=3.0,
+        c="#222222",
+        alpha=0.28,
+        linewidths=0,
+        zorder=6,
+    )
+    goal = env.goal.detach().cpu().numpy()
+    axis.plot(
+        *goal,
+        marker="*",
+        color="gold",
+        markeredgecolor="black",
+        markersize=14,
+        zorder=8,
+    )
+    axis.set_xlim(-0.3, 5.3)
+    axis.set_ylim(-0.3, 5.3)
+    axis.set_aspect("equal")
+    axis.set_xticks([])
+    axis.set_yticks([])
+    axis.set_title(title, fontsize=25, pad=10)
+    axis.set_ylabel(ylabel, fontsize=23, labelpad=15)
+
+
 def draw_zoom(
     axis: Any,
     env: Any,
@@ -573,6 +638,7 @@ def draw_zoom(
     goal_vector: np.ndarray | None = None,
     safety_vector: np.ndarray | None = None,
     show_arrow_legend: bool = False,
+    dense: bool = False,
 ) -> None:
     for obstacle in env.obstacles.detach().cpu().numpy():
         axis.add_patch(
@@ -580,8 +646,15 @@ def draw_zoom(
         )
     color = plt.get_cmap("plasma")(0.92)
     for path, outcome in zip(paths, outcomes):
-        axis.plot(path[:, 0], path[:, 1], color=color, lw=1.45, alpha=0.72, zorder=3)
-        dots = np.asarray(path)[::4]
+        axis.plot(
+            path[:, 0],
+            path[:, 1],
+            color=color,
+            lw=0.55 if dense else 1.45,
+            alpha=0.075 if dense else 0.72,
+            zorder=3,
+        )
+        dots = np.asarray(path)[::8 if dense else 4]
         axis.plot(
             dots[:, 0],
             dots[:, 1],
@@ -589,9 +662,9 @@ def draw_zoom(
             marker="o",
             markerfacecolor=color,
             markeredgecolor="#777777",
-            markeredgewidth=0.35,
-            markersize=3.5,
-            alpha=0.9,
+            markeredgewidth=0.15 if dense else 0.35,
+            markersize=1.5 if dense else 3.5,
+            alpha=0.14 if dense else 0.9,
             zorder=4,
         )
         if outcome != "SR":
@@ -703,15 +776,25 @@ def render_shared_gallery(
     for row_index, row in enumerate(rows):
         for column_index, gamma in enumerate(GAMMAS):
             paths, outcomes, _ = row["cells"][gamma]
-            draw_scene(
-                axes[row_index, column_index],
-                row["env"],
-                paths,
-                outcomes,
-                gamma,
-                title=rf"$\gamma={gamma:g}$" if row_index == 0 else "",
-                ylabel=row["label"] if column_index == 0 else "",
-            )
+            if row.get("dense", False):
+                draw_dense_expert_scene(
+                    axes[row_index, column_index],
+                    row["env"],
+                    paths,
+                    gamma,
+                    title=rf"$\gamma={gamma:g}$" if row_index == 0 else "",
+                    ylabel=row["label"] if column_index == 0 else "",
+                )
+            else:
+                draw_scene(
+                    axes[row_index, column_index],
+                    row["env"],
+                    paths,
+                    outcomes,
+                    gamma,
+                    title=rf"$\gamma={gamma:g}$" if row_index == 0 else "",
+                    ylabel=row["label"] if column_index == 0 else "",
+                )
             if row_index == 0:
                 axes[row_index, column_index].title.set_fontsize(31)
             if column_index == 0:
@@ -741,6 +824,7 @@ def render_shared_gallery(
             goal_vector=row.get("goal_vector"),
             safety_vector=row.get("safety_vector"),
             show_arrow_legend=row.get("show_arrow_legend", False),
+            dense=row.get("dense", False),
         )
     figure.subplots_adjust(
         left=0.135,
@@ -769,6 +853,18 @@ def main() -> int:
         "--shared-source",
         type=Path,
         default=ROOT / "provenance/b1_current_best/gallery_shared_v3",
+    )
+    parser.add_argument(
+        "--pretraining-expert-source",
+        type=Path,
+        default=ROOT
+        / "provenance/pretraining/pretraining_expert_paths_g0151.npz",
+    )
+    parser.add_argument(
+        "--pretraining-expert-manifest",
+        type=Path,
+        default=ROOT
+        / "provenance/pretraining/pretraining_expert_paths_g0151.json",
     )
     parser.add_argument(
         "--raw-ws3",
@@ -813,7 +909,12 @@ def main() -> int:
     )
     args = parser.parse_args()
 
-    expert_source = args.shared_source / "expert_id.npz"
+    expert_source = args.pretraining_expert_source
+    expert_manifest = json.loads(args.pretraining_expert_manifest.read_text())
+    if expert_manifest["status"] != "PRETRAINING_EXPERT_PATHS_EXTRACTED":
+        raise RuntimeError("pretraining expert path extraction is incomplete")
+    if sha256_file(expert_source) != expert_manifest["output_sha256"]:
+        raise RuntimeError("pretraining expert path archive hash mismatch")
     pretrained_source = args.shared_source / "pretrained_ood.npz"
     ours_source = args.shared_source / "ours_r15_ood.npz"
     raw3_source, raw3_manifest = validate_arm(args.raw_ws3, raw_safe_coef=3.0)
@@ -989,10 +1090,11 @@ def main() -> int:
     )
     shared_rows = [
         {
-            "label": "In distribution\n(Expert)",
+            "label": "Pretraining data\n(Expert)",
             "env": id_env,
             "cells": expert,
             "bounds": common_bounds,
+            "dense": True,
         },
         {
             "label": "Out of distribution\n(Pretrained)",
@@ -1057,14 +1159,15 @@ def main() -> int:
     )
 
     sources = {
-        "expert_id": expert_source,
+        "pretraining_expert_paths": expert_source,
+        "pretraining_expert_manifest": args.pretraining_expert_manifest,
         "pretrained_ood": pretrained_source,
         "ours_r15_ood": ours_source,
         "raw_ws3": raw3_source,
         "raw_ws6": raw6_source,
     }
     manifest = {
-        "status": "B1_SHARED_MANUALLY_FILTERED_ZOOM_GALLERY_COMPLETE",
+        "status": "B1_SHARED_PRETRAINING_DATA_ZOOM_GALLERY_COMPLETE",
         "canonical_plot_recipe": "scripts/build_b1_shared_galleries.py",
         "renderer": "scripts/paper_b1_shared_normalized_ws.py",
         "layout": {
@@ -1074,7 +1177,7 @@ def main() -> int:
                 "b1_shared_3x3_gallery filename retained for compatibility"
             ),
             "rows": [
-                "Expert ID",
+                "Pretraining data (Expert)",
                 "pretrained OOD",
                 "ours OOD",
                 "CFM-MPPI normalized ws=0.5",
@@ -1094,6 +1197,16 @@ def main() -> int:
                 "ten manually filtered raw H=10 generative position windows; "
                 "these curves are a paper diagnostic, not an unbiased estimate"
             ),
+            "pretraining_row": {
+                "selection": "all stored trajectories; no seed or outcome curation",
+                "trajectories_per_gamma": {
+                    key: int(value["trajectories"])
+                    for key, value in expert_manifest["source_shards"].items()
+                },
+                "path_semantics": expert_manifest["path_semantics"],
+                "source_dataset_sha256": expert_manifest["source_dataset_sha256"],
+                "archive_sha256": expert_manifest["output_sha256"],
+            },
             "paired_raw_bank": {
                 "version": "b1_shared_zoom_v2",
                 "pool_size": RAW_POOL_SIZE,

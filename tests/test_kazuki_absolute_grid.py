@@ -123,12 +123,32 @@ def test_normalized_ws_comparison_is_hashed_and_explicit_about_raw_scale() -> No
         {"paper_w_s": 1.0, "raw_safe_coefficient": 6.0},
     ]
     assert gallery["layout"]["rows"] == [
-        "Expert ID",
+        "Pretraining data (Expert)",
         "pretrained OOD",
         "ours OOD",
         "CFM-MPPI normalized ws=0.5",
         "CFM-MPPI normalized ws=1.0",
     ]
+    assert gallery["zoom"]["pretraining_row"]["selection"] == (
+        "all stored trajectories; no seed or outcome curation"
+    )
+    assert gallery["zoom"]["pretraining_row"]["trajectories_per_gamma"] == {
+        "0.1": 878,
+        "0.5": 878,
+        "1": 878,
+    }
+    expert_manifest = json.loads(
+        (
+            ROOT
+            / "provenance/pretraining/pretraining_expert_paths_g0151.json"
+        ).read_text()
+    )
+    expert_archive = (
+        ROOT / "provenance/pretraining/pretraining_expert_paths_g0151.npz"
+    )
+    assert hashlib.sha256(expert_archive.read_bytes()).hexdigest() == (
+        expert_manifest["output_sha256"]
+    )
     assert "manually filtered diagnostic" in gallery["zoom"][
         "paired_raw_bank"
     ]["selection_disclosure"]

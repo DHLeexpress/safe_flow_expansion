@@ -35,7 +35,7 @@
   "layout": {
     "comparison": "2 rows x 3 gamma columns",
     "rows": [
-      "Expert ID",
+      "Pretraining data (Expert)",
       "pretrained OOD",
       "ours OOD",
       "CFM-MPPI normalized ws=0.5",
@@ -81,20 +81,16 @@
   },
   "outputs": {
     "comparison": {
-      "b1_kazuki_normalized_ws_2x3_gallery.pdf": "59f2d1fb2df6171fe55baa0cd6f29e89847124cec9bd686d3d02b3a1b17385f5",
+      "b1_kazuki_normalized_ws_2x3_gallery.pdf": "eb56009293ad85a882105b1ded208d44fad96eb6eeb2065d31e71931d0d2358c",
       "b1_kazuki_normalized_ws_2x3_gallery.png": "bb2bb1bfc6b743b2b1bdc06a07fac638dcfcdfc29d3d4c005991dd1d32576af4"
     },
     "shared": {
-      "b1_shared_3x3_gallery.pdf": "9f064d6c60a15e95e459a25e0afe4799905132c3334bb07a40e91ffaf8f48a95",
-      "b1_shared_3x3_gallery.png": "029aac289ae97412071edca7cf9b1ae4e08e6413b756ac7e49f03237a30780bc"
+      "b1_shared_3x3_gallery.pdf": "cb84b3fbab354336ec2b1e75ae81fbb02e8ca7049865b631650d0c47cb6376af",
+      "b1_shared_3x3_gallery.png": "31cf8cb6ac010bc52d2b2890c1d33d8e9c3561db39e4602199a1c8482aeedad5"
     }
   },
   "renderer": "scripts/paper_b1_shared_normalized_ws.py",
   "sources": {
-    "expert_id": {
-      "path": "provenance/b1_current_best/gallery_shared_v3/expert_id.npz",
-      "sha256": "763c3b074fdb841f3f1247866be1a74a10bc50f2e0e2ea670b556955d5bcad38"
-    },
     "ours_r15_ood": {
       "path": "provenance/b1_current_best/gallery_shared_v3/ours_r15_ood.npz",
       "sha256": "e74b187163474719a63a64daab4bc1b4520b073cd07228a3c11d91bfaa558faf"
@@ -102,6 +98,14 @@
     "pretrained_ood": {
       "path": "provenance/b1_current_best/gallery_shared_v3/pretrained_ood.npz",
       "sha256": "f7fb80f30eb9025f8010db36bce750e25cca98ac8b7352374afc7c0c478f1c2b"
+    },
+    "pretraining_expert_manifest": {
+      "path": "provenance/pretraining/pretraining_expert_paths_g0151.json",
+      "sha256": "f2aef21052f626dbf55072a894a58649955bc098410e4ba1dc7e2b457b06bb39"
+    },
+    "pretraining_expert_paths": {
+      "path": "provenance/pretraining/pretraining_expert_paths_g0151.npz",
+      "sha256": "9dcafa82041d6d5114e1cfd742aefd55361b3d6e59a9df23e5a2d9c074b09cc6"
     },
     "raw_ws3": {
       "path": "provenance/paper_baselines/kazuki_alpha34_wall_grid_m10/kazuki_a4_wg0_ws3_m10.npz",
@@ -112,7 +116,7 @@
       "sha256": "2390282e7eb3b637831187c7bd15b059109a82f3e8a05b408edb52c6e4fbf020"
     }
   },
-  "status": "B1_SHARED_MANUALLY_FILTERED_ZOOM_GALLERY_COMPLETE",
+  "status": "B1_SHARED_PRETRAINING_DATA_ZOOM_GALLERY_COMPLETE",
   "zoom": {
     "arrow_semantics": {
       "applied_goal_coefficient": 0.0,
@@ -190,6 +194,17 @@
       "seed": 758454298,
       "selection_disclosure": "manually filtered diagnostic from one fixed paired bank: pretrained retains the first ten collision-producing temperature-1 windows; ours uses the same latent bank at higher diagnostic temperature, retains the upper half by bend score among collision-free positive-progress windows, then selects ten for trajectory-space spread",
       "version": "b1_shared_zoom_v2"
+    },
+    "pretraining_row": {
+      "archive_sha256": "9dcafa82041d6d5114e1cfd742aefd55361b3d6e59a9df23e5a2d9c074b09cc6",
+      "path_semantics": "actual executed SafeMPPI states reconstructed as verifier_state ordered by (trajectory_id, window_step); no rollout is resampled",
+      "selection": "all stored trajectories; no seed or outcome curation",
+      "source_dataset_sha256": "4b8e2d9be794584fad232bcc46cf78c2c4f422efb3e0642f503c8a77fcd2e8ec",
+      "trajectories_per_gamma": {
+        "0.1": 878,
+        "0.5": 878,
+        "1": 878
+      }
     },
     "selected_contexts": {
       "ours": {

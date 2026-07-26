@@ -1,0 +1,31 @@
+{
+  "gammas": [
+    0.1,
+    0.5,
+    1.0
+  ],
+  "output": "/home/dohyun/projects/afe2_runs/low7_fixed_grid_8c80cf0/combined/viz/pretraining_expert_paths_g0151.npz",
+  "output_sha256": "9dcafa82041d6d5114e1cfd742aefd55361b3d6e59a9df23e5a2d9c074b09cc6",
+  "path_semantics": "actual executed SafeMPPI states reconstructed as verifier_state ordered by (trajectory_id, window_step); no rollout is resampled",
+  "source_combined_manifest": "/home/dohyun/projects/afe2_runs/low7_fixed_grid_8c80cf0/combined/manifest.json",
+  "source_combined_manifest_sha256": "01551774e64192854f57edcd408d50a1d952544040ac2730ecd741276b89370a",
+  "source_dataset_sha256": "4b8e2d9be794584fad232bcc46cf78c2c4f422efb3e0642f503c8a77fcd2e8ec",
+  "source_shards": {
+    "0.1": {
+      "path": "/home/dohyun/projects/afe2_runs/low7_fixed_grid_8c80cf0/shards/gamma_0p1/data/low7_randomized_gamma_0.1.pt",
+      "sha256": "ff5f02f178fb3db6bc17c2485ca9fec0ac3dda2022e05b1f3daf02ab83d3e58a",
+      "trajectories": 878
+    },
+    "0.5": {
+      "path": "/home/dohyun/projects/afe2_runs/low7_fixed_grid_8c80cf0/shards/gamma_0p5/data/low7_randomized_gamma_0.5.pt",
+      "sha256": "ec53bd26de794c0016d4105a0e28accc3ef84c56300181207e62ebc8c1ca2ac0",
+      "trajectories": 878
+    },
+    "1": {
+      "path": "/home/dohyun/projects/afe2_runs/low7_fixed_grid_8c80cf0/shards/gamma_1p0/data/low7_randomized_gamma_1.pt",
+      "sha256": "35027541a878cd35905169714b607593fb7df1cfd50c59db2abd695b9d015ea3",
+      "trajectories": 878
+    }
+  },
+  "status": "PRETRAINING_EXPERT_PATHS_EXTRACTED"
+}
