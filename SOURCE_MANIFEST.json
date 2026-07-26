@@ -1,9 +1,9 @@
 {
   "files": [
     {
-      "bytes": 44,
+      "bytes": 112,
       "path": ".gitignore",
-      "sha256": "ec140d9156a3504c176885ef08d195c0bf59400d748c77f6793226e06f072615"
+      "sha256": "d08789ef25f7063da60954abd42327c990e054b8d472da4b9d34ccb93c4a439f"
     },
     {
       "bytes": 475,
@@ -21,9 +21,9 @@
       "sha256": "1faa203fceced8bdd99f3e409585ae02f8eee3bf59f2e28634a68bf8e26cf6ed"
     },
     {
-      "bytes": 14055,
+      "bytes": 16283,
       "path": "README.md",
-      "sha256": "308e9058fc3b2e1f7ba6042c17ab7f12f4b5dbc5ebe9d4430a837e576198e8ad"
+      "sha256": "dc4ad33b4f39f34789d617fc0fcbd9f6bad30ae779016b54de7e221cdd4f19ff"
     },
     {
       "bytes": 314842,
@@ -381,9 +381,9 @@
       "sha256": "12a36d3a1cee022362249aef31f9dd2c53186b4c590c7f537968cd78b92df143"
     },
     {
-      "bytes": 5545828,
+      "bytes": 5557064,
       "path": "assets/results/b1_current_best/b1_shared_3x3_gallery.png",
-      "sha256": "5745b6ad89cbe5ae74539b086c37fa3d1c88ee4d8b6e0c5dc2336ffec83a7d73"
+      "sha256": "81656690b7fbe44b47538086e1e16db38ffec214e6c919f4b6ef899a202df9b4"
     },
     {
       "bytes": 914626,
@@ -464,6 +464,21 @@
       "bytes": 408118,
       "path": "assets/results/b1_current_best/selected_training_diagnostic.png",
       "sha256": "3349fed20cfafb81beef9d09ead54aff0c146da95c4eff54aa269ad21daa12f2"
+    },
+    {
+      "bytes": 1252284,
+      "path": "assets/results/b1_current_best/tutorial_safemppi_vs_vanilla/safemppi_vs_vanilla_mppi.mp4",
+      "sha256": "bbedd4ee479e1eed69fab0fbd6cd1b0835e6c2ff690e68e92d3522babe83ead7"
+    },
+    {
+      "bytes": 379263,
+      "path": "assets/results/b1_current_best/tutorial_safemppi_vs_vanilla/safemppi_vs_vanilla_mppi_preview.png",
+      "sha256": "86b240b44147f8ed274a0aed07fc84299acab25d42c44a231220aeb84ac95bf1"
+    },
+    {
+      "bytes": 12717,
+      "path": "assets/results/b1_current_best/tutorial_safemppi_vs_vanilla/tutorial_manifest.json",
+      "sha256": "89d77d88a68248dfe3a0e25fa1356c246f685e8d34b35930bdfab78f9cae084f"
     },
     {
       "bytes": 289780,
@@ -881,9 +896,9 @@
       "sha256": "5ee7ac30975bf3bda6ec699d6844a044b13d080348d7c8c92f64728e3ae963d5"
     },
     {
-      "bytes": 9130,
+      "bytes": 9285,
       "path": "provenance/b1_current_best/gallery_shared_v5/gallery_manifest.json",
-      "sha256": "a937f08e2c4d7188819e028950c768de1de42cb3ec401b5b163e80b3f6ce44a6"
+      "sha256": "d829dd7c45e1767ea0ac37f051dbc5728e50a85e8d555d8a90a97aba427a2d82"
     },
     {
       "bytes": 6653,
@@ -1666,6 +1681,11 @@
       "sha256": "8810e1d074aaf41050d9b991f0b58ae1c591b2cb01f5ec2d0a24f14e1c76085e"
     },
     {
+      "bytes": 26097,
+      "path": "scripts/build_safemppi_vs_vanilla_tutorial.py",
+      "sha256": "94b4ebc74ef1cd76233aa5709ca29507e861d3951b2e68603ea9f05ba8b0681a"
+    },
+    {
       "bytes": 12810,
       "path": "scripts/diagnose_kazuki_guidance_conflict.py",
       "sha256": "a81f55b6eaedaad49a0c8e2d137e1e27a766d0153c0b890fde56f13fe2177f05"
@@ -1716,9 +1736,9 @@
       "sha256": "9433fd2cdf0981c490b909a40fffd519656c12dc07cf7ef4d68e75c9c1b1ff3a"
     },
     {
-      "bytes": 45223,
+      "bytes": 45927,
       "path": "scripts/paper_b1_shared_normalized_ws.py",
-      "sha256": "0c513e12a5369b611956306839c6f0b3ed3ba394a93eafe7f423b10d02ebf4cf"
+      "sha256": "72a1d7c09342cd50c543db6f5310f241b7157ffaefb87f9fd9dc3174f2743697"
     },
     {
       "bytes": 9348,
