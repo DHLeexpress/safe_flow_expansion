@@ -534,7 +534,7 @@ def render_tutorial(
     )
 
     for frame_index, step in enumerate(shown_steps):
-        figure, axes = plt.subplots(1, 2, figsize=(16.8, 8.6))
+        figure, axes = plt.subplots(1, 2, figsize=(16.8, 9.1))
         for axis in axes:
             _draw_scene(axis, env)
 
@@ -640,9 +640,11 @@ def render_tutorial(
                     label="rejected proposal",
                 ),
             ],
-            loc="upper left",
+            loc="upper center",
+            bbox_to_anchor=(0.5, -0.025),
             frameon=False,
             fontsize=12,
+            ncol=3,
         )
         axes[1].legend(
             handles=[
@@ -658,16 +660,18 @@ def render_tutorial(
                 )
                 for variant in VANILLA_VARIANTS
             ],
-            loc="upper left",
+            loc="upper center",
+            bbox_to_anchor=(0.5, -0.025),
             frameon=False,
             fontsize=13,
+            ncol=3,
         )
         figure.suptitle(
             rf"$\mathrm{{Frame}}\ {frame_index:04d}$",
             fontsize=26,
             y=0.992,
         )
-        figure.tight_layout(rect=(0, 0, 1, 0.965))
+        figure.tight_layout(rect=(0, 0.065, 1, 0.965))
         figure.savefig(
             frame_root / f"frame_{frame_index:06d}.png",
             dpi=150,
