@@ -34,6 +34,7 @@
   },
   "layout": {
     "comparison": "2 rows x 3 gamma columns",
+    "label_refresh": "PNG-only refresh enlarges the row-2 generative-policy and row-4 guidance legends; the PDF remains at its prior published revision.",
     "rows": [
       "Pretraining data (Expert)",
       "pretrained OOD",
@@ -86,7 +87,7 @@
     },
     "shared": {
       "b1_shared_3x3_gallery.pdf": "12a36d3a1cee022362249aef31f9dd2c53186b4c590c7f537968cd78b92df143",
-      "b1_shared_3x3_gallery.png": "5745b6ad89cbe5ae74539b086c37fa3d1c88ee4d8b6e0c5dc2336ffec83a7d73"
+      "b1_shared_3x3_gallery.png": "81656690b7fbe44b47538086e1e16db38ffec214e6c919f4b6ef899a202df9b4"
     }
   },
   "renderer": "scripts/paper_b1_shared_normalized_ws.py",

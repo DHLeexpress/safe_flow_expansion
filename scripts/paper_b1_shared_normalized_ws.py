@@ -638,6 +638,7 @@ def draw_zoom(
     goal_vector: np.ndarray | None = None,
     safety_vector: np.ndarray | None = None,
     show_arrow_legend: bool = False,
+    candidate_label: str | None = None,
 ) -> None:
     for obstacle in env.obstacles.detach().cpu().numpy():
         axis.add_patch(
@@ -731,27 +732,47 @@ def draw_zoom(
             color=arrow_color,
             zorder=10,
         )
+    legend_handles: list[Line2D] = []
+    if candidate_label is not None:
+        legend_handles.append(
+            Line2D(
+                [0],
+                [0],
+                color="#6f6f6f",
+                linestyle="--",
+                lw=1.8,
+                marker="o",
+                markerfacecolor="#f5f5f5",
+                markeredgecolor="#6f6f6f",
+                markersize=5.0,
+                label=candidate_label,
+            )
+        )
     if show_arrow_legend:
-        axis.legend(
-            handles=[
+        legend_handles.extend(
+            [
                 Line2D(
                     [0],
                     [0],
                     color=GOAL_ARROW_COLOR,
-                    lw=3.0,
+                    lw=3.6,
                     label=r"$\nabla r_{\rm goal}$",
                 ),
                 Line2D(
                     [0],
                     [0],
                     color=SAFETY_ARROW_COLOR,
-                    lw=3.0,
+                    lw=3.6,
                     label=r"$\nabla r_{\rm safe}$",
                 ),
-            ],
+            ]
+        )
+    if legend_handles:
+        axis.legend(
+            handles=legend_handles,
             loc="upper left",
             frameon=False,
-            fontsize=15,
+            fontsize=20,
             handlelength=1.4,
         )
     axis.set_xlim(bounds[0], bounds[1])
@@ -823,6 +844,7 @@ def render_shared_gallery(
             goal_vector=row.get("goal_vector"),
             safety_vector=row.get("safety_vector"),
             show_arrow_legend=row.get("show_arrow_legend", False),
+            candidate_label=row.get("candidate_label"),
         )
     figure.subplots_adjust(
         left=0.135,
@@ -1101,6 +1123,7 @@ def main() -> int:
             "bounds": common_bounds,
             "state": pretrained_record["state"],
             "candidates": pretrained_candidates,
+            "candidate_label": "Generative policy",
         },
         {
             "label": "Out of distribution\n" + r"($\mathbf{Ours}$)",

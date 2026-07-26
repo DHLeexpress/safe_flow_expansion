@@ -2,3 +2,4 @@ external_data/
 __pycache__/
 *.pyc
 .DS_Store
+assets/results/b1_current_best/tutorial_safemppi_vs_vanilla/frames/

@@ -25,6 +25,17 @@ exclusivity gate after training and evaluation had completed.
 
 ![B1 current best](assets/results/b1_current_best/b1_current_best_5x3_gallery.png)
 
+### Paper mechanism result
+
+The shared mechanism gallery juxtaposes the pretraining support, the raw
+pretrained OOD failure, the expanded policy, and two CFM--MPPI guidance
+settings.  The fourth column uses a common close-up language: gray dashed
+Horizon-10 generative plans and, for CFM--MPPI, the goal and safety reward
+gradients.  The displayed expanded row is the fixed B1 r15 policy used by the
+matched trend study below.
+
+![B1 shared mechanism gallery](assets/results/b1_current_best/b1_shared_3x3_gallery.png)
+
 ![B1 revised fixed-temperature M200 trends](assets/paper/b1_margin_fixedtemp_m200_revised_r0_r15.png)
 
 [Vector PDF](assets/paper/b1_margin_fixedtemp_m200_revised_r0_r15.pdf)
@@ -95,6 +106,34 @@ All three refinement stages use the exact frozen B1 SafeMPPI plan cost. Its
 coefficient sweep is reported separately in
 [`PAPER_BASELINE_STUDY.md`](PAPER_BASELINE_STUDY.md); no displayed coefficient
 is treated as an optimized final baseline.
+
+### SafeMPPI tutorial: hard rejection versus soft-cost MPPI
+
+The local tutorial renderer
+[`scripts/build_safemppi_vs_vanilla_tutorial.py`](scripts/build_safemppi_vs_vanilla_tutorial.py)
+uses the same in-distribution scene and frozen teacher recipe as the first
+indexed replay.  Its left panel evaluates all 512 SafeMPPI proposals per state
+and draws a deterministic 16-plan subset: accepted proposals are black dashed
+with a light glow, rejected proposals are red dashed, and the nominal
+polytope is always blue.  In addition to the ten gamma-dependent levels, the
+explicit tangent-bounded \(H_P=0\) outer face is drawn; this keeps the
+\(\gamma=0.1\) geometry visible even when its ten inner levels remain far from
+the obstacle tangent.
+
+The right panel is an explicitly non-certified, cost-only vanilla MPPI
+diagnostic.  It retains the double-integrator, \(H=10\), action bounds, native
+task/control cost, and MPPI weighting, removes every feasibility mask, and
+uses only a smooth nearest-obstacle proximity cost.  A fixed common-noise
+episode gives small/medium/large proposal standard deviations
+\(\sigma=\{0.01,0.35,2.0\}\) with outcomes collision/success/collision.  The
+displayed index is the first cell in a declared 20-seed diagnostic bank with
+interior-obstacle collisions in both failing arms.  These three traces
+illustrate exploration starvation, a workable proposal scale, and
+high-variance saturation/averaging; they are not a performance estimate.
+
+[Tutorial MP4](assets/results/b1_current_best/tutorial_safemppi_vs_vanilla/safemppi_vs_vanilla_mppi.mp4)
+
+![SafeMPPI versus vanilla MPPI tutorial](assets/results/b1_current_best/tutorial_safemppi_vs_vanilla/safemppi_vs_vanilla_mppi_preview.png)
 
 ## 1. Static scene and SafeMPPI teacher
 
