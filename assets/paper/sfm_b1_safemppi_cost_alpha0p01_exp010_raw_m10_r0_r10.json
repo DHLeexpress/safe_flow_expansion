@@ -1,0 +1,41 @@
+{
+  "M_per_gamma": [
+    10
+  ],
+  "claim": "curves are bare-policy metrics-only evaluation using each input row's declared sampling temperature and a round-independent CRN bank; no GP, acquisition tilt, verifier, fallback, or trajectory archive",
+  "confidence_bands": "95% Wilson intervals for CR and V_safe; mean +/- 1.96 standard errors for clearance and successful time-to-goal",
+  "highlight_inputs": {},
+  "inputs": {
+    "SafeMPPI-cost alpha0.01 exposure10": "/Users/dhl/Documents/safe_flow_expansion/provenance/sfm_b1_offline_eval/safemppi_cost_alpha0p01_exposures010/raw_m10_r0_r10.jsonl"
+  },
+  "outputs": [
+    "assets/paper/sfm_b1_safemppi_cost_alpha0p01_exp010_raw_m10_r0_r10.png",
+    "assets/paper/sfm_b1_safemppi_cost_alpha0p01_exp010_raw_m10_r0_r10.pdf"
+  ],
+  "sampling_temperature_by_arm_gamma": {
+    "SafeMPPI-cost alpha0.01 exposure10": {
+      "0.1": [
+        1.0
+      ],
+      "0.2": [
+        1.0
+      ],
+      "0.3": [
+        1.0
+      ],
+      "0.4": [
+        1.0
+      ],
+      "0.5": [
+        1.0
+      ],
+      "0.7": [
+        1.0
+      ],
+      "1": [
+        1.0
+      ]
+    }
+  },
+  "status": "B1_MARGIN50_METRIC_TRENDS_COMPLETE"
+}

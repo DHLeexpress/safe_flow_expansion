@@ -1,0 +1,33 @@
+{
+  "M_per_gamma": 10,
+  "arm": "offline_exec_safemppi_cost_alpha0p01_exposures010",
+  "evaluation": "bare generative policy, sampling temperature 1, no acquisition tilt or execution verifier",
+  "gammas": [
+    0.1,
+    0.2,
+    0.3,
+    0.4,
+    0.5,
+    0.7,
+    1.0
+  ],
+  "jsonl_sha256": "75e04959d6dfe04f71100622694e100a57dd07513e519ac7303a5e4b21dd2647",
+  "rounds": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10
+  ],
+  "scene_profile": "double_density_velocity_ood",
+  "source_remote_path": "/data3/research1/sfm_b1_offline_eval_funnel_f8d098e/cost/screening_m10/offline_exec_safemppi_cost_alpha0p01_exposures010/raw_m10_offline_metrics.json",
+  "source_sha256": "93496164f6a979054d406c625e8593ff7a1f4030cfb98da072471b26659d45fb",
+  "standard_errors": "sample standard deviation divided by sqrt(n); clearance and time use successful trajectories only",
+  "status": "SFM_B1_SAFEMPPI_COST_RAW_M10_TRENDS_INPUT_COMPLETE"
+}
