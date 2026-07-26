@@ -81,12 +81,12 @@
   },
   "outputs": {
     "comparison": {
-      "b1_kazuki_normalized_ws_2x3_gallery.pdf": "eb56009293ad85a882105b1ded208d44fad96eb6eeb2065d31e71931d0d2358c",
+      "b1_kazuki_normalized_ws_2x3_gallery.pdf": "c2de720ed71aa9e8d110e5e6021c4e076d2bd4ed8ee978531b66e74756660f1c",
       "b1_kazuki_normalized_ws_2x3_gallery.png": "bb2bb1bfc6b743b2b1bdc06a07fac638dcfcdfc29d3d4c005991dd1d32576af4"
     },
     "shared": {
-      "b1_shared_3x3_gallery.pdf": "cb84b3fbab354336ec2b1e75ae81fbb02e8ca7049865b631650d0c47cb6376af",
-      "b1_shared_3x3_gallery.png": "31cf8cb6ac010bc52d2b2890c1d33d8e9c3561db39e4602199a1c8482aeedad5"
+      "b1_shared_3x3_gallery.pdf": "cadf3d1492312fd9d7868759be5eff0047603f7b48a203fd1e56bd4fdd74fb08",
+      "b1_shared_3x3_gallery.png": "677c4c7eeb862d7af31630b60b4a2c7f795fe9b442901a7cff1c83ca1ba60c52"
     }
   },
   "renderer": "scripts/paper_b1_shared_normalized_ws.py",
@@ -197,6 +197,7 @@
     },
     "pretraining_row": {
       "archive_sha256": "9dcafa82041d6d5114e1cfd742aefd55361b3d6e59a9df23e5a2d9c074b09cc6",
+      "closeup_style": "same opaque trajectory and outlined-state style as other rows",
       "path_semantics": "actual executed SafeMPPI states reconstructed as verifier_state ordered by (trajectory_id, window_step); no rollout is resampled",
       "selection": "all stored trajectories; no seed or outcome curation",
       "source_dataset_sha256": "4b8e2d9be794584fad232bcc46cf78c2c4f422efb3e0642f503c8a77fcd2e8ec",

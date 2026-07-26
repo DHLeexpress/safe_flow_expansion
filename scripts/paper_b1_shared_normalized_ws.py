@@ -638,7 +638,6 @@ def draw_zoom(
     goal_vector: np.ndarray | None = None,
     safety_vector: np.ndarray | None = None,
     show_arrow_legend: bool = False,
-    dense: bool = False,
 ) -> None:
     for obstacle in env.obstacles.detach().cpu().numpy():
         axis.add_patch(
@@ -650,11 +649,11 @@ def draw_zoom(
             path[:, 0],
             path[:, 1],
             color=color,
-            lw=0.55 if dense else 1.45,
-            alpha=0.075 if dense else 0.72,
+            lw=1.45,
+            alpha=0.72,
             zorder=3,
         )
-        dots = np.asarray(path)[::8 if dense else 4]
+        dots = np.asarray(path)[::4]
         axis.plot(
             dots[:, 0],
             dots[:, 1],
@@ -662,9 +661,9 @@ def draw_zoom(
             marker="o",
             markerfacecolor=color,
             markeredgecolor="#777777",
-            markeredgewidth=0.15 if dense else 0.35,
-            markersize=1.5 if dense else 3.5,
-            alpha=0.14 if dense else 0.9,
+            markeredgewidth=0.35,
+            markersize=3.5,
+            alpha=0.9,
             zorder=4,
         )
         if outcome != "SR":
@@ -824,7 +823,6 @@ def render_shared_gallery(
             goal_vector=row.get("goal_vector"),
             safety_vector=row.get("safety_vector"),
             show_arrow_legend=row.get("show_arrow_legend", False),
-            dense=row.get("dense", False),
         )
     figure.subplots_adjust(
         left=0.135,
@@ -1199,6 +1197,9 @@ def main() -> int:
             ),
             "pretraining_row": {
                 "selection": "all stored trajectories; no seed or outcome curation",
+                "closeup_style": (
+                    "same opaque trajectory and outlined-state style as other rows"
+                ),
                 "trajectories_per_gamma": {
                     key: int(value["trajectories"])
                     for key, value in expert_manifest["source_shards"].items()
