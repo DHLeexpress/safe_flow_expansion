@@ -81,12 +81,12 @@
   },
   "outputs": {
     "comparison": {
-      "b1_kazuki_normalized_ws_2x3_gallery.pdf": "c2de720ed71aa9e8d110e5e6021c4e076d2bd4ed8ee978531b66e74756660f1c",
+      "b1_kazuki_normalized_ws_2x3_gallery.pdf": "2531401d49c73221400aa2a7c35f491af4f3caa7c09811c5a73c6870c9adbfe7",
       "b1_kazuki_normalized_ws_2x3_gallery.png": "bb2bb1bfc6b743b2b1bdc06a07fac638dcfcdfc29d3d4c005991dd1d32576af4"
     },
     "shared": {
-      "b1_shared_3x3_gallery.pdf": "cadf3d1492312fd9d7868759be5eff0047603f7b48a203fd1e56bd4fdd74fb08",
-      "b1_shared_3x3_gallery.png": "677c4c7eeb862d7af31630b60b4a2c7f795fe9b442901a7cff1c83ca1ba60c52"
+      "b1_shared_3x3_gallery.pdf": "12a36d3a1cee022362249aef31f9dd2c53186b4c590c7f537968cd78b92df143",
+      "b1_shared_3x3_gallery.png": "5745b6ad89cbe5ae74539b086c37fa3d1c88ee4d8b6e0c5dc2336ffec83a7d73"
     }
   },
   "renderer": "scripts/paper_b1_shared_normalized_ws.py",

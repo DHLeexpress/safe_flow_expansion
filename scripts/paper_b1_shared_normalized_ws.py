@@ -1111,7 +1111,10 @@ def main() -> int:
             "candidates": ours_candidates,
         },
         {
-            "label": r"CFM--MPPI$^*$" + "\n" + r"$w_s=0.5$",
+            "label": (
+                "Out of distribution\n"
+                + r"CFM--MPPI$^*$ ($w_s=0.5$)"
+            ),
             "env": ood_env,
             "cells": ws05,
             "bounds": common_bounds,
@@ -1122,7 +1125,10 @@ def main() -> int:
             "show_arrow_legend": True,
         },
         {
-            "label": r"CFM--MPPI$^*$" + "\n" + r"$w_s=1.0$",
+            "label": (
+                "Out of distribution\n"
+                + r"CFM--MPPI$^*$ ($w_s=1.0$)"
+            ),
             "env": ood_env,
             "cells": ws10,
             "bounds": ws10_bounds,
