@@ -466,19 +466,19 @@
       "sha256": "3349fed20cfafb81beef9d09ead54aff0c146da95c4eff54aa269ad21daa12f2"
     },
     {
-      "bytes": 1252284,
+      "bytes": 1208245,
       "path": "assets/results/b1_current_best/tutorial_safemppi_vs_vanilla/safemppi_vs_vanilla_mppi.mp4",
-      "sha256": "bbedd4ee479e1eed69fab0fbd6cd1b0835e6c2ff690e68e92d3522babe83ead7"
+      "sha256": "ec99111ae6f6b6df9f790a94c0d3c2942fc23610ad551bc1e401655596bf1106"
     },
     {
-      "bytes": 379263,
+      "bytes": 354420,
       "path": "assets/results/b1_current_best/tutorial_safemppi_vs_vanilla/safemppi_vs_vanilla_mppi_preview.png",
-      "sha256": "86b240b44147f8ed274a0aed07fc84299acab25d42c44a231220aeb84ac95bf1"
+      "sha256": "de5ae8062d95beb2920d21d7ae387cfac971035077e060383a02d50a0eae2452"
     },
     {
       "bytes": 12717,
       "path": "assets/results/b1_current_best/tutorial_safemppi_vs_vanilla/tutorial_manifest.json",
-      "sha256": "89d77d88a68248dfe3a0e25fa1356c246f685e8d34b35930bdfab78f9cae084f"
+      "sha256": "1ed528f153e3307a207d61f18397e7acd55da546877da900b74ae0ada390d131"
     },
     {
       "bytes": 289780,
@@ -1681,9 +1681,9 @@
       "sha256": "8810e1d074aaf41050d9b991f0b58ae1c591b2cb01f5ec2d0a24f14e1c76085e"
     },
     {
-      "bytes": 26097,
+      "bytes": 26229,
       "path": "scripts/build_safemppi_vs_vanilla_tutorial.py",
-      "sha256": "94b4ebc74ef1cd76233aa5709ca29507e861d3951b2e68603ea9f05ba8b0681a"
+      "sha256": "e83b98c02c19ec7ee728c6dc831839fc170447102a2924f3253a141c8f51a992"
     },
     {
       "bytes": 12810,
