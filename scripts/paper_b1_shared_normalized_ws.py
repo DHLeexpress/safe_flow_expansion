@@ -66,6 +66,7 @@ WS10_ROLLOUT_INDEX = 0
 GOAL_ARROW_COLOR = "#00A6D6"
 SAFETY_ARROW_COLOR = "#D12AA4"
 FAILURE_COLOR = "#CC3311"
+CLOSEUP_LEGEND_FONTSIZE = 22
 
 
 def sha256_file(path: Path) -> str:
@@ -581,6 +582,7 @@ def draw_dense_expert_scene(
             path[:, 0],
             path[:, 1],
             color=color,
+            linestyle="--",
             lw=0.55,
             alpha=0.045,
             zorder=3,
@@ -639,6 +641,10 @@ def draw_zoom(
     safety_vector: np.ndarray | None = None,
     show_arrow_legend: bool = False,
     candidate_label: str | None = None,
+    trajectory_label: str | None = None,
+    path_linestyle: str = "-",
+    path_dot_stride: int = 4,
+    panel_label: str | None = None,
 ) -> None:
     for obstacle in env.obstacles.detach().cpu().numpy():
         axis.add_patch(
@@ -650,11 +656,12 @@ def draw_zoom(
             path[:, 0],
             path[:, 1],
             color=color,
+            linestyle=path_linestyle,
             lw=1.45,
             alpha=0.72,
             zorder=3,
         )
-        dots = np.asarray(path)[::4]
+        dots = np.asarray(path)[::path_dot_stride]
         axis.plot(
             dots[:, 0],
             dots[:, 1],
@@ -733,6 +740,21 @@ def draw_zoom(
             zorder=10,
         )
     legend_handles: list[Line2D] = []
+    if trajectory_label is not None:
+        legend_handles.append(
+            Line2D(
+                [0],
+                [0],
+                color=color,
+                linestyle=path_linestyle,
+                lw=2.4,
+                marker="o",
+                markerfacecolor=color,
+                markeredgecolor="#777777",
+                markersize=5.0,
+                label=trajectory_label,
+            )
+        )
     if candidate_label is not None:
         legend_handles.append(
             Line2D(
@@ -756,14 +778,14 @@ def draw_zoom(
                     [0],
                     color=GOAL_ARROW_COLOR,
                     lw=3.6,
-                    label=r"$\nabla r_{\rm goal}$",
+                    label="Reward guidance",
                 ),
                 Line2D(
                     [0],
                     [0],
                     color=SAFETY_ARROW_COLOR,
                     lw=3.6,
-                    label=r"$\nabla r_{\rm safe}$",
+                    label="Safety guidance",
                 ),
             ]
         )
@@ -772,8 +794,25 @@ def draw_zoom(
             handles=legend_handles,
             loc="upper left",
             frameon=False,
-            fontsize=20,
+            fontsize=CLOSEUP_LEGEND_FONTSIZE,
             handlelength=1.4,
+        )
+    if panel_label is not None:
+        axis.text(
+            0.965,
+            0.045,
+            panel_label,
+            transform=axis.transAxes,
+            ha="right",
+            va="bottom",
+            fontsize=CLOSEUP_LEGEND_FONTSIZE,
+            zorder=20,
+            bbox={
+                "boxstyle": "square,pad=0.22",
+                "facecolor": "white",
+                "edgecolor": "none",
+                "alpha": 0.78,
+            },
         )
     axis.set_xlim(bounds[0], bounds[1])
     axis.set_ylim(bounds[2], bounds[3])
@@ -845,6 +884,10 @@ def render_shared_gallery(
             safety_vector=row.get("safety_vector"),
             show_arrow_legend=row.get("show_arrow_legend", False),
             candidate_label=row.get("candidate_label"),
+            trajectory_label=row.get("trajectory_label"),
+            path_linestyle=row.get("path_linestyle", "-"),
+            path_dot_stride=row.get("path_dot_stride", 4),
+            panel_label=f"({chr(ord('a') + row_index)})",
         )
     figure.subplots_adjust(
         left=0.135,
@@ -1115,6 +1158,8 @@ def main() -> int:
             "cells": expert,
             "bounds": common_bounds,
             "dense": True,
+            "trajectory_label": "MPPI--DCBF trajectory",
+            "path_linestyle": "--",
         },
         {
             "label": "Out of distribution\n(Pretrained)",
@@ -1123,15 +1168,23 @@ def main() -> int:
             "bounds": common_bounds,
             "state": pretrained_record["state"],
             "candidates": pretrained_candidates,
-            "candidate_label": "Generative policy",
+            "trajectory_label": "Generated trajectory (Executed)",
+            "candidate_label": "Generated trajectory (Candidate)",
+            "path_dot_stride": 1,
         },
         {
-            "label": "Out of distribution\n" + r"($\mathbf{Ours}$)",
+            "label": (
+                "Out of distribution\n"
+                + r"CFM--MPPI$^*$ ($w_s=1.0$)"
+            ),
             "env": ood_env,
-            "cells": ours,
-            "bounds": common_bounds,
-            "state": ours_record["state"],
-            "candidates": ours_candidates,
+            "cells": ws10,
+            "bounds": ws10_bounds,
+            "state": ws10_diagnostic["state"],
+            "candidates": ws10_candidates,
+            "goal_vector": ws10_diagnostic["goal_vector"],
+            "safety_vector": ws10_diagnostic["safety_vector"],
+            "path_dot_stride": 1,
         },
         {
             "label": (
@@ -1146,19 +1199,16 @@ def main() -> int:
             "goal_vector": ws05_diagnostic["goal_vector"],
             "safety_vector": ws05_diagnostic["safety_vector"],
             "show_arrow_legend": True,
+            "path_dot_stride": 1,
         },
         {
-            "label": (
-                "Out of distribution\n"
-                + r"CFM--MPPI$^*$ ($w_s=1.0$)"
-            ),
+            "label": "Out of distribution\n" + r"($\mathbf{Ours}$)",
             "env": ood_env,
-            "cells": ws10,
-            "bounds": ws10_bounds,
-            "state": ws10_diagnostic["state"],
-            "candidates": ws10_candidates,
-            "goal_vector": ws10_diagnostic["goal_vector"],
-            "safety_vector": ws10_diagnostic["safety_vector"],
+            "cells": ours,
+            "bounds": common_bounds,
+            "state": ours_record["state"],
+            "candidates": ours_candidates,
+            "path_dot_stride": 1,
         },
     ]
     shared_outputs = render_shared_gallery(args.shared_outdir, shared_rows)
@@ -1206,9 +1256,9 @@ def main() -> int:
             "rows": [
                 "Pretraining data (Expert)",
                 "pretrained OOD",
-                "ours OOD",
-                "CFM-MPPI normalized ws=0.5",
                 "CFM-MPPI normalized ws=1.0",
+                "CFM-MPPI normalized ws=0.5",
+                "ours OOD",
             ],
         },
         "zoom": {
@@ -1227,7 +1277,7 @@ def main() -> int:
             "pretraining_row": {
                 "selection": "all stored trajectories; no seed or outcome curation",
                 "closeup_style": (
-                    "same opaque trajectory and outlined-state style as other rows"
+                    "opaque dashed MPPI-DCBF trajectories with outlined states"
                 ),
                 "trajectories_per_gamma": {
                     key: int(value["trajectories"])
@@ -1236,6 +1286,15 @@ def main() -> int:
                 "path_semantics": expert_manifest["path_semantics"],
                 "source_dataset_sha256": expert_manifest["source_dataset_sha256"],
                 "archive_sha256": expert_manifest["output_sha256"],
+            },
+            "legend_semantics": {
+                "pretraining": "MPPI-DCBF trajectory",
+                "pretrained_executed": "Generated trajectory (Executed)",
+                "pretrained_candidate": "Generated trajectory (Candidate)",
+                "reward_arrow": "Reward guidance",
+                "safety_arrow": "Safety guidance",
+                "fontsize": CLOSEUP_LEGEND_FONTSIZE,
+                "panel_labels": ["(a)", "(b)", "(c)", "(d)", "(e)"],
             },
             "paired_raw_bank": {
                 "version": "b1_shared_zoom_v2",

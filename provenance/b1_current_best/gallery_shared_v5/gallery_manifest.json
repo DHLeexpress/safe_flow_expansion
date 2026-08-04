@@ -34,13 +34,12 @@
   },
   "layout": {
     "comparison": "2 rows x 3 gamma columns",
-    "label_refresh": "PNG-only refresh enlarges the row-2 generative-policy and row-4 guidance legends; the PDF remains at its prior published revision.",
     "rows": [
       "Pretraining data (Expert)",
       "pretrained OOD",
-      "ours OOD",
+      "CFM-MPPI normalized ws=1.0",
       "CFM-MPPI normalized ws=0.5",
-      "CFM-MPPI normalized ws=1.0"
+      "ours OOD"
     ],
     "shared": "5 rows x (3 gamma columns + 1 diagnostic close-up); legacy b1_shared_3x3_gallery filename retained for compatibility"
   },
@@ -82,12 +81,12 @@
   },
   "outputs": {
     "comparison": {
-      "b1_kazuki_normalized_ws_2x3_gallery.pdf": "2531401d49c73221400aa2a7c35f491af4f3caa7c09811c5a73c6870c9adbfe7",
+      "b1_kazuki_normalized_ws_2x3_gallery.pdf": "3cf452178ded55444f316ab7ae965dfa8c152bb9d1ade186305361f3d1e2431c",
       "b1_kazuki_normalized_ws_2x3_gallery.png": "bb2bb1bfc6b743b2b1bdc06a07fac638dcfcdfc29d3d4c005991dd1d32576af4"
     },
     "shared": {
-      "b1_shared_3x3_gallery.pdf": "12a36d3a1cee022362249aef31f9dd2c53186b4c590c7f537968cd78b92df143",
-      "b1_shared_3x3_gallery.png": "81656690b7fbe44b47538086e1e16db38ffec214e6c919f4b6ef899a202df9b4"
+      "b1_shared_3x3_gallery.pdf": "86c183c5323b088637cfd1447157ff016ae0ee4c6d10895a0f191e1cd4e38277",
+      "b1_shared_3x3_gallery.png": "80f5e7a801d95802c0a626832ef87a42ddbdd0db2cf634746e460046368119ee"
     }
   },
   "renderer": "scripts/paper_b1_shared_normalized_ws.py",
@@ -148,6 +147,21 @@
     },
     "gamma": 1.0,
     "gray_curve_semantics": "ten manually filtered raw H=10 generative position windows; these curves are a paper diagnostic, not an unbiased estimate",
+    "legend_semantics": {
+      "fontsize": 22,
+      "panel_labels": [
+        "(a)",
+        "(b)",
+        "(c)",
+        "(d)",
+        "(e)"
+      ],
+      "pretrained_candidate": "Generated trajectory (Candidate)",
+      "pretrained_executed": "Generated trajectory (Executed)",
+      "pretraining": "MPPI-DCBF trajectory",
+      "reward_arrow": "Reward guidance",
+      "safety_arrow": "Safety guidance"
+    },
     "paired_raw_bank": {
       "index": 0,
       "ours_bending_score": [
@@ -198,7 +212,7 @@
     },
     "pretraining_row": {
       "archive_sha256": "9dcafa82041d6d5114e1cfd742aefd55361b3d6e59a9df23e5a2d9c074b09cc6",
-      "closeup_style": "same opaque trajectory and outlined-state style as other rows",
+      "closeup_style": "opaque dashed MPPI-DCBF trajectories with outlined states",
       "path_semantics": "actual executed SafeMPPI states reconstructed as verifier_state ordered by (trajectory_id, window_step); no rollout is resampled",
       "selection": "all stored trajectories; no seed or outcome curation",
       "source_dataset_sha256": "4b8e2d9be794584fad232bcc46cf78c2c4f422efb3e0642f503c8a77fcd2e8ec",
