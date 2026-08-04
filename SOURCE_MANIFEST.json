@@ -2601,9 +2601,9 @@
       "sha256": "8f152cd2db7dff9a35035723576de6248b648d79a1579aa4ce6276d7ab50e5a6"
     },
     {
-      "bytes": 6822,
+      "bytes": 7232,
       "path": "tests/test_kazuki_absolute_grid.py",
-      "sha256": "06497ed22f6018becd39967f59525d28a27b39dec8254354988ccbceb1937114"
+      "sha256": "a9f17fe9f8dcfad5e9a6172aea76b2c027a67f5aaf07ba1c3570c47e4e488d8b"
     },
     {
       "bytes": 1679,
