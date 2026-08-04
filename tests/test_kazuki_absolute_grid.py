@@ -125,10 +125,19 @@ def test_normalized_ws_comparison_is_hashed_and_explicit_about_raw_scale() -> No
     assert gallery["layout"]["rows"] == [
         "Pretraining data (Expert)",
         "pretrained OOD",
-        "ours OOD",
-        "CFM-MPPI normalized ws=0.5",
         "CFM-MPPI normalized ws=1.0",
+        "CFM-MPPI normalized ws=0.5",
+        "ours OOD",
     ]
+    assert gallery["zoom"]["legend_semantics"] == {
+        "fontsize": 22,
+        "panel_labels": ["(a)", "(b)", "(c)", "(d)", "(e)"],
+        "pretrained_candidate": "Generated trajectory (Candidate)",
+        "pretrained_executed": "Generated trajectory (Executed)",
+        "pretraining": "MPPI-DCBF trajectory",
+        "reward_arrow": "Reward guidance",
+        "safety_arrow": "Safety guidance",
+    }
     assert gallery["zoom"]["pretraining_row"]["selection"] == (
         "all stored trajectories; no seed or outcome curation"
     )
