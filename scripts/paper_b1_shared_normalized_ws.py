@@ -67,6 +67,7 @@ GOAL_ARROW_COLOR = "#00A6D6"
 SAFETY_ARROW_COLOR = "#D12AA4"
 FAILURE_COLOR = "#CC3311"
 CLOSEUP_LEGEND_FONTSIZE = 22
+GENERATED_LEGEND_FONTSIZE = 19
 
 
 def sha256_file(path: Path) -> str:
@@ -645,6 +646,7 @@ def draw_zoom(
     path_linestyle: str = "-",
     path_dot_stride: int = 4,
     panel_label: str | None = None,
+    legend_fontsize: int = CLOSEUP_LEGEND_FONTSIZE,
 ) -> None:
     for obstacle in env.obstacles.detach().cpu().numpy():
         axis.add_patch(
@@ -790,13 +792,20 @@ def draw_zoom(
             ]
         )
     if legend_handles:
-        axis.legend(
+        legend = axis.legend(
             handles=legend_handles,
             loc="upper left",
-            frameon=False,
-            fontsize=CLOSEUP_LEGEND_FONTSIZE,
+            frameon=True,
+            facecolor="white",
+            edgecolor="none",
+            framealpha=0.78,
+            fancybox=False,
+            fontsize=legend_fontsize,
             handlelength=1.4,
+            alignment="left",
         )
+        for text in legend.get_texts():
+            text.set_multialignment("left")
     if panel_label is not None:
         axis.text(
             0.965,
@@ -888,6 +897,10 @@ def render_shared_gallery(
             path_linestyle=row.get("path_linestyle", "-"),
             path_dot_stride=row.get("path_dot_stride", 4),
             panel_label=f"({chr(ord('a') + row_index)})",
+            legend_fontsize=row.get(
+                "legend_fontsize",
+                CLOSEUP_LEGEND_FONTSIZE,
+            ),
         )
     figure.subplots_adjust(
         left=0.135,
@@ -1168,8 +1181,9 @@ def main() -> int:
             "bounds": common_bounds,
             "state": pretrained_record["state"],
             "candidates": pretrained_candidates,
-            "trajectory_label": "Generated trajectory (Executed)",
-            "candidate_label": "Generated trajectory (Candidate)",
+            "trajectory_label": "Generated trajectory\n(Executed)",
+            "candidate_label": "Generated trajectory\n(Candidate)",
+            "legend_fontsize": GENERATED_LEGEND_FONTSIZE,
             "path_dot_stride": 1,
         },
         {
@@ -1289,11 +1303,13 @@ def main() -> int:
             },
             "legend_semantics": {
                 "pretraining": "MPPI-DCBF trajectory",
-                "pretrained_executed": "Generated trajectory (Executed)",
-                "pretrained_candidate": "Generated trajectory (Candidate)",
+                "pretrained_executed": "Generated trajectory\n(Executed)",
+                "pretrained_candidate": "Generated trajectory\n(Candidate)",
                 "reward_arrow": "Reward guidance",
                 "safety_arrow": "Safety guidance",
                 "fontsize": CLOSEUP_LEGEND_FONTSIZE,
+                "generated_fontsize": GENERATED_LEGEND_FONTSIZE,
+                "frame": "translucent white, square, alpha=0.78",
                 "panel_labels": ["(a)", "(b)", "(c)", "(d)", "(e)"],
             },
             "paired_raw_bank": {

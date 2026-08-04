@@ -130,10 +130,12 @@ def test_normalized_ws_comparison_is_hashed_and_explicit_about_raw_scale() -> No
         "ours OOD",
     ]
     assert gallery["zoom"]["legend_semantics"] == {
+        "frame": "translucent white, square, alpha=0.78",
         "fontsize": 22,
+        "generated_fontsize": 19,
         "panel_labels": ["(a)", "(b)", "(c)", "(d)", "(e)"],
-        "pretrained_candidate": "Generated trajectory (Candidate)",
-        "pretrained_executed": "Generated trajectory (Executed)",
+        "pretrained_candidate": "Generated trajectory\n(Candidate)",
+        "pretrained_executed": "Generated trajectory\n(Executed)",
         "pretraining": "MPPI-DCBF trajectory",
         "reward_arrow": "Reward guidance",
         "safety_arrow": "Safety guidance",

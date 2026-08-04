@@ -81,12 +81,12 @@
   },
   "outputs": {
     "comparison": {
-      "b1_kazuki_normalized_ws_2x3_gallery.pdf": "3cf452178ded55444f316ab7ae965dfa8c152bb9d1ade186305361f3d1e2431c",
+      "b1_kazuki_normalized_ws_2x3_gallery.pdf": "fe7ba6efe3e31d745c79130f6735199e44579990ed30c0b083a8a6fd486ee7ca",
       "b1_kazuki_normalized_ws_2x3_gallery.png": "bb2bb1bfc6b743b2b1bdc06a07fac638dcfcdfc29d3d4c005991dd1d32576af4"
     },
     "shared": {
-      "b1_shared_3x3_gallery.pdf": "86c183c5323b088637cfd1447157ff016ae0ee4c6d10895a0f191e1cd4e38277",
-      "b1_shared_3x3_gallery.png": "80f5e7a801d95802c0a626832ef87a42ddbdd0db2cf634746e460046368119ee"
+      "b1_shared_3x3_gallery.pdf": "0130986551faf50e172c3601cd39941ff4d26fe9c077c2f93bd4a588121747a3",
+      "b1_shared_3x3_gallery.png": "1b2e5086dfbf5d41d390581bbec7d954c600c702b6d18c4c7829296769419bd5"
     }
   },
   "renderer": "scripts/paper_b1_shared_normalized_ws.py",
@@ -149,6 +149,8 @@
     "gray_curve_semantics": "ten manually filtered raw H=10 generative position windows; these curves are a paper diagnostic, not an unbiased estimate",
     "legend_semantics": {
       "fontsize": 22,
+      "frame": "translucent white, square, alpha=0.78",
+      "generated_fontsize": 19,
       "panel_labels": [
         "(a)",
         "(b)",
@@ -156,8 +158,8 @@
         "(d)",
         "(e)"
       ],
-      "pretrained_candidate": "Generated trajectory (Candidate)",
-      "pretrained_executed": "Generated trajectory (Executed)",
+      "pretrained_candidate": "Generated trajectory\n(Candidate)",
+      "pretrained_executed": "Generated trajectory\n(Executed)",
       "pretraining": "MPPI-DCBF trajectory",
       "reward_arrow": "Reward guidance",
       "safety_arrow": "Safety guidance"
